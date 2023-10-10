@@ -6,5 +6,4 @@ module.exports = {
 	trailingComma: "all",
 	bracketSameLine: true,
 	useTabs: true,
-	endOfLine: "lf",
 };
