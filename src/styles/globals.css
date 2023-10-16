@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-	margin: 0 auto;
+	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
@@ -29,6 +29,12 @@ body {
 	line-height: 1.5;
 	word-break: keep-all;
 	background-color: #ffffff;
-	width: 1281px;
-	border: 1px black solid;
+}
+.wrap {
+	position: relative;
+	display: block;
+	width: 100%;
+	/* 1280px 피그마 */
+	/* 1903px */
+	max-width: 1280px;
 }
