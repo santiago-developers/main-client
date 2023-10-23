@@ -19,6 +19,8 @@
 		"@mui/joy": "^5.0.0-beta.10",
 		"@mui/material": "^5.14.12",
 		"@mui/styles": "^5.14.12",
+		"axios": "^1.5.1",
+		"dayjs": "^1.11.10",
 		"next": "latest",
 		"react": "latest",
 		"react-dom": "latest",
@@ -45,7 +47,7 @@
 		"prettier": "^3.0.3",
 		"tailwindcss": "latest",
 		"twin.macro": "^3.4.0",
-		"typescript": "latest"
+		"typescript": "^5.2.2"
 	},
 	"engines": {
 		"node": ">=16.16.0",
