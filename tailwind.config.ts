@@ -17,7 +17,7 @@ const config: Config = {
 				noto: ["var(--noto_Sans)"],
 			},
 			fontSize: {
-				xs: "0.5rem",
+				xs: "0.6rem",
 				sm: "0.75rem",
 				base: "1rem",
 				// xl: "1.25rem",
@@ -25,6 +25,10 @@ const config: Config = {
 				// "3xl": "1.953rem",
 				// "4xl": "2.441rem",
 				// "5xl": "3.052rem",
+			},
+			colors: {
+				mint: "#05C3B6",
+				sgray: "#A3A3A3",
 			},
 		},
 	},

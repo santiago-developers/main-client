@@ -1,12 +1,15 @@
 import LogoSvg from "@public/images/logo.svg";
 import DefautUserSvg from "@public/images/defaultUser.svg";
 import tw from "twin.macro";
+import Link from "next/link";
 
 const SantiagoLayout = ({ children }) => {
 	return (
 		<>
 			<header tw="w-[1280px] bg-[#FAFAFA] h-[98px] flex items-center justify-between px-16">
-				<LogoSvg tw="w-[131px]" />
+				<Link href="/">
+					<LogoSvg tw="w-[131px]" />
+				</Link>
 				<div tw="flex gap-8">
 					<button>Post</button>
 					<DefautUserSvg />

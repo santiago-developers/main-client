@@ -38,3 +38,7 @@ body {
 	/* 1903px */
 	max-width: 1280px;
 }
+input:focus {
+	border: none;
+	outline: none;
+}
