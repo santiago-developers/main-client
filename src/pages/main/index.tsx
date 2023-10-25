@@ -73,7 +73,7 @@ const MainPage: NextPage = () => {
 					/>
 				</div>
 				{/* 나라파트 */}
-				<div tw="w-[67%] mx-auto">
+				<div tw="w-[67%] mx-auto mb-[130px]">
 					<Grid container spacing={2}>
 						{regions.map((item, index) => (
 							<Grid item xs={4} md={3} key={index}>

@@ -24,6 +24,7 @@
 		"next": "latest",
 		"react": "latest",
 		"react-dom": "latest",
+		"react-quill": "^2.0.0",
 		"usehooks-ts": "^2.9.1"
 	},
 	"devDependencies": {

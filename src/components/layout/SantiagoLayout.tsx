@@ -2,22 +2,23 @@ import LogoSvg from "@public/images/logo.svg";
 import DefautUserSvg from "@public/images/defaultUser.svg";
 import tw from "twin.macro";
 import Link from "next/link";
+import { StrictPropsWithChildren } from "types/global";
 
-const SantiagoLayout = ({ children }) => {
+const SantiagoLayout:React.FunctionComponent<StrictPropsWithChildren> = ({ children }) => {
 	return (
 		<>
-			<header tw="w-[1280px] bg-[#FAFAFA] h-[98px] flex items-center justify-between px-16">
+			<header tw="w-[1280px] h-[98px] flex items-center justify-between px-16">
 				<Link href="/">
 					<LogoSvg tw="w-[131px]" />
 				</Link>
 				<div tw="flex gap-8">
 					<button>Post</button>
-					<DefautUserSvg />
+					<DefautUserSvg tw="w-[30px] h-[30px]"/>
 				</div>
 			</header>
 			<div className="wrap">
 				{children}
-				<footer tw="w-full h-[126px] mt-[130px] flex justify-center items-center bg-[#FAFAFA] text-gray-800 mx-auto">
+				<footer tw="w-full h-[126px] flex justify-center items-center bg-[#FAFAFA] text-gray-800 mx-auto">
 					<div tw="text-[11px] text-center font-medium">
 						<div>
 							<a href="">산티아고 이용약관</a> |{" "}

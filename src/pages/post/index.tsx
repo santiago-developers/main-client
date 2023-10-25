@@ -4,7 +4,7 @@ import Typography from "@mui/joy/Typography";
 import tw from "twin.macro";
 import DefautUserSvg from "@public/images/defaultUser.svg";
 import PostSvg from "@public/images/post.svg";
-import MoreMenu from "@components/MoreMenu";
+import MoreMenu from "@utils/MoreMenu";
 import dayjs from "dayjs";
 import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
@@ -15,7 +15,7 @@ import { GetStaticProps } from "next";
 import CommentInput from "@components/post/CommentInput";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 type MagazineProps = {
 	magazineId: string;

@@ -1,7 +1,7 @@
 import { Button, Divider, Grid, IconButton, Paper } from "@mui/material";
 import DefautUserSvg from "@public/images/defaultUser.svg";
 import tw from "twin.macro";
-import MoreMenu from "@components/MoreMenu";
+import MoreMenu from "@utils/MoreMenu";
 import CommentInput from "./CommentInput";
 
 const Comment = () => {
