@@ -2,11 +2,14 @@ import { Divider } from "@mui/material";
 import QuillEditer from "@utils/QuillEditer";
 import "react-quill/dist/quill.snow.css";
 import tw from "twin.macro";
+import { useState } from "react";
+import CountryModal from "@components/post/publish/CountryModal";
 
 const index = () => {
-	const openCountry = ()=>{
-		alert("모달열려랏");
-	}
+	const [isOpen, setIsOpen] = useState(false);
+	const openCountry = () => {
+		setIsOpen(!isOpen);
+	};
 	return (
 		<div tw="h-screen bg-[#FAFAFA] flex justify-center items-center">
 			<div tw="w-[866px] h-full bg-white p-10">
@@ -18,9 +21,10 @@ const index = () => {
 				</div>
 				<Divider />
 				<div tw="text-sm flex justify-between my-4">
-					<input placeholder="Please enter your tag"/>
+					<input placeholder="Please enter your tag" />
 					<button onClick={openCountry}>Select a country</button>
-				</div> 
+					{isOpen && <CountryModal isOpen={isOpen} />}
+				</div>
 				<QuillEditer />
 			</div>
 		</div>
