@@ -111,7 +111,7 @@ export default function PostPage({ post }) {
 			</div>
 			<div tw="text-sm">
 				<ChatBubbleOutlineIcon tw="text-[16px] mr-2" />4
-				<button tw="border border-mint rounded-full text-mint  pr-2 ml-4">
+				<button tw="border border-mint rounded-full text-mint pr-2 ml-4">
 					<ArrowDropDownIcon />
 					Open Comment
 				</button>

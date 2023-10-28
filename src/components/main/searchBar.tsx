@@ -1,26 +1,15 @@
 import { SearchOutlined } from "@mui/icons-material";
-import {
-	Divider,
-	IconButton,
-	InputBase,
-	InputBaseProps,
-	ListItemText,
-	MenuItem,
-	MenuList,
-	Paper,
-} from "@mui/material";
+import { IconButton, InputBase, InputBaseProps, Paper } from "@mui/material";
 import { useState } from "react";
 import { regions } from "@statics/region";
-import { log } from "console";
 import tw from "twin.macro";
-import RegionSearch from "./regionSearchL";
+import RegionSearch from "./RegionSearch";
 
-type Props = {
+type SearchbarProps = {
 	onSubmit(searchTerm: string): void;
-	inputProps: InputBaseProps;
 };
 
-const Searchbar = (props: Props) => {
+const Searchbar = (props: SearchbarProps) => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [regionsList, setRegionsList] = useState(regions);
 	const [open, setOpen] = useState(false);
@@ -56,13 +45,12 @@ const Searchbar = (props: Props) => {
 				}}>
 				<InputBase
 					sx={{ ml: 1, flex: 1 }}
-					placeholder="Where to go.."
+					placeholder="Where to go..."
 					inputProps={{ "aria-label": "search" }}
 					value={searchTerm}
 					onChange={(e) => {
 						handleSearch(e.target.value);
 					}}
-					{...props.inputProps}
 				/>
 				<IconButton type="submit">
 					<SearchOutlined />

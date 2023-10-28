@@ -2,11 +2,11 @@ import { Divider } from "@mui/material";
 import QuillEditer from "@utils/QuillEditer";
 import "react-quill/dist/quill.snow.css";
 import tw from "twin.macro";
-import { useState } from "react";
+import React, { useState } from "react";
 import CountryModal from "@components/post/publish/CountryModal";
 
 const index = () => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
 		setIsOpen(!isOpen);
 	};
@@ -23,7 +23,9 @@ const index = () => {
 				<div tw="text-sm flex justify-between my-4">
 					<input placeholder="Please enter your tag" />
 					<button onClick={openCountry}>Select a country</button>
-					{isOpen && <CountryModal isOpen={isOpen} />}
+					{isOpen && (
+						<CountryModal isOpen={isOpen} setIsOpen={setIsOpen} />
+					)}
 				</div>
 				<QuillEditer />
 			</div>

@@ -24,23 +24,23 @@ html {
 	font-size: 16px;
 }
 body {
-	/* font-family: "Roboto","", sans-serif;
-	font-size: 16px; */
 	line-height: 1.5;
 	word-break: keep-all;
 	background-color: #ffffff;
 }
 .wrap {
+	padding-top: 98px;
+	margin: 0 auto;
 	position: relative;
 	display: block;
 	width: 100%;
 	height: 100%;
+	width: 1280px;
 	/* 1280px 피그마 */
 	/* 1903px */
-	max-width: 1280px;
+	max-width: 1880px;
 }
 input:focus {
 	border: none;
 	outline: none;
 }
-

@@ -4,7 +4,7 @@ import React from "react";
 import tw from "twin.macro";
 import { experimentalStyled as styled } from "@mui/material/styles";
 
-const CountryModal = ({ isOpen }) => {
+const CountryModal = ({ isOpen, setIsOpen }: boolean) => {
 	const style = {
 		position: "absolute" as "absolute",
 		top: 130,
@@ -26,13 +26,17 @@ const CountryModal = ({ isOpen }) => {
 		fontSize: "12px",
 	}));
 
+	const chooseCountry = () => {
+		setIsOpen(false);
+	};
+
 	return (
 		<Paper sx={style}>
 			<Grid container spacing={2}>
 				{regions.map((item, index) => (
 					<Grid item xs={4} md={3} key={index}>
 						<Item>
-							<button>{item}</button>
+							<button onClick={chooseCountry}>{item}</button>
 						</Item>
 					</Grid>
 				))}

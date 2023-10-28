@@ -1,15 +1,12 @@
 import type { NextPage } from "next";
-import LogoSvg from "@public/images/logo.svg";
-import DefautUserSvg from "@public/images/defaultUser.svg";
 import tw from "twin.macro";
 import MainSvg from "@public/images/main.svg";
-import MainBottomSvg from "@public/images/mainBottom.svg";
 import { Grid, Paper } from "@mui/material";
-import Searchbar from "@components/main/searchBar";
+import Searchbar from "@components/main/SearchBar";
 import { useRouter } from "next/router";
 import { experimentalStyled as styled } from "@mui/material/styles";
 import { regions } from "@statics/region";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>
@@ -27,8 +24,7 @@ const MainPage: NextPage = () => {
 		textAlign: "center",
 	}));
 
-	const anchorEl = useRef<HTMLDivElement>(null);
-	const [searchTerm, setSearchTerm] = useState("");
+	const [searchTerm, setSearchTerm] = useState<string>("");
 
 	return (
 		<>
@@ -54,9 +50,8 @@ const MainPage: NextPage = () => {
 					<MainSvg />
 				</div>
 				<div tw="mt-10 mb-16">
-					{/* 타이핑 시, 검색창 밑으로 해당하는 국가가 리스트 형식으로 나타납니다. */}
 					<Searchbar
-						onSubmit={(searchTerm: string) => {
+						onSubmit={(searchTerm) => {
 							// 각 나라별 magazine page로 이동
 							router.push({
 								query: {
@@ -65,15 +60,10 @@ const MainPage: NextPage = () => {
 							});
 							setSearchTerm(searchTerm);
 						}}
-						inputProps={
-							{
-								// onFocus: () => setOpen(true),
-							}
-						}
 					/>
 				</div>
-				{/* 나라파트 */}
-				<div tw="w-[67%] mx-auto mb-[130px]">
+				{/* 대륙파트 */}
+				<div tw="w-[67%] mx-auto pb-[130px]">
 					<Grid container spacing={2}>
 						{regions.map((item, index) => (
 							<Grid item xs={4} md={3} key={index}>
