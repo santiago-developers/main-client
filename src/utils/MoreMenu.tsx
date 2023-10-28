@@ -4,11 +4,20 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const options = ["report", "edit", "html edit", "statistics"];
+type MoreMenuType ={
+	post:string[],
+	comment: string[]
+}
+
+const moreMenu:MoreMenuType = {
+	post: ["report", "edit", "html edit", "statistics"],
+	comment:["edit","delete", "report"]
+}
+
 
 const ITEM_HEIGHT = 48;
 
-const LongMenu = () => {
+const MoreMenu = ({moreMenuType}) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,7 +52,7 @@ const LongMenu = () => {
 						width: "13ch",
 					},
 				}}>
-				{options.map((option) => (
+				{moreMenu[moreMenuType].map((option) => (
 					<MenuItem
 						key={option}
 						selected={option === "Pyxis"}
@@ -55,4 +64,4 @@ const LongMenu = () => {
 		</div>
 	);
 };
-export default LongMenu;
+export default MoreMenu;

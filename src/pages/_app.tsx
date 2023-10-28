@@ -1,4 +1,5 @@
 import "@styles/globals.css";
+import "@styles/quill.css";
 import type { AppProps } from "next/app";
 import { Noto_Sans, Source_Serif_4 } from "next/font/google";
 import CssBaseline from "@mui/material/CssBaseline";

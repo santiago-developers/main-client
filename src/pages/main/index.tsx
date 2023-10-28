@@ -1,20 +1,23 @@
 import type { NextPage } from "next";
-import LogoSvg from "@public/images/logo.svg";
-import DefautUserSvg from "@public/images/defaultUser.svg";
 import tw from "twin.macro";
 import MainSvg from "@public/images/main.svg";
-import MainBottomSvg from "@public/images/mainBottom.svg";
 import { Grid, Paper } from "@mui/material";
-import Searchbar from "@components/main/searchBar";
+import Searchbar from "@components/main/SearchBar";
 import { useRouter } from "next/router";
 import { experimentalStyled as styled } from "@mui/material/styles";
-import { regions } from "@statics/region";
-import { useState, useRef } from "react";
+import { countinents } from "@statics/region";
+import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
+import { SantiagoGet } from "lib/fetchData";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>
+type RegionsProps = {
+	regionId: string;
+	name_en: string;
+	[key: string]: string;
+};
 
-const MainPage: NextPage = () => {
+export default function MainPage() {
 	const router = useRouter();
 
 	const Item = styled(Paper)(({ theme }) => ({
@@ -27,9 +30,49 @@ const MainPage: NextPage = () => {
 		textAlign: "center",
 	}));
 
-	const anchorEl = useRef<HTMLDivElement>(null);
-	const [searchTerm, setSearchTerm] = useState("");
+	const [searchTerm, setSearchTerm] = useState<string>("");
+	console.log("뭐눌렀니", searchTerm);
 
+	const searchSubmit = (searchTerm:string) => {
+		setSearchTerm(searchTerm);
+		console.log("너는?",searchTerm);
+		// 각 나라별 magazine page로 이동
+		// router.push("/magazines");
+		router.push({
+			pathname:"/magazines",
+			query:{
+				"regin-id":searchTerm,
+				"query-type":"hot",
+				base:0,
+				limit:8
+			},
+
+		},
+		`magazines?region-id=${"regin-id"}0bcbbb91-89bd-48f7-9562-ec662b6fd3a2&query-type=hot&base=0&limit=8`
+		)
+		if (searchTerm) {
+			router.push({
+				pathname:"/magazines",
+				query:{
+					"regin-id":searchTerm,
+					"query-type":"hot",
+					base:0,
+					limit:8
+				},
+
+			},
+			`magazines?region-id=${"regin-id"}0bcbbb91-89bd-48f7-9562-ec662b6fd3a2&query-type=hot&base=0&limit=8`
+			)
+		}
+		// router.push({
+		// 	query: {
+		// 		search: searchTerm,
+		// 	},
+		// });
+		// router.push(post)
+		alert("돋보기submit");
+		setSearchTerm("");
+	};
 	return (
 		<>
 			<div tw="w-full">
@@ -54,28 +97,12 @@ const MainPage: NextPage = () => {
 					<MainSvg />
 				</div>
 				<div tw="mt-10 mb-16">
-					{/* 타이핑 시, 검색창 밑으로 해당하는 국가가 리스트 형식으로 나타납니다. */}
-					<Searchbar
-						onSubmit={(searchTerm: string) => {
-							// 각 나라별 magazine page로 이동
-							router.push({
-								query: {
-									search: searchTerm,
-								},
-							});
-							setSearchTerm(searchTerm);
-						}}
-						inputProps={
-							{
-								// onFocus: () => setOpen(true),
-							}
-						}
-					/>
+					<Searchbar onSubmit={searchSubmit} />
 				</div>
-				{/* 나라파트 */}
-				<div tw="w-[67%] mx-auto">
+				{/* 대륙파트 */}
+				<div tw="w-[67%] mx-auto pb-[130px]">
 					<Grid container spacing={2}>
-						{regions.map((item, index) => (
+						{countinents.map((item, index) => (
 							<Grid item xs={4} md={3} key={index}>
 								<Item>{item}</Item>
 							</Grid>
@@ -85,6 +112,22 @@ const MainPage: NextPage = () => {
 			</div>
 		</>
 	);
-};
+}
 
-export default MainPage;
+// 왜 undefined 뜨지??
+// export async function getStaticProps() {
+// 	const res = await fetch("http://3.34.114.67:11009/regions");
+
+// 	const data = await res.json();
+// 	console.log(data);
+// 	const regions = data.map((item)=>item)
+
+// 	// const regions = await SantiagoGet("regions");
+
+// 	return {
+// 		props: {
+// 			regions: data,
+// 		},
+// 		revalidate: 10,
+// 	};
+// }
