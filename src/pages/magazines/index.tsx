@@ -1,3 +1,3 @@
-export default async function Posts() {
-	return <div></div>;
+export default function Magazines() {
+	return <div>메거진입니다.</div>;
 }

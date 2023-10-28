@@ -1,18 +1,44 @@
 import { SearchOutlined } from "@mui/icons-material";
-import { IconButton, InputBase, InputBaseProps, Paper } from "@mui/material";
-import { useState } from "react";
-import { regions } from "@statics/region";
+import { IconButton, InputBase, Paper } from "@mui/material";
+import { useEffect, useState } from "react";
+import { countinents } from "@statics/region";
 import tw from "twin.macro";
 import RegionSearch from "./RegionSearch";
+import { SantiagoGet } from "lib/fetchData";
 
 type SearchbarProps = {
 	onSubmit(searchTerm: string): void;
 };
 
+type RegionsProps = {
+	regionId: string;
+	name_en: string;
+	[key: string]: string;
+};
+
 const Searchbar = (props: SearchbarProps) => {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [regionsList, setRegionsList] = useState(regions);
+	const [regionsId, setRegionsId] = useState("");
+	const [names, setNames] = useState("");
+	const [regionsList, setRegionsList] = useState(names);
 	const [open, setOpen] = useState(false);
+
+	const fetchData = async () => {
+		const regions = await SantiagoGet("regions");
+		const regionsName = regions.map(
+			(item: RegionsProps, _i) => item.name_en,
+		);
+		setNames(regionsName);
+
+		const regionsId = regions.map(
+			(item: RegionsProps, _i) => item.regionId,
+		);
+		setRegionsId(regionsId);
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value);
@@ -22,9 +48,9 @@ const Searchbar = (props: SearchbarProps) => {
 			setOpen(true);
 		}
 
-		const filterdRegion = regions.filter((region) => {
-			return region.toLowerCase().includes(value.toLowerCase());
-		});
+		const filterdRegion = names.filter((item): item is string =>
+			item.toLowerCase().includes(value.toLowerCase()),
+		);
 		setRegionsList(filterdRegion);
 	};
 
@@ -42,6 +68,7 @@ const Searchbar = (props: SearchbarProps) => {
 				onSubmit={(e) => {
 					e.preventDefault();
 					props.onSubmit((searchTerm as string) ?? "");
+					alert("이건?")
 				}}>
 				<InputBase
 					sx={{ ml: 1, flex: 1 }}
@@ -51,6 +78,7 @@ const Searchbar = (props: SearchbarProps) => {
 					onChange={(e) => {
 						handleSearch(e.target.value);
 					}}
+					{...props.inputProps}
 				/>
 				<IconButton type="submit">
 					<SearchOutlined />

@@ -16,6 +16,7 @@ import CommentInput from "@components/post/CommentInput";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { SantiagoGet } from "lib/fetchData";
 
 type MagazineProps = {
 	magazineId: string;
@@ -55,7 +56,7 @@ export default function PostPage({ post }) {
 		writer,
 		tags,
 	}: MagazineProps = post;
-	console.log("sjss", post);
+	console.log("포스트", post);
 	const formatDate = dayjs(createdAt).format("MMM DD, YYYY");
 
 	return (
@@ -125,14 +126,8 @@ export default function PostPage({ post }) {
 }
 
 export async function getStaticProps() {
-	const res = await fetch("http://3.34.114.67:11009/magazines/tesgt");
-	// const res = await fetch(`http://3.34.114.67:11009/magazines/${magazineId}`);
-	if (!res.ok) {
-		// This will activate the closest `error.js` Error Boundary
-		throw new Error("Failed to fetch data");
-	}
-
-	const post = await res.json();
+	const post = await SantiagoGet("magazines/tesgt");
+	
 	return {
 		props: {
 			post,

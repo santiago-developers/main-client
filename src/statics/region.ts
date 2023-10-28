@@ -1,4 +1,4 @@
-export const regions: string[] = [
+export const countinents: string[] = [
 	"All",
 	"Europe",
 	"Northeast Asia",
