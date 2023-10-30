@@ -2,11 +2,12 @@ import { SearchOutlined } from "@mui/icons-material";
 import { ListItemText, MenuItem, MenuList, Paper } from "@mui/material";
 import tw from "twin.macro";
 
-type RegionsListProps = {
+type RegionSearchProps = {
 	regionsList: string[];
+	onSubmit(searchTerm: string): void;
 };
 
-const RegionSearch = ({ regionsList }: RegionsListProps) => {
+const RegionSearch = ({ regionsList, onSubmit }: RegionSearchProps) => {
 	return (
 		<div tw="absolute w-full">
 			<Paper
@@ -20,8 +21,6 @@ const RegionSearch = ({ regionsList }: RegionsListProps) => {
 					top: 0,
 					left: 0,
 					right: 0,
-					//클릭시
-					// boxShadow: "0px 0px 9px 3px rgba(0, 0, 0, 0.25)",
 				}}>
 				{!regionsList.length ? (
 					<>
@@ -32,7 +31,11 @@ const RegionSearch = ({ regionsList }: RegionsListProps) => {
 						{regionsList.map((item, index) => (
 							<MenuList
 								key={index}
-								sx={{ borderBottom: "0.5px solid #D4D4D4" }}>
+								sx={{ borderBottom: "0.5px solid #D4D4D4" }}
+								onClick={(e) => {
+									e.preventDefault();
+									onSubmit(item as string);
+								}}>
 								<MenuItem>
 									<SearchOutlined />
 									<ListItemText>{item}</ListItemText>

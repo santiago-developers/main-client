@@ -1,15 +1,15 @@
 import { Grid, Paper } from "@mui/material";
-import { regions } from "@statics/region";
+import { countinents } from "@statics/region";
 import React from "react";
 import tw from "twin.macro";
 import { experimentalStyled as styled } from "@mui/material/styles";
 
-const CountryModal = ({ isOpen, setIsOpen }: boolean) => {
+const CountryModal = ({ isOpen, setIsOpen }) => {
 	const style = {
 		position: "absolute" as "absolute",
-		top: 130,
+		top: 250,
 		right: 240,
-		width: 628,
+		width: 820,
 		padding: 4,
 		zIndex: 1,
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
@@ -19,11 +19,11 @@ const CountryModal = ({ isOpen, setIsOpen }: boolean) => {
 	const Item = styled(Paper)(({ theme }) => ({
 		// background image 삽입
 		backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-		height: 124,
-		padding: theme.spacing(5),
+		height: 150,
+		padding: theme.spacing(7),
 		justifyContent: "center",
 		textAlign: "center",
-		fontSize: "12px",
+		fontSize: "16px",
 	}));
 
 	const chooseCountry = () => {
@@ -33,7 +33,7 @@ const CountryModal = ({ isOpen, setIsOpen }: boolean) => {
 	return (
 		<Paper sx={style}>
 			<Grid container spacing={2}>
-				{regions.map((item, index) => (
+				{countinents.map((item, index) => (
 					<Grid item xs={4} md={3} key={index}>
 						<Item>
 							<button onClick={chooseCountry}>{item}</button>

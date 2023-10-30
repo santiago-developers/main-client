@@ -48,7 +48,7 @@ const Searchbar = (props: SearchbarProps) => {
 			setOpen(true);
 		}
 
-		const filterdRegion = names.filter((item): item is string =>
+		const filterdRegion = names.filter((item): string =>
 			item.toLowerCase().includes(value.toLowerCase()),
 		);
 		setRegionsList(filterdRegion);
@@ -67,8 +67,8 @@ const Searchbar = (props: SearchbarProps) => {
 				}}
 				onSubmit={(e) => {
 					e.preventDefault();
-					props.onSubmit((searchTerm as string) ?? "");
-					alert("이건?")
+					props.onSubmit(searchTerm as string);
+					alert("나는 searchbar submit");
 				}}>
 				<InputBase
 					sx={{ ml: 1, flex: 1 }}
@@ -78,13 +78,17 @@ const Searchbar = (props: SearchbarProps) => {
 					onChange={(e) => {
 						handleSearch(e.target.value);
 					}}
-					{...props.inputProps}
 				/>
 				<IconButton type="submit">
 					<SearchOutlined />
 				</IconButton>
 			</Paper>
-			{open && <RegionSearch regionsList={regionsList} />}
+			{open && (
+				<RegionSearch
+					regionsList={regionsList}
+					onSubmit={props.onSubmit}
+				/>
+			)}
 		</>
 	);
 };

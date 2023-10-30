@@ -17,7 +17,8 @@ type RegionsProps = {
 	[key: string]: string;
 };
 
-export default function MainPage() {
+export default function MainPage({ props }) {
+	console.log(props);
 	const router = useRouter();
 
 	const Item = styled(Paper)(({ theme }) => ({
@@ -31,48 +32,37 @@ export default function MainPage() {
 	}));
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
-	console.log("뭐눌렀니", searchTerm);
 
-	const searchSubmit = (searchTerm:string) => {
+	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-		console.log("너는?",searchTerm);
-		// 각 나라별 magazine page로 이동
-		// router.push("/magazines");
-		router.push({
-			pathname:"/magazines",
-			query:{
-				"regin-id":searchTerm,
-				"query-type":"hot",
-				base:0,
-				limit:8
-			},
-
-		},
-		`magazines?region-id=${"regin-id"}0bcbbb91-89bd-48f7-9562-ec662b6fd3a2&query-type=hot&base=0&limit=8`
-		)
+		console.log("너는?", searchTerm);
 		if (searchTerm) {
 			router.push({
-				pathname:"/magazines",
-				query:{
-					"regin-id":searchTerm,
-					"query-type":"hot",
-					base:0,
-					limit:8
+				pathname: "/magazines",
+				query: {
+					regin_id: searchTerm,
+					query_type: "hot",
+					base: 0,
+					limit: 8,
 				},
-
-			},
-			`magazines?region-id=${"regin-id"}0bcbbb91-89bd-48f7-9562-ec662b6fd3a2&query-type=hot&base=0&limit=8`
-			)
+			});
 		}
-		// router.push({
-		// 	query: {
-		// 		search: searchTerm,
-		// 	},
-		// });
-		// router.push(post)
-		alert("돋보기submit");
 		setSearchTerm("");
 	};
+
+	const continentClick = (item: string) => {
+		let contient = item.toLowerCase().replace(/ /g, "_");
+		router.push({
+			pathname: "/magazines",
+			query: {
+				continent: contient,
+				query_type: "hot",
+				base: 0,
+				limit: 8,
+			},
+		});
+	};
+
 	return (
 		<>
 			<div tw="w-full">
@@ -104,7 +94,14 @@ export default function MainPage() {
 					<Grid container spacing={2}>
 						{countinents.map((item, index) => (
 							<Grid item xs={4} md={3} key={index}>
-								<Item>{item}</Item>
+								<Item
+									onClick={(e) => {
+										e.preventDefault();
+										continentClick(item as string);
+									}}
+									sx={{ cursor: "pointer" }}>
+									{item}
+								</Item>
 							</Grid>
 						))}
 					</Grid>
@@ -116,18 +113,14 @@ export default function MainPage() {
 
 // 왜 undefined 뜨지??
 // export async function getStaticProps() {
-// 	const res = await fetch("http://3.34.114.67:11009/regions");
+// 	// const regions =await data.map((item,index)=>item)
 
-// 	const data = await res.json();
-// 	console.log(data);
-// 	const regions = data.map((item)=>item)
-
-// 	// const regions = await SantiagoGet("regions");
+// 	const regions = await SantiagoGet("regions");
 
 // 	return {
 // 		props: {
-// 			regions: data,
+// 			regions
 // 		},
-// 		revalidate: 10,
+// 		revalidate: 20,
 // 	};
 // }
