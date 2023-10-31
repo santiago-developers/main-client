@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import tw from "twin.macro";
 import MainSvg from "@public/images/main.svg";
 import { Grid, Paper } from "@mui/material";
@@ -11,14 +11,19 @@ import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwo
 import { SantiagoGet } from "lib/fetchData";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>
-type RegionsProps = {
+type Regions = {
+	data: string[];
+};
+
+type RegionProps = {
 	regionId: string;
 	name_en: string;
 	[key: string]: string;
 };
 
-export default function MainPage({ props }) {
-	console.log(props);
+export default function MainPage({
+	regions,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
 
 	const Item = styled(Paper)(({ theme }) => ({
@@ -35,12 +40,15 @@ export default function MainPage({ props }) {
 
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-		console.log("너는?", searchTerm);
+		const regionsId = regions.data
+			.map((item: RegionProps) => item)
+			.find((item: RegionProps) => item.name_en === "France");
+
 		if (searchTerm) {
 			router.push({
 				pathname: "/magazines",
 				query: {
-					regin_id: searchTerm,
+					regin_id: regionsId.regionId,
 					query_type: "hot",
 					base: 0,
 					limit: 8,
@@ -111,16 +119,14 @@ export default function MainPage({ props }) {
 	);
 }
 
-// 왜 undefined 뜨지??
-// export async function getStaticProps() {
-// 	// const regions =await data.map((item,index)=>item)
+export const getStaticProps = (async () => {
+	const regions = await SantiagoGet("regions");
 
-// 	const regions = await SantiagoGet("regions");
-
-// 	return {
-// 		props: {
-// 			regions
-// 		},
-// 		revalidate: 20,
-// 	};
-// }
+	return {
+		props: {
+			regions,
+		},
+	};
+}) satisfies GetStaticProps<{
+	regions: Regions;
+}>;

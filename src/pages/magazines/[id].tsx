@@ -26,7 +26,7 @@ type MagazineProps = {
 	photoLikeCount: number;
 	writingLikeCount: number;
 	writer: WriterProps;
-	tags: TagProps[];
+	tags: TagProps;
 };
 
 type WriterProps = {
@@ -58,6 +58,7 @@ export default function PostPage({
 		writer,
 		tags,
 	}: MagazineProps = post;
+	console.log("포스트", post);
 	const formatDate = dayjs(createdAt).format("MMM DD, YYYY");
 
 	return (
@@ -107,7 +108,7 @@ export default function PostPage({
 			</div>
 			<div tw="py-10 leading-9">{content}</div>
 			<div tw="flex gap-3 font-bold mb-14">
-				{tags.map((item: TagProps) => (
+				{tags.map((item: TagProps, _i) => (
 					<div key={item.tagId}> #{item.tag}</div>
 				))}
 			</div>
@@ -126,8 +127,20 @@ export default function PostPage({
 	);
 }
 
-export const getStaticProps = (async () => {
-	const post = await SantiagoGet("magazines/tesgt");
+// 메거진 리스트 페이지 생성 먼저
+export async function getStaticPaths() {
+	const posts = await SantiagoGet(
+		"magazines?query_type=hot&base=0&limit=100",
+	);
+
+	const paths = posts.map((post) => ({
+		params: { id: post.id },
+	}));
+	return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
+	const post = await SantiagoGet(`magazines/${params.id}`);
 
 	return {
 		props: {
@@ -135,6 +148,4 @@ export const getStaticProps = (async () => {
 		},
 		revalidate: 10,
 	};
-}) satisfies GetStaticProps<{
-	post: MagazineProps;
-}>;
+}

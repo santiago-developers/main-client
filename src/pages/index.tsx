@@ -1,14 +1,14 @@
-import Head from "next/head";
-import MainPage from "./main";
+import type { GetServerSideProps } from "next";
 
 export default function Home() {
-	return (
-		<>
-			<Head>
-				<title>Santiago</title>
-			</Head>
-
-			<MainPage />
-		</>
-	);
+	return <></>;
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	return {
+		redirect: {
+			destination: "/main",
+			permanent: true,
+		},
+	};
+};
