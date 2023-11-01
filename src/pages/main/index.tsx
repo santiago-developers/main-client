@@ -1,4 +1,4 @@
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import tw from "twin.macro";
 import MainSvg from "@public/images/main.svg";
 import { Grid, Paper } from "@mui/material";

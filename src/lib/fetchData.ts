@@ -14,7 +14,7 @@ export async function SantiagoGet(url: string) {
 		const res = await fetch(`http://3.34.114.67:11009/${url}`);
 		const data = await res.json();
 		return data;
-	} catch(err) {
+	} catch (err) {
 		console.log({ url }, err);
 	}
 	// if (!res.ok) {

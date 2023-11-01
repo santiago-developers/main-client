@@ -7,9 +7,9 @@ const SantiagoLayout: React.FunctionComponent<StrictPropsWithChildren> = ({
 }) => {
 	return (
 		<>
-			<SantiagoHeader/>
+			<SantiagoHeader />
 			<div className="wrap">{children}</div>
-			<SantiagoFooter/>
+			<SantiagoFooter />
 		</>
 	);
 };

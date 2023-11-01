@@ -4,20 +4,19 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-type MoreMenuType ={
-	post:string[],
-	comment: string[]
-}
+type MoreMenuType = {
+	post: string[];
+	comment: string[];
+};
 
-const moreMenu:MoreMenuType = {
+const moreMenu: MoreMenuType = {
 	post: ["report", "edit", "html edit", "statistics"],
-	comment:["edit","delete", "report"]
-}
-
+	comment: ["edit", "delete", "report"],
+};
 
 const ITEM_HEIGHT = 48;
 
-const MoreMenu = ({moreMenuType}) => {
+const MoreMenu = ({ moreMenuType }) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {

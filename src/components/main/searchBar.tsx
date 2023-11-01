@@ -41,10 +41,10 @@ const Searchbar = (props: SearchbarProps) => {
 		} else {
 			setOpen(true);
 		}
-		
+
 		const filteredRegion = names.filter((item: string) =>
 			item.toLowerCase().includes(value.toLowerCase()),
-		)
+		);
 		setRegionsList(filteredRegion);
 	};
 
