@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import { MintButton } from "@utils/MintButton";
 import { ArrowRight } from "@mui/icons-material";
 
-export default function FindPassword() {
+export default function FindPassword1() {
 	return (
 		<>
 			<div tw="w-[336px] m-auto h-[75vh] grid place-items-center">
