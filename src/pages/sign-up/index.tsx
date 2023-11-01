@@ -50,6 +50,9 @@ export default function SignUp() {
 							placeholder="Please enter your password"
 							fullWidth
 						/>
+						<div tw="text-sm text-[#49454F] px-[16px] pt-[4px]  hover:cursor-default">
+							Badly formed password
+						</div>
 						<div tw="h-[8px]" />
 						<TextField
 							id="confirm-password"
@@ -65,9 +68,16 @@ export default function SignUp() {
 					<div tw="m-auto">
 						<div tw="flex justify-between items-center">
 							<FormControlLabel
-								control={<Checkbox size="medium" sx={{'&.Mui-checked': {
-                                    color: '#05C3B6',
-                                  },}}/>}
+								control={
+									<Checkbox
+										size="medium"
+										sx={{
+											"&.Mui-checked": {
+												color: "#05C3B6",
+											},
+										}}
+									/>
+								}
 								label={
 									<p tw="text-[#404040] text-base">
 										Agree to the terms and conditions
@@ -79,9 +89,16 @@ export default function SignUp() {
 						<div tw="h-[8px]" />
 						<div tw="flex justify-between items-center">
 							<FormControlLabel
-								control={<Checkbox size="medium" sx={{'&.Mui-checked': {
-                                    color: '#05C3B6',
-                                  },}}/>}
+								control={
+									<Checkbox
+										size="medium"
+										sx={{
+											"&.Mui-checked": {
+												color: "#05C3B6",
+											},
+										}}
+									/>
+								}
 								label={
 									<p tw="text-[#404040] text-base">
 										Agree to the privacy policy
@@ -93,9 +110,16 @@ export default function SignUp() {
 						<div tw="h-[8px]" />
 						<div tw="flex justify-between items-center">
 							<FormControlLabel
-								control={<Checkbox size="medium" sx={{'&.Mui-checked': {
-                                    color: '#05C3B6',
-                                  },}}/>}
+								control={
+									<Checkbox
+										size="medium"
+										sx={{
+											"&.Mui-checked": {
+												color: "#05C3B6",
+											},
+										}}
+									/>
+								}
 								label={
 									<p tw="text-[#404040] text-base">
 										Agree to personal information marketing
