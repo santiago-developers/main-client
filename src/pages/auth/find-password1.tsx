@@ -2,8 +2,58 @@ import tw from "twin.macro";
 import { TextField } from "@mui/material";
 import { MintButton } from "@utils/MintButton";
 import { ArrowRight } from "@mui/icons-material";
+import { useState } from "react";
+import { SantiagoPost } from "lib/fetchData";
+import { FindPasswordRequest } from "lib/dto/findPassword/findPasswordRequest";
+import { FindPasswordResponse } from "lib/dto/findPassword/findPasswordResponse";
+import { VerifyVerificationNumberRequest } from "lib/dto/findPassword/verifyVerificationNumberRequest";
+import { useRouter } from "next/router";
 
 export default function FindPassword1() {
+	const router = useRouter();
+	const emailFormat = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+	const [email, setEmail] = useState("");
+	const [verificationNumber, setVerificationNumber] = useState("");
+	const [verifiedEmail, setVerifiedEmail] = useState("");
+	const [isVerified, setIsVerified] = useState(false);
+
+	const sendVerificationNumber = () => {
+		if(!emailFormat.test(email)) {
+			alert("Please make sure you entered your email correctly");
+		} else {
+			const dto = new FindPasswordRequest(email);
+			SantiagoPost<FindPasswordRequest, FindPasswordResponse>("auth/verification_numbers/receive?query-type=find-password", dto).then((data)=> {
+				if(data.isSuccess) {
+					alert("The verification number has been sent");
+					setVerifiedEmail(email);
+				} else {
+					alert("Please make sure you entered your email correctly");
+				}
+			});
+			
+		}
+	}
+
+	const verify = () => {
+		const dto = new VerifyVerificationNumberRequest(verifiedEmail, verificationNumber);
+		SantiagoPost<VerifyVerificationNumberRequest, FindPasswordResponse>("auth/verification_numbers/verify", dto)
+		.then((data)=>{
+			if(data.isSuccess) {
+				alert("Verification completed");
+				setIsVerified(true);
+			} else {
+				alert("Verification failed. Please make sure you entered your verification number correctly");
+			}
+		});
+	}
+
+	const confirm = () => {
+		if(isVerified) {
+			router.push("/auth/find-password2");
+		} else {
+			alert("Please verify your email.");
+		}
+	}
 	return (
 		<>
 			<div tw="w-[336px] m-auto h-[75vh] grid place-items-center">
@@ -16,13 +66,14 @@ export default function FindPassword1() {
 							variant="outlined"
 							placeholder="Please enter your email"
 							fullWidth
+							onChange={(event) => setEmail(event.target.value)}
 						/>
 						<div tw="flex justify-between items-center px-[16px] pt-[4px]">
 							<div tw="text-sm text-[#05C3B6] hover:cursor-default">
 								Click to get a verification number{" "}
 								<ArrowRight />
 							</div>
-							<button tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[8px] rounded-md">
+							<button tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[8px] rounded-md" onClick={sendVerificationNumber}>
 								send
 							</button>
 						</div>
@@ -32,17 +83,18 @@ export default function FindPassword1() {
 							variant="outlined"
 							placeholder="Please enter a verification number"
 							fullWidth
+							onChange={(event) => setVerificationNumber(event.target.value)}
 						/>
 						<div tw="flex justify-between items-center px-[16px] pt-[4px]">
 							<div tw="text-sm text-[#49454F] hover:cursor-default">
-								Verification completed
+								{isVerified ? "Verification completed":null}
 							</div>
-							<button tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[6px] rounded-md">
+							<button tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[6px] rounded-md" onClick={verify}>
 								verify
 							</button>
 						</div>
 						<div tw="h-[36px]" />
-						<MintButton tw="w-full h-[40px] font-medium hover:text-white hover:bg-[#05C3B6]">
+						<MintButton tw="w-full h-[40px] font-medium hover:text-white hover:bg-[#05C3B6]" onClick={confirm}>
 							Confirm
 						</MintButton>
 						<div tw="h-[66px]" />
