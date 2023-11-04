@@ -63,7 +63,7 @@ export default function SignIn() {
 		<>
 			<div tw="w-[336px] h-[75vh] m-auto grid place-items-center">
 				<div tw="w-full m-auto px-[8px]">
-					<div tw="text-center text-[30px]">Sign in</div>
+					<div tw="text-center text-[30px] font-serif">Sign in</div>
 					<div tw="h-[66px]" />
 					<div tw="m-auto">
 						<TextField
@@ -100,6 +100,10 @@ export default function SignIn() {
 						</Link>
 					</div>
 					<div tw="h-[36px]" />
+					<Link href="/auth/find-password1">
+					<div tw="text-[12px] flex justify-center text-[#05C3B6]">Forgot your password?</div>
+					</Link>
+					<div tw="h-[24px]" />
 					<SocialSignInDivider />
 					<div tw="h-[16px]" />
 					<div tw="flex justify-center">

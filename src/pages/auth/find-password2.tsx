@@ -33,7 +33,7 @@ export default function FindPassword2() {
 		<>
 			<div tw="w-[336px] m-auto h-[75vh] grid place-items-center">
 				<div tw="w-full m-auto px-[8px]">
-					<div tw="text-center text-[30px]">Find Password</div>
+					<div tw="text-center text-[30px] font-serif">Find Password</div>
 					<div tw="h-[36px]" />
 					<div tw="m-auto">
 						<TextField
