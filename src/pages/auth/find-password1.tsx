@@ -1,5 +1,6 @@
 import tw from "twin.macro";
-import { TextField } from "@mui/material";
+import CheckIcon from "@public/images/checkIcon.svg"
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { MintButton } from "@utils/MintButton";
 import { ArrowRight } from "@mui/icons-material";
 import { useState } from "react";
@@ -16,6 +17,7 @@ export default function FindPassword1() {
 	const [verificationNumber, setVerificationNumber] = useState("");
 	const [verifiedEmail, setVerifiedEmail] = useState("");
 	const [isVerified, setIsVerified] = useState(false);
+	const [isSendEmail, setIsSendEmail] = useState(false);
 	const [isClickedButton2, setIsClickedButton2] = useState(false);
 
 	const sendVerificationNumber = () => {
@@ -30,6 +32,7 @@ export default function FindPassword1() {
 				if (data.isSuccess) {
 					alert("The verification number has been sent");
 					setVerifiedEmail(email);
+					setIsSendEmail(true);
 				} else {
 					alert("Please make sure you entered your email correctly");
 				}
@@ -80,6 +83,18 @@ export default function FindPassword1() {
 							placeholder="Please enter your email"
 							fullWidth
 							onChange={(event) => setEmail(event.target.value)}
+							InputProps={ isSendEmail ? {
+								endAdornment: (
+								  <InputAdornment position="end">
+									<IconButton
+									  aria-label="toggle password visibility"
+									  edge="end"
+									>
+									  <CheckIcon/>
+									</IconButton>
+								  </InputAdornment>
+								),
+							  } : undefined}
 						/>
 						<div tw="flex justify-between items-center px-[16px] pt-[4px]">
 							<div tw="text-sm text-[#05C3B6] hover:cursor-default">
@@ -101,6 +116,18 @@ export default function FindPassword1() {
 							onChange={(event) =>
 								setVerificationNumber(event.target.value)
 							}
+							InputProps={ isVerified ? {
+								endAdornment: (
+								  <InputAdornment position="end">
+									<IconButton
+									  aria-label="toggle password visibility"
+									  edge="end"
+									>
+									  <CheckIcon/>
+									</IconButton>
+								  </InputAdornment>
+								),
+							  } : undefined}
 						/>
 						<div tw="flex justify-between items-center px-[16px] pt-[4px]">
 							<div tw="text-sm text-[#49454F] hover:cursor-default">
