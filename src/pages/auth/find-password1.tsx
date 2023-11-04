@@ -16,6 +16,7 @@ export default function FindPassword1() {
 	const [verificationNumber, setVerificationNumber] = useState("");
 	const [verifiedEmail, setVerifiedEmail] = useState("");
 	const [isVerified, setIsVerified] = useState(false);
+	const [isClickedButton2, setIsClickedButton2] = useState(false);
 
 	const sendVerificationNumber = () => {
 		if (!emailFormat.test(email)) {
@@ -37,6 +38,7 @@ export default function FindPassword1() {
 	};
 
 	const verify = () => {
+		setIsClickedButton2(true);
 		const dto = new VerifyVerificationNumberRequest(
 			verifiedEmail,
 			verificationNumber,
@@ -102,7 +104,7 @@ export default function FindPassword1() {
 						/>
 						<div tw="flex justify-between items-center px-[16px] pt-[4px]">
 							<div tw="text-sm text-[#49454F] hover:cursor-default">
-								{isVerified ? "Verification completed" : null}
+								{isClickedButton2 ? isVerified ? "Verification completed" : <div tw="text-[#EB4335]">Verification failed</div> : null}
 							</div>
 							<button
 								tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[6px] rounded-md"

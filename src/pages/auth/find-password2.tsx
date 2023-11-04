@@ -4,7 +4,6 @@ import { MintButton } from "@utils/MintButton";
 import { useState } from "react";
 import { UpdatePasswordRequest } from "lib/dto/findPassword/updatePasswordRequest";
 import { SantiagoPut } from "lib/fetchData";
-import { FindPasswordResponse } from "lib/dto/findPassword/findPasswordResponse";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 
@@ -58,7 +57,7 @@ export default function FindPassword2() {
 							onChange={(event) => setPasswordToConfirm(event.target.value)}
 						/>
 						<div tw="text-sm text-[#49454F] px-[16px] pt-[4px]  hover:cursor-default">
-							{password == passwordToConfirm ? <div>The password matches</div> : <div tw="text-[#EB4335]">The password doesn't match</div>}
+							{passwordToConfirm != "" ? password == passwordToConfirm ? <div>The password matches</div> : <div tw="text-[#EB4335]">The password doesn't match</div> : ""}
 						</div>
 					</div>
                     <div tw="h-[36px]" />
