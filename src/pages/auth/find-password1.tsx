@@ -5,9 +5,9 @@ import { MintButton } from "@utils/MintButton";
 import { ArrowRight } from "@mui/icons-material";
 import { useState } from "react";
 import { SantiagoPost } from "lib/fetchData";
-import { FindPasswordRequest } from "lib/dto/findPassword/findPasswordRequest";
-import { FindPasswordResponse } from "lib/dto/findPassword/findPasswordResponse";
-import { VerifyVerificationNumberRequest } from "lib/dto/findPassword/verifyVerificationNumberRequest";
+import { SendVerificationNumberRequest } from "lib/dto/auth/sendVerificationNumberRequest";
+import { SendVerificationNumberResponse } from "lib/dto/auth/sendVerificationNumberResponse";
+import { VerifyVerificationNumberRequest } from "lib/dto/auth/verifyVerificationNumberRequest";
 import { useRouter } from "next/router";
 
 export default function FindPassword1() {
@@ -24,8 +24,8 @@ export default function FindPassword1() {
 		if (!emailFormat.test(email)) {
 			alert("Please make sure you entered your email correctly");
 		} else {
-			const dto = new FindPasswordRequest(email);
-			SantiagoPost<FindPasswordRequest, FindPasswordResponse>(
+			const dto = new SendVerificationNumberRequest(email);
+			SantiagoPost<SendVerificationNumberRequest, SendVerificationNumberResponse>(
 				"auth/verification_numbers/receive?query-type=find-password",
 				dto,
 			).then((data) => {
@@ -46,7 +46,7 @@ export default function FindPassword1() {
 			verifiedEmail,
 			verificationNumber,
 		);
-		SantiagoPost<VerifyVerificationNumberRequest, FindPasswordResponse>(
+		SantiagoPost<VerifyVerificationNumberRequest, SendVerificationNumberResponse>(
 			"auth/verification_numbers/verify",
 			dto,
 		).then((data) => {

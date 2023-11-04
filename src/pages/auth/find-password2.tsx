@@ -2,7 +2,7 @@ import tw from "twin.macro";
 import { TextField } from "@mui/material";
 import { MintButton } from "@utils/MintButton";
 import { useState } from "react";
-import { UpdatePasswordRequest } from "lib/dto/findPassword/updatePasswordRequest";
+import { UpdatePasswordRequest } from "lib/dto/auth/updatePasswordRequest";
 import { SantiagoPut } from "lib/fetchData";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";

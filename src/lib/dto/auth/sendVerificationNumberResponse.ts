@@ -1,4 +1,4 @@
-export class FindPasswordResponse {
+export class SendVerificationNumberResponse {
     constructor(isSuccess: boolean) {
         this.isSuccess = isSuccess;
     }
