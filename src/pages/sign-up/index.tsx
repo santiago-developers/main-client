@@ -85,7 +85,6 @@ export default function SignUp() {
 	const searchSubmit = (selectedRegionId: string, selectedRegionName: string) => {
 		setRegionId(selectedRegionId);
 		setRegionName(selectedRegionName);
-		alert(selectedRegionId);
 	};
 
 	const confirm = () => {
@@ -94,6 +93,7 @@ export default function SignUp() {
 			isCheckedAgreement1 &&
 			isCheckedAgreement2 &&
 			password == passwordToConfirm
+			&& regionId
 		) {
 			const dto = new SignUpRequest(
 				verifiedEmail,
