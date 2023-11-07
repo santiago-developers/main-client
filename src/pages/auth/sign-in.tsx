@@ -12,9 +12,19 @@ import { SignInRequest } from "lib/dto/signIn/signInRequest";
 import { SignInResponse } from "lib/dto/signIn/signInResponse";
 import { useRouter } from "next/router";
 import { GetUserResponse } from "lib/dto/user/getUserResponse";
+import {
+	getAuth,
+	signInWithPopup,
+	GoogleAuthProvider,
+	FacebookAuthProvider,
+	OAuthProvider,
+	UserCredential,
+} from "firebase/auth";
 import myInfoStore from "store/myInfoStore";
+import { initFirebase } from "config/firebaseConfig";
 
 export default function SignIn() {
+	initFirebase();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const router = useRouter();
@@ -41,22 +51,69 @@ export default function SignIn() {
 		setRegion(myInfo.region);
 	};
 
+	const loadUserInfo = (data: SignInResponse) => {
+		localStorage.setItem("userId", data.userId);
+		localStorage.setItem("accessToken", data.accessToken);
+		localStorage.setItem("refreshToken", data.refreshToken);
+		storeMyInfo(data.userId);
+	};
+
+	const handleSocialSignIn = async (result: UserCredential) => {
+		const user = result.user;
+		const dto = new SignInRequest(null, null, user.uid);
+		SantiagoPost<SignInRequest, SignInResponse>("auth/sign-in", dto)
+			.then((data) => loadUserInfo(data))
+			.then(() => {
+				router.push("/main"); //TODO: 이전 페이지로 이동하기 (뒤로 돌아가기 아님)
+			})
+			.catch(() => {
+				localStorage.setItem("firebaseUID", user.uid);
+				router.push("/sign-up/simple");
+			});
+	};
+
 	const signIn = async () => {
 		const dto = new SignInRequest(email, password, null);
 		SantiagoPost<SignInRequest, SignInResponse>("auth/sign-in", dto)
-			.then((data) => {
-				localStorage.setItem("userId", data.userId);
-				localStorage.setItem("accessToken", data.accessToken);
-				localStorage.setItem("refreshToken", data.refreshToken);
-				storeMyInfo(data.userId).then(() => {
-					router.push("/main"); //TODO: 이전 페이지로 이동하기 (뒤로 돌아가기 아님)
-				});
+			.then((data) => loadUserInfo(data))
+			.then(() => {
+				router.push("/main"); //TODO: 이전 페이지로 이동하기 (뒤로 돌아가기 아님)
 			})
 			.catch(() =>
 				alert(
 					"Please make sure you entered your email and password correctly.",
 				),
 			);
+	};
+
+	const signInWithGoogle = () => {
+		const auth = getAuth();
+		const provider = new GoogleAuthProvider();
+		signInWithPopup(auth, provider)
+			.then((result) => handleSocialSignIn(result))
+			.catch(() => {
+				alert("Failed in sign-in");
+			});
+	};
+
+	const signInWithFaceBook = async () => {
+		const auth = getAuth();
+		const provider = new FacebookAuthProvider();
+		signInWithPopup(auth, provider)
+			.then((result) => handleSocialSignIn(result))
+			.catch(() => {
+				alert("Failed in sign-in");
+			});
+	};
+
+	const signInWithApple = async () => {
+		const auth = getAuth();
+		const provider = new OAuthProvider("apple.com");
+		signInWithPopup(auth, provider)
+			.then((result) => handleSocialSignIn(result))
+			.catch(() => {
+				alert("Failed in sign-in");
+			});
 	};
 
 	return (
@@ -101,15 +158,23 @@ export default function SignIn() {
 					</div>
 					<div tw="h-[36px]" />
 					<Link href="/auth/find-password1">
-					<div tw="text-[12px] flex justify-center text-[#05C3B6]">Forgot your password?</div>
+						<div tw="text-[12px] flex justify-center text-[#05C3B6]">
+							Forgot your password?
+						</div>
 					</Link>
 					<div tw="h-[24px]" />
 					<SocialSignInDivider />
 					<div tw="h-[16px]" />
 					<div tw="flex justify-center">
-						<GoogleLogo />
-						<FacebookLogo />
-						<AppleLogo />
+						<div onClick={signInWithGoogle}>
+							<GoogleLogo />
+						</div>
+						<div onClick={signInWithFaceBook}>
+							<FacebookLogo />
+						</div>
+						<div onClick={signInWithApple}>
+							<AppleLogo />
+						</div>
 					</div>
 				</div>
 			</div>
