@@ -2,11 +2,11 @@ import { Divider } from "@mui/material";
 import QuillEditer from "@utils/QuillEditer";
 import "react-quill/dist/quill.snow.css";
 import tw from "twin.macro";
-import React, { useState } from "react";
 import CountryModal from "@components/post/publish/CountryModal";
+import { useState } from "react";
 
-const index = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+const PostPage = () => {
+	const [isOpen, setIsOpen] = useState(false);
 	const openCountry = () => {
 		setIsOpen(!isOpen);
 	};
@@ -33,4 +33,4 @@ const index = () => {
 	);
 };
 
-export default index;
+export default PostPage;
