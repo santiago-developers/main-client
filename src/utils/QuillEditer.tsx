@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import tw from "twin.macro";
 
 const QuillWrapper = dynamic(() => import("react-quill"), {
 	ssr: false,
@@ -92,13 +93,15 @@ const formats = [
 	"align",
 ];
 
-export default function QuillEditer() {
+export default function QuillEditer({value}) {
 	return (
 		<QuillWrapper
+			tw="leading-9"
 			modules={modules}
 			formats={formats}
 			theme="snow"
 			placeholder="Please enter your content"
+			value={value}
 		/>
 	);
 }

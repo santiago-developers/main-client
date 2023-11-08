@@ -4,3 +4,7 @@
 .ql-toolbar.ql-snow {
 	border: none !important;
 }
+.ql-editor > p {
+	line-height: 2.25rem;
+	font-size:1rem;
+}
