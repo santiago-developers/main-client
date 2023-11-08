@@ -1,4 +1,5 @@
 import RegionDropBox from "@components/userInfo/regionDropBox";
+import RegionDropDown from "@components/userInfo/regionDropBox";
 import { ArrowRight } from "@mui/icons-material";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { MintButton } from "@utils/MintButton";
@@ -16,7 +17,6 @@ export default function SimpleSignUp() {
 	const [isCheckedAgreement2, setIsCheckedAgreement2] = useState(false);
 	const [isCheckedAgreement3, setIsCheckedAgreement3] = useState(false);
 	const [regionId, setRegionId] = useState<string>("");
-	const [regionName, setRegionName] = useState("");
 	const router = useRouter();
 
 	const {
@@ -74,17 +74,15 @@ export default function SimpleSignUp() {
 
 	const searchSubmit = (
 		selectedRegionId: string,
-		selectedRegionName: string,
 	) => {
 		setRegionId(selectedRegionId);
-		setRegionName(selectedRegionName);
 	};
 
 	return (
 		<>
 			<div tw="w-[336px] m-auto h-[75vh] grid place-items-center">
 				<div tw="w-full m-auto px-[8px]">
-					<div tw="text-center text-[30px]">Sign up</div>
+					<div tw="text-center text-[30px] font-serif">Sign up</div>
 					<div tw="h-[56px]" />
 					<div tw="m-auto">
 						<div tw="flex justify-between items-center">
@@ -162,10 +160,7 @@ export default function SimpleSignUp() {
 						<div tw="h-[8px]" />
 					</div>
 					<div tw="h-[26px]" />
-					<RegionDropBox
-						onSubmit={searchSubmit}
-						regionName={regionName}
-					/>
+					<RegionDropDown onSubmit={searchSubmit}/>
 					<div tw="h-[36px]" />
 					<MintButton
 						tw="w-full h-[40px] font-medium hover:text-white hover:bg-[#05C3B6]"

@@ -17,7 +17,8 @@ import tw from "twin.macro";
 import { SignUpRequest } from "lib/dto/signUp/signUpRequest";
 import { SignInResponse } from "lib/dto/signIn/signInResponse";
 import { useRouter } from "next/router";
-import RegionDropBox from "@components/userInfo/regionDropBox";
+import BasicMenu from "@components/userInfo/regionDropBox";
+import RegionDropDown from "@components/userInfo/regionDropBox";
 
 export default function SignUp() {
 	const emailFormat = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
@@ -35,7 +36,6 @@ export default function SignUp() {
 	const [isCheckedAgreement2, setIsCheckedAgreement2] = useState(false);
 	const [isCheckedAgreement3, setIsCheckedAgreement3] = useState(false);
 	const [regionId, setRegionId] = useState<string>("");
-	const [regionName, setRegionName] = useState("");
 	const router = useRouter();
 
 	const sendVerificationNumber = () => {
@@ -82,9 +82,8 @@ export default function SignUp() {
 		setIsClickedButton2(true);
 	};
 
-	const searchSubmit = (selectedRegionId: string, selectedRegionName: string) => {
+	const searchSubmit = (selectedRegionId: string) => {
 		setRegionId(selectedRegionId);
-		setRegionName(selectedRegionName);
 	};
 
 	const confirm = () => {
@@ -250,9 +249,12 @@ export default function SignUp() {
 							)}
 						</div>
 					</div>
-					<div tw="h-[26px]" />
-					<RegionDropBox onSubmit={searchSubmit} regionName={regionName}/>
-					<div tw="h-[26px]" />
+					<div tw="h-[20px]" />
+					<div tw="relative">
+					{/*<RegionDropBox onSubmit={searchSubmit} regionName={regionName}/>*/}
+					<RegionDropDown onSubmit={searchSubmit}/>
+					</div>
+					<div tw="h-[20px]" />
 					<div tw="m-auto">
 						<div tw="flex justify-between items-center">
 							<FormControlLabel

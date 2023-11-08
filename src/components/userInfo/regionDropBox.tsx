@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-
-import tw from "twin.macro";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { SantiagoGet } from "lib/fetchData";
-import RegionBox from "./regionBox";
+import { MenuList } from "@mui/material";
 
 type RegionDropBoxProps = {
-	onSubmit(regionId: string, regionName: string): void;
-    regionName: string | null;
+	onSubmit(regionId: string): void;
 };
 
 type RegionsProps = {
@@ -16,41 +16,92 @@ type RegionsProps = {
 };
 
 interface RegionInterface {
-    id: string;
-    regionName: string;
+	id: string;
+	regionName: string;
 }
 
-const RegionDropBox = (props: RegionDropBoxProps) => {
-	const [regionsList, setRegionsList] = useState<RegionInterface[]>([]);
-	const [open, setOpen] = useState<boolean>(false);
+export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
+	const [regionsList, setRegionsList] = React.useState<RegionInterface[]>([]);
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const open = Boolean(anchorEl);
 
 	const fetchData = async () => {
 		const regions = await SantiagoGet("regions");
-		return regions.data.map(
-			(item: RegionsProps) => {return {id: item.regionId, regionName: item.name_en}},
-		);
+		return regions.data.map((item: RegionsProps) => {
+			return { id: item.regionId, regionName: item.name_en };
+		});
 	};
 
-	useEffect(() => {
-		fetchData()
-        .then((data)=>{
-            setRegionsList(data);
-        });
+	React.useEffect(() => {
+		fetchData().then((data) => {
+			setRegionsList(data);
+		});
 	}, []);
 
-	return (
-		<> 
-			<div tw="text-[#737373] hover:cursor-pointer" onClick={()=> open ? setOpen(false) : setOpen(true)}>
-                {props.regionName ? props.regionName : "Select your nationality"}
-            </div>
-			{open && (
-				<RegionBox
-					regionsList={regionsList}
-					onSubmit={props.onSubmit}
-                    setOpen={setOpen}
-				/>
-			)}
-		</>
+	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+	const [regionName, setRegionName] = React.useState(
+		"Select your nationality",
 	);
-};
-export default RegionDropBox;
+
+	return (
+		<div>
+			<Button
+				id="basic-button"
+				aria-controls={open ? "basic-menu" : undefined}
+				aria-haspopup="true"
+				aria-expanded={open ? "true" : undefined}
+				onClick={handleClick}
+				sx={{
+					color: "grey",
+				}}
+				style={{
+					textTransform: "none",
+					justifyContent: "flex-start",
+					fontSize: "1rem",
+					backgroundColor: "transparent",
+				}}
+				fullWidth>
+				{regionName}
+			</Button>
+			<Menu
+				id="basic-menu"
+				anchorEl={anchorEl}
+				open={open}
+				onClose={handleClose}
+                style={{
+                    maxHeight: "310px"
+                }}
+				MenuListProps={{
+                    style:{width: "320px"},
+					"aria-labelledby": "basic-button",
+				}}>
+				{regionsList.map((item, index) => (
+					<MenuList
+						key={index}
+						sx={{
+							borderBottom: "0.5px solid #D4D4D4",
+							width: "full",
+						}}>
+						<MenuItem
+							onClick={(e) => {
+								e.preventDefault();
+								onSubmit(item.id);
+								setAnchorEl(null);
+								setRegionName(item.regionName);
+							}}>
+							{item.regionName}
+						</MenuItem>
+					</MenuList>
+				))}
+				<MenuItem onClick={handleClose}>Profile</MenuItem>
+				<MenuItem onClick={handleClose}>My account</MenuItem>
+				<MenuItem onClick={handleClose}>Logout</MenuItem>
+			</Menu>
+		</div>
+	);
+}
