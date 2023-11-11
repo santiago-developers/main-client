@@ -1,7 +1,13 @@
 import { error } from "console";
 
-export async function SantiagoPost(url: string) {
-	const res = await fetch(`http://3.34.114.67:11009/${url}`);
+export async function SantiagoPost<T, R>(url: string, dto: T): Promise<R> {
+	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(dto),
+	});
 	if (!res.ok) {
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
@@ -9,13 +15,30 @@ export async function SantiagoPost(url: string) {
 	return data;
 }
 
-export async function SantiagoGet(url: string) {
+export async function SantiagoPut<T, R>(url: string, dto: T): Promise<R> {
+	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(dto),
+	});
+
+	if(!res.ok) {
+		throw new Error(`Failed to fetch posts, received status ${res.status}`);
+	}
+	const data = await res.json();
+	return data;
+}
+
+export async function SantiagoGet<T>(url: string): Promise<T> {
 	try {
 		const res = await fetch(`http://3.34.114.67:11009/${url}`);
 		const data = await res.json();
 		return data;
 	} catch (err) {
 		console.log({ url }, err);
+		throw new Error();
 	}
 	// if (!res.ok) {
 	// 	throw new Error(`Failed to fetch posts, received status ${res.status}`);
