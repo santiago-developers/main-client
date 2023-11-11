@@ -13,9 +13,8 @@ import BWritingsSvg from "@public/images/magazines/bWritings.svg";
 import PhotoSvg from "@public/images/photo.svg";
 import WritingSvg from "@public/images/writing.svg";
 import LineSvg from "@public/images/line.svg";
-import BPhotographersSvg from "@public/images/magazines/bPhotographers.svg";
-import BWritersSvg from "@public/images/magazines/bWriters.svg";
-import BFanaticsSvg from "@public/images/magazines/bFanatics.svg";
+import BestList from "@components/magazines/BestList";
+
 
 export default function MagazinesPage({
 	regions,
@@ -42,7 +41,7 @@ export default function MagazinesPage({
 		setSearchTerm("");
 	};
 
-	const bestList = ["Best Photographers", "Best Writers", "Best Fanatics"];
+	
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writings"];
 
 	const [selectedType, setSelectedType] = useState<string>("Hot");
@@ -55,8 +54,10 @@ export default function MagazinesPage({
 	return (
 		<div tw="flex flex-col items-center mb-20">
 			<div tw="relative w-full pt-10">
-			<Searchbar onSubmit={searchSubmit} />
-			<button tw="absolute bottom-0 right-72 w-[134px] h-[38px] rounded bg-[#D9D9D9] text-white">South Korea</button>
+				<Searchbar onSubmit={searchSubmit} />
+				<button tw="absolute bottom-0 right-72 w-[134px] h-[38px] rounded bg-[#D9D9D9] text-white">
+					South Korea
+				</button>
 			</div>
 			<div tw="flex items-center justify-center gap-32 text-center mt-10 mb-14 text-sm">
 				{searchType.map((item, index) => (
@@ -137,28 +138,10 @@ export default function MagazinesPage({
 						</div>
 					))}
 				</div>
-				<LineSvg  />
+				<LineSvg />
 				{/* best들 */}
 				<div tw="flex flex-col gap-16">
-					{bestList.map((item, index) => (
-						<div tw="text-[14px]" key={index}>
-							<div tw="whitespace-nowrap flex gap-4 pb-2 font-bold ">
-								{item === "Best Photographers" && (<BPhotographersSvg/>)}
-								{item === "Best Writers" && (<BWritersSvg/>)}
-								{item === "Best Fanatics" && (<BFanaticsSvg/>)}
-								<span>{item}</span>
-							</div>
-							{Array.from({ length: 5 }, (_, index) => (
-								<div
-									tw="flex items-center gap-4 pb-5"
-									key={index}>
-									{index + 1}
-									<DefautUserSvg tw="w-[24.5px] h-[24.5px]" />{" "}
-									David
-								</div>
-							))}
-						</div>
-					))}
+				<BestList/>
 				</div>
 			</div>
 		</div>
