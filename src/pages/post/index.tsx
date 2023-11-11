@@ -103,6 +103,7 @@ export default function PostPage({
 				</div>
 			</div>
 			<div tw="flex">
+				{/* 이미지미리보기 수정필요 */}
 				<PostSvg width="750" />
 			</div>
 			<div tw="py-10 leading-9">{content}</div>

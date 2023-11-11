@@ -9,17 +9,9 @@ import { countinents } from "@statics/region";
 import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 import { SantiagoGet } from "lib/fetchData";
+import { RegionProps, Regions } from "types/regions";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>
-type Regions = {
-	data: string[];
-};
-
-type RegionProps = {
-	regionId: string;
-	name_en: string;
-	[key: string]: string;
-};
 
 export default function MainPage({
 	regions,

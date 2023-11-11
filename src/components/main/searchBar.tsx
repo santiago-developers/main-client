@@ -58,6 +58,8 @@ const Searchbar = (props: SearchbarProps) => {
 					mx: 44,
 					py: 0.5,
 					borderTop: "0.5px solid #D4D4D4",
+					width: 500,
+					height: 38,
 				}}
 				onSubmit={(e) => {
 					e.preventDefault();
