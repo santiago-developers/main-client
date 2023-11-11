@@ -15,7 +15,6 @@ import WritingSvg from "@public/images/writing.svg";
 import LineSvg from "@public/images/line.svg";
 import BestList from "@components/magazines/BestList";
 
-
 export default function MagazinesPage({
 	regions,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -41,7 +40,6 @@ export default function MagazinesPage({
 		setSearchTerm("");
 	};
 
-	
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writings"];
 
 	const [selectedType, setSelectedType] = useState<string>("Hot");
@@ -141,7 +139,7 @@ export default function MagazinesPage({
 				<LineSvg />
 				{/* best들 */}
 				<div tw="flex flex-col gap-16">
-				<BestList/>
+					<BestList />
 				</div>
 			</div>
 		</div>

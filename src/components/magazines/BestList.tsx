@@ -4,15 +4,15 @@ import BPhotographersSvg from "@public/images/magazines/bPhotographers.svg";
 import BWritersSvg from "@public/images/magazines/bWriters.svg";
 import BFanaticsSvg from "@public/images/magazines/bFanatics.svg";
 import { SantiagoGet } from "lib/fetchData";
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect } from "react";
+import { useState } from "react";
 
 const BestList = () => {
 	const bestList = ["Best Photographers", "Best Writers", "Best Fanatics"];
 
-	const [bWriters, setBWriters] =useState<string>([]);
-	const [bPhotographers, setBPhotographers] =useState<string>([]);
-	const [bFanatics, setBFanatics] =useState<string>([]);
+	const [bWriters, setBWriters] = useState([]);
+	const [bPhotographers, setBPhotographers] = useState([]);
+	const [bFanatics, setBFanatics] = useState([]);
 
 	const fetchData = async () => {
 		const bestList = await SantiagoGet("users");

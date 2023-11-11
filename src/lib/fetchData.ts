@@ -24,7 +24,7 @@ export async function SantiagoPut<T, R>(url: string, dto: T): Promise<R> {
 		body: JSON.stringify(dto),
 	});
 
-	if(!res.ok) {
+	if (!res.ok) {
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
 	const data = await res.json();

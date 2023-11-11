@@ -72,9 +72,7 @@ export default function SimpleSignUp() {
 		}
 	};
 
-	const searchSubmit = (
-		selectedRegionId: string,
-	) => {
+	const searchSubmit = (selectedRegionId: string) => {
 		setRegionId(selectedRegionId);
 	};
 
@@ -160,7 +158,7 @@ export default function SimpleSignUp() {
 						<div tw="h-[8px]" />
 					</div>
 					<div tw="h-[26px]" />
-					<RegionDropDown onSubmit={searchSubmit}/>
+					<RegionDropDown onSubmit={searchSubmit} />
 					<div tw="h-[36px]" />
 					<MintButton
 						tw="w-full h-[40px] font-medium hover:text-white hover:bg-[#05C3B6]"
