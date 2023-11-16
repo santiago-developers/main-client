@@ -1,6 +1,5 @@
-import { Divider, tableHeadClasses } from "@mui/material";
+import { Divider } from "@mui/material";
 import QuillEditer from "@utils/QuillEditer";
-import "react-quill/dist/quill.snow.css";
 import tw from "twin.macro";
 import CountryModal from "@components/post/publish/CountryModal";
 import { useEffect, useState } from "react";

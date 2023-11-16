@@ -7,4 +7,6 @@ export const MintButton = styled.button`
 	font-size: sm;
 	padding: 0 25px;
 	cursor: pointer;
+	width: max-content;
+	background-color: white;
 `;

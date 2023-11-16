@@ -21,7 +21,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 			setMyName(name);
 			setMyRegion(region ? region.name_en : "earth");
 		}
-	});
+	},[]);
 
 	return (
 		<>
@@ -37,7 +37,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 					<>
 						<div tw="flex gap-5">
 							<MintButton>
-								<Link href="/post/publish" tw="text-mint">
+								<Link href="/write" tw="text-mint">
 									Write
 								</Link>
 							</MintButton>

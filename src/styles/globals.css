@@ -29,6 +29,7 @@ body {
 	background-color: #ffffff;
 }
 .wrap {
+	position: relative;
 	padding-top: 98px;
 	margin: 0 auto;
 	position: relative;

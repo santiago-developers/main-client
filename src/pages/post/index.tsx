@@ -17,33 +17,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { SantiagoGet } from "lib/fetchData";
-
-type MagazineProps = {
-	magazineId: string;
-	title: string;
-	content: string;
-	createdAt: string;
-	photoLikeCount: number;
-	writingLikeCount: number;
-	writer: WriterProps;
-	tags: TagProps[];
-};
-
-type WriterProps = {
-	id: string;
-	imageUrl: string;
-	name: string;
-	region: RegionProps;
-};
-
-type RegionProps = {
-	name_en: string;
-};
-
-type TagProps = {
-	tagId: string;
-	tag: string;
-};
+import { MagazineProps, TagProps } from "types/magazines";
 
 export default function PostPage({
 	post,
@@ -128,7 +102,7 @@ export default function PostPage({
 }
 
 export const getStaticProps = (async () => {
-	const post = await SantiagoGet("magazines/tesgt");
+	const post = await SantiagoGet<MagazineProps>("magazines/tesgt");
 
 	return {
 		props: {

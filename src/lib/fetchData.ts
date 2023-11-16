@@ -1,5 +1,3 @@
-import { error } from "console";
-
 export async function SantiagoPost<T, R>(url: string, dto: T): Promise<R> {
 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
 		method: "POST",
@@ -7,6 +5,20 @@ export async function SantiagoPost<T, R>(url: string, dto: T): Promise<R> {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify(dto),
+	});
+	if (!res.ok) {
+		throw new Error(`Failed to fetch posts, received status ${res.status}`);
+	}
+	const data = await res.json();
+	return data;
+}
+export async function SantiagoImagePost<T, R>(
+	dto,
+): Promise<R> {
+	const url = "magazines/upload_image";
+	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+		method: "POST",
+		body: dto,
 	});
 	if (!res.ok) {
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);

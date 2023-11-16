@@ -108,7 +108,7 @@ export default function MagazinesPage({
 			</div>
 			<div tw="w-[1021px] flex justify-center items-center gap-10">
 				{/* magazinelist component로 빼기 */}
-				<div tw="w-full grid grid-cols-3 gap-5 pr-8">
+				<div tw="w-full grid grid-cols-3 gap-10 pr-8">
 					{Array.from({ length: 9 }, (_, index) => (
 						<div
 							tw="w-[220px] h-[290px] flex flex-col items-center justify-between"
