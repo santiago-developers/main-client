@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@components/post/publish/CountryModal";
 import { useState } from "react";
-import {  SantiagoPost} from "lib/fetchData";
+import { SantiagoPost } from "lib/fetchData";
 import QuillEditer from "@utils/QuillEditer";
 import writeStore from "store/writeStore";
 
@@ -106,7 +106,6 @@ const WritePage = () => {
 						/>
 					</div>
 					<button onClick={openCountry}>{selectedRegion}</button>
-
 					{isOpen && (
 						<CountryModal
 							isOpen={isOpen}
@@ -115,7 +114,12 @@ const WritePage = () => {
 						/>
 					)}
 				</div>
-				<QuillEditer value={content} setContent={setContent} />
+
+				<QuillEditer
+					value={content}
+					setContent={setContent}
+					tw="bg-red-500"
+				/>
 				<button
 					tw="absolute top-0 right-56 m-10 z-10 font-bold"
 					onClick={handleSubmit}>

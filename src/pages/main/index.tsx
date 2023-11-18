@@ -5,11 +5,11 @@ import { Grid, Paper } from "@mui/material";
 import Searchbar from "@components/main/SearchBar";
 import { useRouter } from "next/router";
 import { experimentalStyled as styled } from "@mui/material/styles";
-import { countinents } from "@statics/region";
+import { countinents } from "@statics/continents";
 import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 import { SantiagoGet } from "lib/fetchData";
-import {  RegionProps, Regions } from "types/regions";
+import { RegionProps, Regions } from "types/regions";
 import regionsStore from "store/regionsStore";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>

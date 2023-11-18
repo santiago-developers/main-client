@@ -1,5 +1,5 @@
 import { Grid, Paper } from "@mui/material";
-import { countinents } from "@statics/region";
+import { countinents } from "@statics/continents";
 import React, { useState } from "react";
 import tw from "twin.macro";
 import { experimentalStyled as styled } from "@mui/material/styles";
@@ -48,12 +48,13 @@ const CountryModal = ({ isOpen, setIsOpen, setSelectedRegion }) => {
 			setRegionNames(regionNames);
 		}
 	};
+
 	const handleRegionClick = (selectedName: string) => {
 		setSelectedRegion(selectedName);
 		const region = regions
 			.map((item) => item)
 			.find((item) => item.name_en === selectedName);
-		setRegionId(region.regionId)
+		setRegionId(region.regionId);
 		setIsOpen(!open);
 	};
 
@@ -66,15 +67,15 @@ const CountryModal = ({ isOpen, setIsOpen, setSelectedRegion }) => {
 							onClick={(e) => {
 								e.preventDefault();
 								regionClick(item as string);
-							}}>
+							}}
+							tw="cursor-pointer">
 							{item}
 						</Item>
 					</Grid>
 				))}
-				<div tw="w-full ml-4 bg-red-400"></div>
 				{regionsName.map((item, index) => (
 					<span
-						tw="bg-[#F5F5F5] max-w-max px-6 py-2 rounded-lg text-[16px] ml-4 mt-2"
+						tw="bg-[#F5F5F5] max-w-max px-6 py-2 rounded-lg text-[16px] ml-4 mt-3 cursor-pointer"
 						key={index}
 						onClick={(e) => {
 							e.preventDefault();
