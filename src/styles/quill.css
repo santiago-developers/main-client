@@ -6,5 +6,14 @@
 }
 .ql-editor > p {
 	line-height: 2.25rem;
-	font-size:1rem;
+	font-size: 1rem;
+}
+.ql-editor h1 {
+	font-size: 1.8rem !important;
+}
+.ql-editor h2 {
+	font-size: 1.6rem !important;
+}
+.ql-editor h3 {
+	font-size: 1.4rem !important;
 }

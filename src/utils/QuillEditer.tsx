@@ -5,8 +5,15 @@ import { SantiagoImagePost } from "lib/fetchData";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillNoSSRWrapper from "./reactQuill/QuillNoSSRWrapper";
+import writeStore from "store/writeStore";
+
+type ImageProps ={
+	url:string;
+	id:string
+}
 
 export default function QuillEditer({ value, setContent }) {
+	const { setImageId } = writeStore();
 	const quillRef = useRef<ReactQuill>(null);
 	const [imgUrlIds, setImgUrlIds] = useState<string[]>([]);
 
@@ -23,17 +30,18 @@ export default function QuillEditer({ value, setContent }) {
 				formData.append("file", file[0]);
 			}
 			if (quillRef.current) {
-				const fetchData: string[] = await SantiagoImagePost(formData);
-				console.log(fetchData);
+				const fetchData:ImageProps  = await SantiagoImagePost(formData);
 				const url = fetchData.url;
 				const id = fetchData.id;
 				setImgUrlIds((prevImgUrlIds) => [...prevImgUrlIds, id]);
+				console.log("imgurl: ", imgUrlIds);
 				const editor = quillRef.current.getEditor();
 				const range = editor.getSelection();
 				editor.insertEmbed(range.index, "image", url);
 				editor.setSelection(range.index + 1);
 			}
 		});
+		setImageId(imgUrlIds);
 	};
 
 	const modules = useMemo(
@@ -57,7 +65,8 @@ export default function QuillEditer({ value, setContent }) {
 			},
 			// imageResize: {
 			// 	parchment: Quill.import("parchment"),
-			// 	modules: ["Resize", "DisplaySize"],
+			// 	modules: ["Resizeimport { writeStore } from 'store/imageStore';
+// ", "DisplaySize"],
 			// },
 			clipboard: {
 				matchVisual: false,

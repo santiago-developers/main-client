@@ -9,7 +9,8 @@ import { countinents } from "@statics/region";
 import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 import { SantiagoGet } from "lib/fetchData";
-import { RegionProps, Regions } from "types/regions";
+import {  RegionProps, Regions } from "types/regions";
+import regionsStore from "store/regionsStore";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>
 
@@ -18,6 +19,8 @@ export default function MainPage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
 
+	const { setRegions } = regionsStore();
+	setRegions(regions.data);
 	const Item = styled(Paper)(({ theme }) => ({
 		// background image 삽입
 		backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,7 +35,7 @@ export default function MainPage({
 
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-		const regionsId = regions.data
+		const searchedRegion = regions.data
 			.map((item: RegionProps) => item)
 			.find((item: RegionProps) => item.name_en === "France");
 
@@ -40,7 +43,7 @@ export default function MainPage({
 			router.push({
 				pathname: "/magazines",
 				query: {
-					regin_id: regionsId.regionId,
+					regin_id: searchedRegion.regionId,
 					query_type: "hot",
 					base: 0,
 					limit: 8,
@@ -112,7 +115,7 @@ export default function MainPage({
 }
 
 export const getStaticProps = (async () => {
-	const regions = await SantiagoGet("regions");
+	const regions = await SantiagoGet<Regions>("regions");
 
 	return {
 		props: {

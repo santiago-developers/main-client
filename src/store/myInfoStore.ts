@@ -19,7 +19,7 @@ interface MyInfo {
 	setFollowingCount: (newFollowingCount: number) => void;
 	setPhotoScore: (newPhotoScore: number) => void;
 	setWritingScore: (newWritingScore: number) => void;
-	setRegion: (newRegion: RegionResponse) => void;
+	imageStore : (newRegion: RegionResponse) => void;
 
 	reset: () => void;
 }

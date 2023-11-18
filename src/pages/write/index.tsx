@@ -3,11 +3,15 @@ import { Divider } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@components/post/publish/CountryModal";
 import { useState } from "react";
-import { SantiagoPost } from "lib/fetchData";
+import {  SantiagoPost} from "lib/fetchData";
 import QuillEditer from "@utils/QuillEditer";
+import writeStore from "store/writeStore";
 
 const WritePage = () => {
 	// 추후 authentication 설정 필요
+	const { imageIds, regionId } = writeStore();
+	const [selectedRegion, setSelectedRegion] =
+		useState<string>("Select a country");
 
 	const [isOpen, setIsOpen] = useState(false);
 	const openCountry = () => {
@@ -29,20 +33,44 @@ const WritePage = () => {
 
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
-	const [file, setFile] = useState<string>("");
 
 	const handleSubmit = () => {
 		const dto = {
 			title,
 			content,
-			regionId: "0bcbbb91-89bd-48f7-9562-ec662b6fd3a2",
+			regionId,
 			userId: "e400750b-cd1d-4b21-bdb0-0111c813757b",
-			tags: tags,
+			tags,
 			language: "korean",
-			imageUrlUIds: [],
+			imageUrlIds: imageIds,
 		};
 		console.log(dto);
-		// SantiagoPost("magazines", dto);
+		const fetchData = async () => {
+			try {
+				const response = await fetch(
+					"http://3.34.114.67:11009/magazines",
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							// Add any other headers if needed
+						},
+						body: JSON.stringify(dto),
+					},
+				);
+
+				if (!response.ok) {
+					throw new Error(`HTTP error! Status: ${response.status}`);
+				}
+
+				const data = await response.json();
+				console.log("Response data:", data);
+			} catch (error) {
+				console.error("Error:", error);
+			}
+		};
+		fetchData();
+		// SantiagoPost2("magazines", dto);
 	};
 
 	return (
@@ -77,14 +105,19 @@ const WritePage = () => {
 							onKeyDown={handleKeyDown}
 						/>
 					</div>
-					<button onClick={openCountry}>Select a country</button>
+					<button onClick={openCountry}>{selectedRegion}</button>
+
 					{isOpen && (
-						<CountryModal isOpen={isOpen} setIsOpen={setIsOpen} />
+						<CountryModal
+							isOpen={isOpen}
+							setIsOpen={setIsOpen}
+							setSelectedRegion={setSelectedRegion}
+						/>
 					)}
 				</div>
 				<QuillEditer value={content} setContent={setContent} />
 				<button
-					tw="absolute top-0 right-52 m-10 z-10 font-bold"
+					tw="absolute top-0 right-56 m-10 z-10 font-bold"
 					onClick={handleSubmit}>
 					Publish
 				</button>

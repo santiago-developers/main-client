@@ -52,7 +52,29 @@ export async function SantiagoGet<T>(url: string): Promise<T> {
 		console.log({ url }, err);
 		throw new Error();
 	}
-	// if (!res.ok) {
-	// 	throw new Error(`Failed to fetch posts, received status ${res.status}`);
-	// }
 }
+
+// export async function SantiagoPost2<T>(url: string, dto): Promise<T> {
+// 	try {
+// 		const res = await fetch(`http://3.34.114.67:11009/${url}`,d);
+// 		const data = await res.json();
+// 		return data;
+// 	} catch (err) {
+// 		console.log({ url }, err);
+// 		throw new Error();
+// 	}
+// }
+// export async function SantiagoPost2<T, R>(url: string, dto: T): Promise<R> {
+// 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+// 		method: "POST",
+// 		headers: {
+// 			"Content-Type": "application/json",
+// 		},
+// 		body: dto,
+// 	});
+// 	if (!res.ok) {
+// 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
+// 	}
+// 	const data = await res.json();
+// 	return data;
+// }

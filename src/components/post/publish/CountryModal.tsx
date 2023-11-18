@@ -1,10 +1,13 @@
 import { Grid, Paper } from "@mui/material";
 import { countinents } from "@statics/region";
-import React from "react";
+import React, { useState } from "react";
 import tw from "twin.macro";
 import { experimentalStyled as styled } from "@mui/material/styles";
+import writeStore from "store/writeStore";
+import regionsStore from "store/regionsStore";
+import { RegionProps } from "types/regions";
 
-const CountryModal = ({ isOpen, setIsOpen }) => {
+const CountryModal = ({ isOpen, setIsOpen, setSelectedRegion }) => {
 	const style = {
 		position: "absolute" as "absolute",
 		top: 250,
@@ -26,8 +29,32 @@ const CountryModal = ({ isOpen, setIsOpen }) => {
 		fontSize: "16px",
 	}));
 
-	const chooseCountry = () => {
-		setIsOpen(false);
+	const { regions } = regionsStore();
+	const { setRegionId } = writeStore();
+	const [regionsName, setRegionNames] = useState<string[]>([]);
+
+	const regionClick = (item: string) => {
+		const continent = item.toLowerCase().replace(/ /g, "_");
+		const regionAllNames = regions
+			.map((item) => item)
+			.map((item) => item.name_en);
+		const regionNames = regions
+			.map((item) => item)
+			.filter((item) => item.continent === continent)
+			.map((item) => item.name_en);
+		if (continent === "all") {
+			setRegionNames(regionAllNames);
+		} else {
+			setRegionNames(regionNames);
+		}
+	};
+	const handleRegionClick = (selectedName: string) => {
+		setSelectedRegion(selectedName);
+		const region = regions
+			.map((item) => item)
+			.find((item) => item.name_en === selectedName);
+		setRegionId(region.regionId)
+		setIsOpen(!open);
 	};
 
 	return (
@@ -35,10 +62,26 @@ const CountryModal = ({ isOpen, setIsOpen }) => {
 			<Grid container spacing={2}>
 				{countinents.map((item, index) => (
 					<Grid item xs={4} md={3} key={index}>
-						<Item>
-							<button onClick={chooseCountry}>{item}</button>
+						<Item
+							onClick={(e) => {
+								e.preventDefault();
+								regionClick(item as string);
+							}}>
+							{item}
 						</Item>
 					</Grid>
+				))}
+				<div tw="w-full ml-4 bg-red-400"></div>
+				{regionsName.map((item, index) => (
+					<span
+						tw="bg-[#F5F5F5] max-w-max px-6 py-2 rounded-lg text-[16px] ml-4 mt-2"
+						key={index}
+						onClick={(e) => {
+							e.preventDefault();
+							handleRegionClick(item as string);
+						}}>
+						{item}
+					</span>
 				))}
 			</Grid>
 		</Paper>
