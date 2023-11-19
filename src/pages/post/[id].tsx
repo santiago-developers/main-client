@@ -18,10 +18,14 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps, TagProps } from "types/magazines";
+import Image from "next/image";
 
 export default function PostPage({
 	post,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+	if (!post) {
+		return <p>Loading...</p>;
+	}
 	const {
 		magazineId,
 		title,
@@ -31,8 +35,10 @@ export default function PostPage({
 		writingLikeCount,
 		writer,
 		tags,
+		imageUrl,
 	}: MagazineProps = post;
-	const formatDate = dayjs(createdAt).format("MMM DD, YYYY");
+		
+		console.log(imageUrl)
 
 	return (
 		<div tw="w-[60%] mx-auto flex flex-col justify-center">
@@ -65,7 +71,9 @@ export default function PostPage({
 						</Tooltip>
 						{photoLikeCount}
 					</span>
-					<span tw="text-[#A3A3A3] pl-4">{formatDate}</span>
+					<span tw="text-[#A3A3A3] pl-4">
+						{dayjs(createdAt).format("MMM DD, YYYY")}
+					</span>
 				</div>
 				<MoreMenu moreMenuType="post" />
 			</div>
@@ -76,10 +84,11 @@ export default function PostPage({
 					<span tw="text-xs">{writer.region.name_en}</span>
 				</div>
 			</div>
-			<div tw="flex">
-				{/* 이미지미리보기 수정필요 */}
-				<PostSvg width="750" />
-			</div>
+			{imageUrl && (
+				<div tw="flex ">
+					<Image src={`${imageUrl}`} alt="postImage" fill />
+				</div>
+			)}
 			<div tw="py-10 leading-9">{content}</div>
 			<div tw="flex gap-3 font-bold mb-14">
 				{tags.map((item: TagProps) => (
@@ -101,14 +110,25 @@ export default function PostPage({
 	);
 }
 
-export const getStaticProps = (async () => {
-	const post = await SantiagoGet<MagazineProps>("magazines/tesgt");
+export const getStaticPaths = async () => {
+	return {
+		paths: [{ params: { id: "1번" } }],
+		fallback: true,
+	};
+};
 
+export const getStaticProps = (async (context) => {
+	const { params } = context;
+	const magazineId = params.id;
+	console.log(params);
+	const post = await SantiagoGet<MagazineProps>(`magazines/${magazineId}`);
+	if (!post) {
+		return { notFound: true };
+	}
 	return {
 		props: {
 			post,
 		},
-		revalidate: 10,
 	};
 }) satisfies GetStaticProps<{
 	post: MagazineProps;

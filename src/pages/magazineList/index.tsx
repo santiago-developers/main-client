@@ -1,5 +1,5 @@
 import Searchbar from "@components/main/searchBar";
-import { RegionProps, Regions } from "types/regions";
+import { RegionProps } from "types/regions";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { SantiagoGet } from "lib/fetchData";
@@ -14,15 +14,21 @@ import PhotoSvg from "@public/images/photo.svg";
 import WritingSvg from "@public/images/writing.svg";
 import LineSvg from "@public/images/line.svg";
 import BestList from "@components/magazines/BestList";
+import Image from "next/image";
+import regionsStore from "store/regionsStore";
+import dayjs from "dayjs";
+import Link from "next/link";
 
-export default function MagazinesPage({
-	regions,
+export default function MagazineListPage({
+	magazines,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+	console.log(magazines);
+	const { regions } = regionsStore();
 	const router = useRouter();
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-		const regionsId = regions.data
+		const regionsId = regions
 			.map((item: RegionProps) => item)
 			.find((item: RegionProps) => item.name_en === "France");
 
@@ -109,30 +115,48 @@ export default function MagazinesPage({
 			<div tw="w-[1021px] flex justify-center items-center gap-10">
 				{/* magazinelist component로 빼기 */}
 				<div tw="w-full grid grid-cols-3 gap-10 pr-8">
-					{Array.from({ length: 9 }, (_, index) => (
+					{magazines.data.map((item) => (
 						<div
 							tw="w-[220px] h-[290px] flex flex-col items-center justify-between"
-							key={index}>
+							key={item.id}>
 							{/* writer정보 */}
 							<div tw=" w-full h-[30px] flex justify-between">
 								<div tw="flex">
 									<DefautUserSvg tw="w-[30px] h-[30px]" />
 									<div tw="flex flex-col justify-center pl-2">
-										<span tw="text-sm">Andrew</span>
-										<span tw="text-xs">South Korea</span>
+										<span tw="text-sm">
+											{item.writer.name}
+										</span>
+										<span tw="text-xs">
+											{item.writer.region.name_en}
+										</span>
 									</div>
 								</div>
 								<div tw="place-self-end flex items-center gap-1 text-sm">
 									<PhotoSvg tw="w-[12px] h-[12px]" />
-									23
+									{item.photoLikeCount}
 									<WritingSvg tw="w-[12px] h-[12px]" />
-									24
+									{item.writingLikeCount}
 								</div>
 							</div>
 							{/* img */}
-							<div tw="w-[220px] h-full bg-red-500 rounded-2xl my-1"></div>
-							<div tw="w-full">title</div>
-							<div tw="w-full text-xs text-[#A3A3A3]">date</div>
+							<Link href={`/post/${item.id}`}>
+								<div tw="relative w-[220px] h-[218px] bg-gray-100 rounded-2xl my-1">
+									<Image
+										src={
+											item.imageUrl || "/images/post.svg"
+										}
+										alt="postImage"
+										fill
+									/>
+								</div>
+								<div tw="w-full break-words">{item.title}</div>
+								<div tw="w-full text-xs text-[#A3A3A3]">
+									{dayjs(item.createdAt).format(
+										"MMM DD, YYYY",
+									)}
+								</div>
+							</Link>
 						</div>
 					))}
 				</div>
@@ -147,13 +171,13 @@ export default function MagazinesPage({
 }
 
 export const getStaticProps = (async () => {
-	const regions = await SantiagoGet("regions");
+	const magazines = await SantiagoGet("magazines");
 
 	return {
 		props: {
-			regions,
+			magazines,
 		},
 	};
 }) satisfies GetStaticProps<{
-	regions: Regions;
+	magazines: string[];
 }>;

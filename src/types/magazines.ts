@@ -6,7 +6,8 @@ export type MagazineProps = {
 	photoLikeCount: number;
 	writingLikeCount: number;
 	writer: WriterProps;
-	tags: TagProps[];
+	tags?: TagProps[];
+	imageUrl?: string;
 };
 
 export type WriterProps = {
