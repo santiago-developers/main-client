@@ -18,13 +18,28 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import TypeToggleButtonGroup from "@components/post/statistics/ToggleButtonGroup";
+import { SantiagoGet } from "lib/fetchData";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { StatisticDto } from "lib/dto/statistic/StatisticDto";
+import { ParsedUrlQuery } from "querystring";
+import { aggregateByMonth, formatDateToDayMonth } from "lib/formatDate";
 
-export default function Statistics() {
+export default function Statistics({
+	statistic,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+	const [selectedData, setSelectedData] = useState(statistic.viewCount);
 	const [date, setDate] = useState<string>();
 	const [timeUnit, setTimeUnit] = useState("Daily");
 	const [isOpen, setIsOpen] = useState(false);
 	const [type, setType] = useState("total_views");
+	const [totalCount, setTotalCount] = useState(statistic.totalViewCount);
 	const [typeText, setTypeText] = useState("Total Views");
+	const [labelX, setLabelX] = useState(
+		statistic.viewCount.map((vc) => formatDateToDayMonth(vc.date)),
+	);
+	const [dataY, setDataY] = useState(
+		statistic.viewCount.map((vc) => vc.count),
+	);
 
 	useEffect(() => {
 		if (!date) setDate(new Date().toLocaleDateString());
@@ -35,16 +50,56 @@ export default function Statistics() {
 		newType: string | null,
 	) => {
 		if (newType == "picture") {
-			setTypeText("Picture Likes");
 			setType("picture");
 		} else if (newType == "writing") {
-			setTypeText("Writing Likes");
 			setType("writing");
 		} else {
-			setTypeText("Total Views");
 			setType("total_views");
 		}
 	};
+
+	const selectTimeUnit = (newTimeUnit: string | null) => {
+		if (newTimeUnit == "Daily") {
+			setTimeUnit("Daily");
+		} else if (newTimeUnit == "Monthly") {
+			setTimeUnit("Monthly");
+		} else {
+			setTimeUnit("Monthly");
+		}
+	};
+
+	useEffect(() => {
+		if (type == "picture") {
+			setTypeText("Picture Likes");
+			setTotalCount(statistic.totalPhotoLikeCount);
+			timeUnit == "Daily"
+				? setSelectedData(statistic.photoLikeCount)
+				: setSelectedData(aggregateByMonth(statistic.photoLikeCount));
+		} else if (type == "writing") {
+			setTypeText("Writing Likes");
+			setTotalCount(statistic.totalWritingLikeCount);
+			timeUnit == "Daily"
+				? setSelectedData(statistic.writingLikeCount)
+				: setSelectedData(aggregateByMonth(statistic.writingLikeCount));
+		} else {
+			setTypeText("Total Views");
+			setTotalCount(statistic.totalViewCount);
+			timeUnit == "Daily"
+				? setSelectedData(statistic.viewCount)
+				: setSelectedData(aggregateByMonth(statistic.viewCount));
+		}
+	}, [timeUnit, type]);
+
+	useEffect(() => {
+		console.log(selectedData);
+		if(timeUnit == "Daily") 
+			setLabelX(selectedData.map((sd) => formatDateToDayMonth(sd.date)));
+		else if(timeUnit == "Monthly")
+			setLabelX(selectedData.map((sd) => sd.date));
+		else	
+			setLabelX(selectedData.map((sd) => sd.date));
+		setDataY(selectedData.map((sd) => sd.count));
+	}, [selectedData]);
 
 	ChartJS.register(
 		CategoryScale,
@@ -56,22 +111,6 @@ export default function Statistics() {
 		Legend,
 	);
 
-	const label_x = [
-		"1월",
-		"2월",
-		"3월",
-		"4월",
-		"5월",
-		"6월",
-		"7월",
-		"8월",
-		"9월",
-		"10월",
-		"11월",
-		"12월",
-	];
-	const data_y = [7, 2, 4, 9, 10, 4, 0, 0, 0, 3, 0, 2];
-
 	const options = {
 		responsive: true,
 		plugins: {
@@ -82,14 +121,20 @@ export default function Statistics() {
 				display: false,
 			},
 		},
+		scale: {
+			y: {
+				min: 0,
+				suggestedMax: 6,
+			},
+		},
 	};
 
 	const data = {
-		labels: label_x,
+		labels: labelX,
 		datasets: [
 			{
 				label: "none",
-				data: data_y,
+				data: dataY,
 				borderColor: "rgb(5,195,182)",
 				backgroundColor: "rgb(5,195,182)",
 			},
@@ -104,7 +149,7 @@ export default function Statistics() {
 					<div tw="relative">
 						<TimeUnitDropDown
 							timeUnit={timeUnit}
-							setTimeUnit={setTimeUnit}
+							setTimeUnit={selectTimeUnit}
 						/>
 					</div>
 					<div tw="relative w-[500px] flex justify-center">
@@ -146,7 +191,9 @@ export default function Statistics() {
 							<div tw="h-[4px]" />
 						</div>
 						<div tw="w-[12px]" />
-						<div tw="text-[28px] text-[#05C3B6] font-bold">128</div>
+						<div tw="text-[28px] text-[#05C3B6] font-bold">
+							{totalCount}
+						</div>
 					</div>
 				</div>
 				<div tw="h-[20px]" />
@@ -156,4 +203,18 @@ export default function Statistics() {
 			</div>
 		</>
 	);
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	const param = context.params as ParsedUrlQuery;
+	const id = param.id as string;
+	const statistic = await SantiagoGet<StatisticDto>(
+		`magazines/${id}/statistics`,
+	);
+
+	return {
+		props: {
+			statistic,
+		},
+	};
 }

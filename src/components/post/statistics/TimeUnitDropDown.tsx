@@ -4,7 +4,7 @@ import React from "react";
 import tw from "twin.macro";
 
 interface Props {
-	setTimeUnit: React.Dispatch<React.SetStateAction<string>>;
+	setTimeUnit: (newTimeUnit: string | null) => void;
 	timeUnit: string;
 }
 
