@@ -7,7 +7,15 @@ import writeStore from "store/writeStore";
 import regionsStore from "store/regionsStore";
 import { RegionProps } from "types/regions";
 
-const CountryModal = ({ isOpen, setIsOpen, setSelectedRegion }) => {
+type ContryModalProps = {
+	setIsOpen(value: boolean): void;
+	setSelectedRegion(value: string): void;
+};
+
+const CountryModal = ({
+	setIsOpen,
+	setSelectedRegion,
+}: ContryModalProps) => {
 	const style = {
 		position: "absolute" as "absolute",
 		top: 250,

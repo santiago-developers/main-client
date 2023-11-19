@@ -1,5 +1,6 @@
 export type MagazineProps = {
-	magazineId: string;
+	id?: string;
+	magazineId?: string;
 	title: string;
 	content: string;
 	createdAt: string;
@@ -12,7 +13,7 @@ export type MagazineProps = {
 
 export type WriterProps = {
 	id: string;
-	imageUrl: string;
+	imageUrl?: string;
 	name: string;
 	region: RegionProps;
 };
