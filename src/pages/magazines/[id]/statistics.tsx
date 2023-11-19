@@ -22,7 +22,11 @@ import { SantiagoGet } from "lib/fetchData";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { StatisticDto } from "lib/dto/statistic/StatisticDto";
 import { ParsedUrlQuery } from "querystring";
-import { aggregateByMonth, formatDateToDayMonth } from "lib/formatDate";
+import {
+	aggregateByMonth,
+	fillDates,
+	formatDateToDayMonth,
+} from "lib/formatDate";
 
 export default function Statistics({
 	statistic,
@@ -40,6 +44,7 @@ export default function Statistics({
 	const [dataY, setDataY] = useState(
 		statistic.viewCount.map((vc) => vc.count),
 	);
+	let [chartWidth, setChartWidth] = useState(3000);
 
 	useEffect(() => {
 		if (!date) setDate(new Date().toLocaleDateString());
@@ -73,31 +78,35 @@ export default function Statistics({
 			setTypeText("Picture Likes");
 			setTotalCount(statistic.totalPhotoLikeCount);
 			timeUnit == "Daily"
-				? setSelectedData(statistic.photoLikeCount)
-				: setSelectedData(aggregateByMonth(statistic.photoLikeCount));
+				? setSelectedData(fillDates(statistic.photoLikeCount))
+				: setSelectedData(
+						aggregateByMonth(fillDates(statistic.photoLikeCount)),
+				  );
 		} else if (type == "writing") {
 			setTypeText("Writing Likes");
 			setTotalCount(statistic.totalWritingLikeCount);
 			timeUnit == "Daily"
-				? setSelectedData(statistic.writingLikeCount)
-				: setSelectedData(aggregateByMonth(statistic.writingLikeCount));
+				? setSelectedData(fillDates(statistic.writingLikeCount))
+				: setSelectedData(
+						aggregateByMonth(fillDates(statistic.writingLikeCount)),
+				  );
 		} else {
 			setTypeText("Total Views");
 			setTotalCount(statistic.totalViewCount);
 			timeUnit == "Daily"
-				? setSelectedData(statistic.viewCount)
-				: setSelectedData(aggregateByMonth(statistic.viewCount));
+				? setSelectedData(fillDates(statistic.viewCount))
+				: setSelectedData(
+						aggregateByMonth(fillDates(statistic.viewCount)),
+				  );
 		}
 	}, [timeUnit, type]);
 
 	useEffect(() => {
-		console.log(selectedData);
-		if(timeUnit == "Daily") 
+		if (timeUnit == "Daily")
 			setLabelX(selectedData.map((sd) => formatDateToDayMonth(sd.date)));
-		else if(timeUnit == "Monthly")
+		else if (timeUnit == "Monthly")
 			setLabelX(selectedData.map((sd) => sd.date));
-		else	
-			setLabelX(selectedData.map((sd) => sd.date));
+		else setLabelX(selectedData.map((sd) => sd.date));
 		setDataY(selectedData.map((sd) => sd.count));
 	}, [selectedData]);
 
@@ -112,7 +121,8 @@ export default function Statistics({
 	);
 
 	const options = {
-		responsive: true,
+		responsive: false,
+		maintainAspectRatio: false,
 		plugins: {
 			legend: {
 				display: false,
@@ -133,7 +143,7 @@ export default function Statistics({
 		labels: labelX,
 		datasets: [
 			{
-				label: "none",
+				label: typeText,
 				data: dataY,
 				borderColor: "rgb(5,195,182)",
 				backgroundColor: "rgb(5,195,182)",
@@ -198,7 +208,9 @@ export default function Statistics({
 				</div>
 				<div tw="h-[20px]" />
 				<div>
-					<Line options={options} data={data} />
+					<div tw="overflow-auto">
+						<Line options={options} data={data} height={350} width={5000}/>
+					</div>
 				</div>
 			</div>
 		</>
