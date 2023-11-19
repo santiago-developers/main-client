@@ -103,7 +103,7 @@ export default function Statistics({
 
 	useEffect(() => {
 		if (timeUnit == "Daily")
-			setLabelX(selectedData.map((sd) => formatDateToDayMonth(sd.date)));
+			setLabelX(fillDates(statistic.viewCount).map((vc)=>formatDateToDayMonth(vc.date)));
 		else if (timeUnit == "Monthly")
 			setLabelX(selectedData.map((sd) => sd.date));
 		else setLabelX(selectedData.map((sd) => sd.date));
