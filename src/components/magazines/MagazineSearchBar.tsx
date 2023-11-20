@@ -10,7 +10,7 @@ type SearchbarProps = {
 const MagazineSearchBar = ({ onSubmit }: SearchbarProps) => {
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const handleSearch = (value: string) => {
-		setSearchTerm(value);
+		setSearchTerm(value);	
 	};
 
 	return (

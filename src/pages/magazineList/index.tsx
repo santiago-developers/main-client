@@ -7,15 +7,26 @@ import BPicturesSvg from "@public/images/magazines/bPictures.svg";
 import BWritingsSvg from "@public/images/magazines/bWritings.svg";
 import LineSvg from "@public/images/line.svg";
 import BestList from "@components/magazines/BestList";
-
 import CountryModal from "@components/post/publish/CountryModal";
 import Magazines from "@components/magazines/Magazines";
 import MagazineSearchBar from "@components/magazines/MagazineSearchBar";
+import writeStore from "store/writeStore";
+import { Paper } from "@mui/material";
 
 export default function MagazineListPage() {
+	const style = {
+		position: "absolute",
+		top: 20,
+		right: "22.5%",
+		width: 640,
+		padding: 4,
+		zIndex: 1,
+		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
+	};
+
 	const router = useRouter();
+	const { regionId } = writeStore();
 	const [searchTerm, setSearchTerm] = useState<string>("");
-	const [regionId, setRegionId] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
 	};
@@ -44,11 +55,14 @@ export default function MagazineListPage() {
 					Select a Country
 				</button>
 				{isOpen && (
-					<CountryModal
-						tw="absolute top-0 right-0"
-						setIsOpen={setIsOpen}
-						setSelectedRegion={setSelectedRegion}
-					/>
+					<div tw="relative w-full" >
+						<Paper sx={style}>
+							<CountryModal
+								setIsOpen={setIsOpen}
+								setSelectedRegion={setSelectedRegion}
+							/>
+						</Paper>
+					</div>
 				)}
 			</div>
 			<div tw="flex items-center justify-center gap-32 text-center mt-10 mb-14 text-sm">

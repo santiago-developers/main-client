@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider } from "@mui/material";
+import { Divider, Paper } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@components/post/publish/CountryModal";
 import { useState } from "react";
@@ -8,6 +8,15 @@ import QuillEditer from "@utils/QuillEditer";
 import writeStore from "store/writeStore";
 
 const WritePage = () => {
+	const style = {
+		position: "absolute",
+		top: 250,
+		right: 240,
+		width: 820,
+		padding: 4,
+		zIndex: 1,
+		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
+	};
 	// 추후 authentication 설정 필요
 	const { imageIds, regionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =
@@ -107,11 +116,13 @@ const WritePage = () => {
 					</div>
 					<button onClick={openCountry}>{selectedRegion}</button>
 					{isOpen && (
-						<CountryModal
-							isOpen={isOpen}
-							setIsOpen={setIsOpen}
-							setSelectedRegion={setSelectedRegion}
-						/>
+						<Paper sx={style}>
+							<CountryModal
+								isOpen={isOpen}
+								setIsOpen={setIsOpen}
+								setSelectedRegion={setSelectedRegion}
+							/>
+						</Paper>
 					)}
 				</div>
 
