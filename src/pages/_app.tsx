@@ -8,7 +8,7 @@ import SantiagoLayout from "@components/layout/SantiagoLayout";
 const notoSans = Noto_Sans({
 	subsets: ["latin"],
 	display: "swap",
-	weight: ["400"],
+	weight: ["500", "400", "300"],
 });
 
 const sourceSerif = Source_Serif_4({
