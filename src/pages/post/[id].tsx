@@ -19,6 +19,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps, TagProps } from "types/magazines";
 import Image from "next/image";
+import Dompurify from "dompurify";
 
 export default function PostPage({
 	post,
@@ -37,8 +38,8 @@ export default function PostPage({
 		tags,
 		imageUrl,
 	}: MagazineProps = post;
-		
-		console.log(imageUrl)
+
+	console.log(imageUrl);
 
 	return (
 		<div tw="w-[60%] mx-auto flex flex-col justify-center">
@@ -84,14 +85,16 @@ export default function PostPage({
 					<span tw="text-xs">{writer.region.name_en}</span>
 				</div>
 			</div>
-			{imageUrl && (
-				<div tw="flex ">
-					<Image src={`${imageUrl}`} alt="postImage" fill />
-				</div>
+			{process.browser && (
+				<div
+					tw="py-10 leading-9"
+					dangerouslySetInnerHTML={{
+						__html: Dompurify.sanitize(String(content)),
+					}}
+				/>
 			)}
-			<div tw="py-10 leading-9">{content}</div>
 			<div tw="flex gap-3 font-bold mb-14">
-				{tags.map((item: TagProps) => (
+				{tags?.map((item: TagProps) => (
 					<div key={item.tagId}> #{item.tag}</div>
 				))}
 			</div>

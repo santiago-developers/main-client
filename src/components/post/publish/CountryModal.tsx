@@ -37,7 +37,6 @@ const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
 			.find((item) => item.name_en === selectedName);
 		setRegionId(region.regionId);
 		setIsOpen(!open);
-		setRegionId("")
 	};
 
 	return (

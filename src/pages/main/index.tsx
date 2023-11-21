@@ -19,8 +19,6 @@ export default function MainPage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
 
-	const { setRegions } = regionsStore();
-	setRegions(regions.data);
 	const Item = styled(Paper)(({ theme }) => ({
 		// background image 삽입
 		backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -39,17 +37,17 @@ export default function MainPage({
 			.map((item: RegionProps) => item)
 			.find((item: RegionProps) => item.name_en === "France");
 
-		if (searchTerm) {
-			router.push({
-				pathname: "/magazines",
-				query: {
-					regin_id: searchedRegion.regionId,
-					query_type: "hot",
-					base: 0,
-					limit: 8,
-				},
-			});
-		}
+		// if (searchTerm) {
+		// 	router.push({
+		// 		pathname: "/magazines",
+		// 		query: {
+		// 			regin_id: searchedRegion.regionId,
+		// 			query_type: "hot",
+		// 			base: 0,
+		// 			limit: 8,
+		// 		},
+		// 	});
+		// }
 		setSearchTerm("");
 	};
 
@@ -57,12 +55,12 @@ export default function MainPage({
 		let contient = item.toLowerCase().replace(/ /g, "_");
 		router.push({
 			pathname: "/magazines",
-			query: {
-				continent: contient,
-				query_type: "hot",
-				base: 0,
-				limit: 8,
-			},
+			// query: {
+			// 	continent: contient,
+			// 	query_type: "hot",
+			// 	base: 0,
+			// 	limit: 8,
+			// },
 		});
 	};
 
@@ -116,7 +114,8 @@ export default function MainPage({
 
 export const getStaticProps = (async () => {
 	const regions = await SantiagoGet<Regions>("regions");
-
+	regionsStore.setState((state) => ({ ...state, regions: regions.data }));
+	
 	return {
 		props: {
 			regions,

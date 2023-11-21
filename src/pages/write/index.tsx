@@ -3,9 +3,11 @@ import { Divider, Paper } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@components/post/publish/CountryModal";
 import { useState } from "react";
-import { SantiagoPost } from "lib/fetchData";
+import { SantiagoPostWithAutorization } from "lib/fetchData";
 import QuillEditer from "@utils/QuillEditer";
 import writeStore from "store/writeStore";
+import myInfoStore from "store/myInfoStore";
+import { useRouter } from "next/navigation";
 
 const WritePage = () => {
 	const style = {
@@ -17,8 +19,11 @@ const WritePage = () => {
 		zIndex: 1,
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
 	};
+	const router =useRouter()
+
+	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
-	const { imageIds, regionId } = writeStore();
+	const { imageIds, regionId, setImageId, setRegionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
 
@@ -44,42 +49,23 @@ const WritePage = () => {
 	const [content, setContent] = useState<string>("");
 
 	const handleSubmit = () => {
+		let locale = navigator.language || navigator.userLanguage;
 		const dto = {
 			title,
 			content,
 			regionId,
-			userId: "e400750b-cd1d-4b21-bdb0-0111c813757b",
+			userId: id,
 			tags,
-			language: "korean",
+			language: locale,
 			imageUrlIds: imageIds,
 		};
-		console.log(dto);
 		const fetchData = async () => {
-			try {
-				const response = await fetch(
-					"http://3.34.114.67:11009/magazines",
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							// Add any other headers if needed
-						},
-						body: JSON.stringify(dto),
-					},
-				);
-
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-				}
-
-				const data = await response.json();
-				console.log("Response data:", data);
-			} catch (error) {
-				console.error("Error:", error);
-			}
+			await SantiagoPostWithAutorization("magazines", dto);
 		};
 		fetchData();
-		// SantiagoPost2("magazines", dto);
+		setRegionId("")
+		setImageId([])
+		router.push("/magazineList")
 	};
 
 	return (
@@ -118,7 +104,6 @@ const WritePage = () => {
 					{isOpen && (
 						<Paper sx={style}>
 							<CountryModal
-								isOpen={isOpen}
 								setIsOpen={setIsOpen}
 								setSelectedRegion={setSelectedRegion}
 							/>

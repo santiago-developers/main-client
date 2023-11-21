@@ -1,5 +1,4 @@
-import { useRef, useMemo, useState } from "react";
-import { ImageResize } from "quill-image-resize-module-ts";
+import { useRef, useMemo, useState, useEffect } from "react";
 import tw from "twin.macro";
 import { SantiagoImagePost } from "lib/fetchData";
 import ReactQuill from "react-quill";
@@ -7,10 +6,10 @@ import "react-quill/dist/quill.snow.css";
 import QuillNoSSRWrapper from "./reactQuill/QuillNoSSRWrapper";
 import writeStore from "store/writeStore";
 
-type ImageProps ={
-	url:string;
-	id:string
-}
+type ImageProps = {
+	url: string;
+	id: string;
+};
 
 export default function QuillEditer({ value, setContent }) {
 	const { setImageId } = writeStore();
@@ -22,7 +21,6 @@ export default function QuillEditer({ value, setContent }) {
 		input.setAttribute("type", "file");
 		input.setAttribute("accept", "image/*");
 		input.click();
-
 		input.addEventListener("change", async () => {
 			const file = input.files;
 			const formData = new FormData();
@@ -30,26 +28,32 @@ export default function QuillEditer({ value, setContent }) {
 				formData.append("file", file[0]);
 			}
 			if (quillRef.current) {
-				const fetchData:ImageProps  = await SantiagoImagePost(formData);
+				const fetchData: ImageProps = await SantiagoImagePost(formData);
 				const url = fetchData.url;
-				const id = fetchData.id;
-				setImgUrlIds((prevImgUrlIds) => [...prevImgUrlIds, id]);
-				console.log("imgurl: ", imgUrlIds);
+				console.log(fetchData.id);
+				// setImgUrlIds([fetchData.id]);
+				// // setImgUrlIds([...imgUrlIds,fetchData.id])
+				setImgUrlIds((prevImgUrlIds) => [...prevImgUrlIds, fetchData.id]);
 				const editor = quillRef.current.getEditor();
 				const range = editor.getSelection();
 				editor.insertEmbed(range.index, "image", url);
 				editor.setSelection(range.index + 1);
 			}
 		});
-		setImageId(imgUrlIds);
+	
 	};
+
+	useEffect(() => {
+		setImageId(imgUrlIds);
+		console.log("이미지useEffect", imgUrlIds);
+	}, [imgUrlIds]);
 
 	const modules = useMemo(
 		() => ({
 			toolbar: {
 				container: [
 					[{ header: [1, 2, 3, false] }],
-					["bold", "italic", "underline", "strike", "blockquote", {}],
+					["bold", "italic", "underline", "strike", "blockquote"],
 					[
 						{ align: [] },
 						{ list: "ordered" },
@@ -63,11 +67,6 @@ export default function QuillEditer({ value, setContent }) {
 				],
 				handlers: { image: imageHandler },
 			},
-			// imageResize: {
-			// 	parchment: Quill.import("parchment"),
-			// 	modules: ["Resizeimport { writeStore } from 'store/imageStore';
-// ", "DisplaySize"],
-			// },
 			clipboard: {
 				matchVisual: false,
 			},

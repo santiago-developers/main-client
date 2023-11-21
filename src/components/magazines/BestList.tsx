@@ -9,12 +9,12 @@ import { useState } from "react";
 import writeStore from "store/writeStore";
 import Image from "next/image";
 
-type BestListProps ={
-	id:string;
-	name:string;
-    imageUrl: string | null;
-    region: string[]
-}
+type BestListProps = {
+	id: string;
+	name: string;
+	imageUrl: string | null;
+	region: string[];
+};
 
 const BestList = () => {
 	// const { regionId } = writeStore();
@@ -29,20 +29,20 @@ const BestList = () => {
 		const bWritersList = await SantiagoGet(
 			`users?query_type=photoBest%20&region_id=${regionId}&base=0&limit=5`,
 		);
-		setBWriters(bWritersList.data);
 		const bPhotographersList = await SantiagoGet(
 			`users?query_type=writingBest%20&region_id=${regionId}&base=0&limit=5`,
 		);
-		setBPhotographers(bPhotographersList.data);
 		const bFanaticsList = await SantiagoGet(
 			`users?query_type=fanaticBest%20&region_id=${regionId}&base=0&limit=5`,
 		);
+		setBWriters(bWritersList.data);
+		setBPhotographers(bPhotographersList.data);
 		setBFanatics(bFanaticsList.data);
 	};
 
 	useEffect(() => {
 		fetchData(regionId);
-	}, []);
+	}, [regionId]);
 
 	const fetchDataList = [bWriters, bPhotographers, bFanatics];
 
@@ -56,10 +56,15 @@ const BestList = () => {
 						{index == 2 && <BFanaticsSvg />}
 						<span>{item}</span>
 					</div>
-					{fetchDataList[index].map((item:BestListProps, index) => (
+					{fetchDataList[index].map((item: BestListProps, index) => (
 						<div tw="flex items-center gap-4 pb-5" key={index}>
 							{index + 1}
-							<Image src={item.imageUrl || "images/defaultUser.svg"} alt="userImage" width={24.5} height={24.5} />
+							<Image
+								src={item.imageUrl || "images/defaultUser.svg"}
+								alt="userImage"
+								width={24.5}
+								height={24.5}
+							/>
 							{item.name}
 						</div>
 					))}

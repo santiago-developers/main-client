@@ -5,8 +5,10 @@ import { useEffect, type PropsWithChildren, useState } from "react";
 import { MintButton } from "@utils/MintButton";
 import UserFrame from "@utils/UserFrame";
 import myInfoStore from "store/myInfoStore";
+import { useRouter } from "next/router";
 
 const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
+	const router = useRouter();
 	const { id, name, imageUrl, region } = myInfoStore();
 	const [myId, setMyId] = useState("");
 	const [myName, setMyName] = useState("");
@@ -27,21 +29,24 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 		<>
 			<header tw="w-full h-[98px] flex items-center justify-between px-16 bg-white fixed top-0 z-1">
 				<Link href="/">
-					<LogoSvg tw="w-[131px]" />
+					<LogoSvg tw="w-[131px] cursor-pointer" />
 				</Link>
 				{myId == "" ? (
 					<>
-						<Link href="/auth/sign-in">Sign in</Link>
+						<Link href="/auth/sign-in" tw="cursor-pointer">Sign in</Link>
 					</>
 				) : (
 					<>
+				
 						<div tw="flex gap-5">
-							<MintButton>
-								<Link href="/write" tw="text-mint">
+							{router.pathname !== "/write" &&(
+								<MintButton>
+								<Link href="/write" tw="text-mint cursor-pointer">
 									Write
 								</Link>
 							</MintButton>
-							<Link href="/profile">
+								)}
+							<Link href="/profile" tw="cursor-pointer">
 								<UserFrame
 									name={myName}
 									imageUrl={myImageUrl}

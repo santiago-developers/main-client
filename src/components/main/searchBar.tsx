@@ -18,13 +18,13 @@ type RegionsProps = {
 const Searchbar = (props: SearchbarProps) => {
 	const { regions } = regionsStore();
 	const [searchTerm, setSearchTerm] = useState<string>("");
-	const [names, setNames] = useState<string[]>([]);
-	const [regionsList, setRegionsList] = useState<string[]>(names);
+	// const [names, setNames] = useState<string[]>([]);
+	const [regionsList, setRegionsList] = useState<string[]>([]);
 	const [open, setOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		const regionsName = regions.map((item: RegionsProps) => item.name_en);
-		setNames(regionsName);
+		setRegionsList(regionsName);
 	}, [regions]);
 
 	const handleSearch = (value: string) => {
@@ -35,7 +35,7 @@ const Searchbar = (props: SearchbarProps) => {
 			setOpen(true);
 		}
 
-		const filteredRegion = names.filter((item: string) =>
+		const filteredRegion = regionsList.filter((item: string) =>
 			item.toLowerCase().includes(value.toLowerCase()),
 		);
 		setRegionsList(filteredRegion);
