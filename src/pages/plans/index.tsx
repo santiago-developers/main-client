@@ -1,21 +1,26 @@
 import LanguageSelection from "@components/plans/LanguageSelection";
 import PlanCard from "@components/plans/PlanCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import myInfoStore from "store/myInfoStore";
 import tw from "twin.macro";
 
 export interface LanguageDto {
 	id: string;
 	name: string;
-	isSelected: boolean;
 }
 
 export default function Plan() {
-	const [languages, setLanguages] = useState<LanguageDto[]>([
-		{ id: "Korean", name: "Korean", isSelected: true },
-		{ id: "English", name: "English", isSelected: true },
-		{ id: "Japanese", name: "Japanese", isSelected: true },
-	]);
+	const [languages, setLanguages] = useState<LanguageDto[]>([]);
 	const [isNeedToUpdate, SetIsNeedToUpdate] = useState(true);
+	const {
+		allowedLanguageCount,
+		languagesSubcribed,
+	} = myInfoStore();
+
+	useEffect(()=> {
+		setLanguages(languagesSubcribed);
+		SetIsNeedToUpdate(!(allowedLanguageCount === languages.length));
+	}, []);
 	return (
 		<>
 			<div tw="w-full grid place-items-center">
@@ -31,7 +36,6 @@ export default function Plan() {
 				<div tw="h-12" />
 				<div>
 					{" "}
-					{/*선택 가능하게 만들 것 */}
 					<LanguageSelection
 						languages={languages}
 						allowedCount={5}

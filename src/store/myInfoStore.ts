@@ -1,3 +1,4 @@
+import { LanguageDto } from "@pages/plans";
 import { RegionResponse } from "lib/dto/region/region";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -11,6 +12,8 @@ interface MyInfo {
 	photoScore: number;
 	writingScore: number;
 	region: RegionResponse | null;
+	languagesSubcribed: LanguageDto[];
+    allowedLanguageCount: number;
 
 	setId: (newId: string) => void;
 	setName: (newName: string) => void;
@@ -20,7 +23,8 @@ interface MyInfo {
 	setPhotoScore: (newPhotoScore: number) => void;
 	setWritingScore: (newWritingScore: number) => void;
 	setRegion: (newRegion: RegionResponse) => void;
-
+	setLanguagesSubcribed: (newLanguages: LanguageDto[]) =>void;
+	setAllowedLanguageCount: (newAllowedLanguageCount: number) => void;
 	reset: () => void;
 }
 
@@ -34,6 +38,9 @@ const myInfoStore = create(persist<MyInfo>((set) => ({
 	photoScore: 0,
 	writingScore: 0,
 	region: null,
+	languagesSubcribed: [],
+    allowedLanguageCount: -1,
+
 
 	setId: (newId) => set({ id: newId }),
 	setName: (newName) => set({ name: newName }),
@@ -43,6 +50,8 @@ const myInfoStore = create(persist<MyInfo>((set) => ({
 	setPhotoScore: (score) => set({ photoScore: score }),
 	setWritingScore: (score) => set({ writingScore: score }),
 	setRegion: (region) => set({ region }),
+	setLanguagesSubcribed: (newLanguages) => set({languagesSubcribed: newLanguages}),
+	setAllowedLanguageCount: (newAllowedLanguageCount) => set({allowedLanguageCount: newAllowedLanguageCount}),
 	reset: () =>
 		set({
 			id: "",
@@ -53,6 +62,8 @@ const myInfoStore = create(persist<MyInfo>((set) => ({
 			photoScore: 0,
 			writingScore: 0,
 			region: null,
+			allowedLanguageCount: -1,
+			languagesSubcribed: []
 		}),
 }), {name: 'my-info'}));
 

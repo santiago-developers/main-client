@@ -1,4 +1,5 @@
 import { RegionResponse } from "../region/region";
+import { LanguageDto } from "./LanguageDto";
 
 export interface GetUserResponse {
     id: string;
@@ -8,5 +9,7 @@ export interface GetUserResponse {
     followingCount: number;
     photoScore: number;
     writingScore: number;
-    region: RegionResponse
+    region: RegionResponse;
+    languagesSubcribed: LanguageDto[];
+    allowedLanguageCount: number;
 }

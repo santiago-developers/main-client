@@ -1,13 +1,12 @@
-import {
-	Dispatch,
-	SetStateAction,
-	useEffect,
-	useState,
-} from "react";
+import { LanguageDto } from "lib/dto/user/LanguageDto";
+import { UpdateLanguageDto } from "lib/dto/user/UpdateLanguageDto";
+import { SantiagoPut } from "lib/fetchData";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import myInfoStore from "store/myInfoStore";
 import tw from "twin.macro";
 
 interface Props {
-	languages: { id: string; name: string; isSelected: boolean }[];
+	languages: { id: string; name: string }[];
 	allowedCount: number;
 	isNeedToUpdate: boolean;
 	setIsNeedToUpdate: Dispatch<SetStateAction<boolean>>;
@@ -19,31 +18,44 @@ export default function LanguageSelection({
 	isNeedToUpdate,
 	setIsNeedToUpdate,
 }: Props) {
-	const [isKoreanSelected, setIsKoreanSelected] = useState(
-		languages.find((lang) => lang.name === "Korean") ? true : false,
-	);
-	const [isEnglishSelected, setIsEnglishSelected] = useState(
-		languages.find((lang) => lang.name === "English") ? true : false,
-	);
-	const [isSpanishSelected, setIsSpanishSelected] = useState(
-		languages.find((lang) => lang.name === "Spanish") ? true : false,
-	);
-	const [isChineseSelected, setIsChineseSelected] = useState(
-		languages.find((lang) => lang.name === "Chinese") ? true : false,
-	);
-	const [isGermanSelected, setIsGermanSelected] = useState(
-		languages.find((lang) => lang.name === "German") ? true : false,
-	);
-	const [isItalianSelected, setIsItalianSelected] = useState(
-		languages.find((lang) => lang.name === "Italian") ? true : false,
-	);
-	const [isJapaneseSelected, setIsJapaneseSelected] = useState(
-		languages.find((lang) => lang.name === "Japanese") ? true : false,
-	);
-	const [isFrenchSelected, setIsFrenchSelected] = useState(
-		languages.find((lang) => lang.name === "French") ? true : false,
-	);
+	const [isKoreanSelected, setIsKoreanSelected] = useState(false);
+	const [isEnglishSelected, setIsEnglishSelected] = useState(false);
+	const [isSpanishSelected, setIsSpanishSelected] = useState(false);
+	const [isChineseSelected, setIsChineseSelected] = useState(false);
+	const [isGermanSelected, setIsGermanSelected] = useState(false);
+	const [isItalianSelected, setIsItalianSelected] = useState(false);
+	const [isJapaneseSelected, setIsJapaneseSelected] = useState(false);
+	const [isFrenchSelected, setIsFrenchSelected] = useState(false);
 	const [currentCount, setCurrentCount] = useState(languages.length);
+
+	const { id, setLanguagesSubcribed } = myInfoStore();
+
+	useEffect(() => {
+		setIsFrenchSelected(
+			languages.find((lang) => lang.name === "French") ? true : false,
+		);
+		setIsJapaneseSelected(
+			languages.find((lang) => lang.name === "Japanese") ? true : false,
+		);
+		setIsItalianSelected(
+			languages.find((lang) => lang.name === "Italian") ? true : false,
+		);
+		setIsGermanSelected(
+			languages.find((lang) => lang.name === "German") ? true : false,
+		);
+		setIsChineseSelected(
+			languages.find((lang) => lang.name === "Chinese") ? true : false,
+		);
+		setIsSpanishSelected(
+			languages.find((lang) => lang.name === "Spanish") ? true : false,
+		);
+		setIsKoreanSelected(
+			languages.find((lang) => lang.name === "Korean") ? true : false,
+		);
+		setIsEnglishSelected(
+			languages.find((lang) => lang.name === "English") ? true : false,
+		);
+	}, [languages]);
 
 	useEffect(() => {
 		let count = 0;
@@ -67,6 +79,30 @@ export default function LanguageSelection({
 		isJapaneseSelected,
 		isFrenchSelected,
 	]);
+
+	const updateLanguage = () => {
+		if (allowedCount === currentCount) {
+			setIsNeedToUpdate(false);
+			SantiagoPut<UpdateLanguageDto, LanguageDto[]>(
+				`users/${id}/languages`,
+				new UpdateLanguageDto(
+					isKoreanSelected,
+					isChineseSelected,
+					isJapaneseSelected,
+					isEnglishSelected,
+					isGermanSelected,
+					isSpanishSelected,
+					isItalianSelected,
+					isFrenchSelected,
+				),
+			).then((data)=>{
+				setLanguagesSubcribed(data);
+			});
+		} else
+			alert(
+				`You need to select ${allowedCount} languages`,
+			);
+	}
 
 	return (
 		<>
@@ -130,11 +166,7 @@ export default function LanguageSelection({
 						<div tw="w-2" />
 						<button
 							tw="p-2 text-[#000000] text-[10px] font-semibold rounded-full"
-							onClick={() => {
-								if (allowedCount === currentCount)
-									setIsNeedToUpdate(false);
-                                else alert(`You need to select ${allowedCount} languages`);
-							}}>
+							onClick={updateLanguage}>
 							Confirm
 						</button>
 					</div>
