@@ -26,3 +26,13 @@ export type TagProps = {
 	tagId: string;
 	tag: string;
 };
+
+export type CommentProps = {
+	id: string;
+	content: string;
+	createdAt: string;
+	writer: WriterProps;
+	likeCount:number;
+	didILike:boolean;
+	parentId: string |null
+};

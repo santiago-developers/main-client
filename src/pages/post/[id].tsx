@@ -34,8 +34,6 @@ export default function PostPage({
 		imageUrl,
 	}: MagazineProps = post;
 
-	console.log(imageUrl);
-
 	return (
 		<div tw="w-[60%] mx-auto flex flex-col justify-center">
 			<div tw="pt-6 text-2xl font-bold">{title}</div>
@@ -107,8 +105,8 @@ export default function PostPage({
 				</button>
 			</div>
 			<div>
-				<CommentInput />
-				<Comment />
+				<CommentInput magazineId={magazineId} />
+				<Comment magazineId={magazineId} />
 			</div>
 		</div>
 	);

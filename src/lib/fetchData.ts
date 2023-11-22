@@ -17,8 +17,7 @@ export async function SantiagoPostWithAutorization<T, R>(
 	dto: T,
 ): Promise<R> {
 	const accessToken = localStorage.getItem("accessToken");
-	console.log(accessToken);
-	
+
 	if (!accessToken) {
 		throw new Error("Access token is not available");
 	}
@@ -68,37 +67,36 @@ export async function SantiagoPut<T, R>(url: string, dto: T): Promise<R> {
 }
 
 export async function SantiagoGet<T>(url: string): Promise<T> {
-	try {
-		const res = await fetch(`http://3.34.114.67:11009/${url}`);
-		const data = await res.json();
-		return data;
-	} catch (err) {
-		console.log({ url }, err);
-		throw new Error();
+	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	if (!res.ok) {
+		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
+	const data = await res.json();
+	return data;
 }
 
-// export async function SantiagoPost2<T>(url: string, dto): Promise<T> {
-// 	try {
-// 		const res = await fetch(`http://3.34.114.67:11009/${url}`,d);
-// 		const data = await res.json();
-// 		return data;
-// 	} catch (err) {
-// 		console.log({ url }, err);
-// 		throw new Error();
-// 	}
-// }
-// export async function SantiagoPost2<T, R>(url: string, dto: T): Promise<R> {
-// 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: dto,
-// 	});
-// 	if (!res.ok) {
-// 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
-// 	}
-// 	const data = await res.json();
-// 	return data;
-// }
+export async function SantiagoDelete<T>(url: string): Promise<T> {
+	const accessToken = localStorage.getItem("accessToken");
+	if (!accessToken) {
+		throw new Error("Access token is not available");
+	}
+	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+
+	if (!res.ok) {
+		throw new Error(`Failed to fetch posts, received status ${res.status}`);
+	}
+	const data = await res.json();
+	return data;
+}
