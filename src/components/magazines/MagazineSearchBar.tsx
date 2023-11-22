@@ -20,7 +20,6 @@ const MagazineSearchBar = ({ onSubmit }: SearchbarProps) => {
 				sx={{
 					display: "flex",
 					alignItems: "center",
-					mx: 44,
 					py: 0.5,
 					borderTop: "0.5px solid #D4D4D4",
 					width: 500,

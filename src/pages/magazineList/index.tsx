@@ -16,8 +16,8 @@ import { Paper } from "@mui/material";
 export default function MagazineListPage() {
 	const style = {
 		position: "absolute",
-		top: 20,
-		right: "22.5%",
+		top: 100,
+		right: 0,
 		width: 640,
 		padding: 4,
 		zIndex: 1,
@@ -26,6 +26,7 @@ export default function MagazineListPage() {
 
 	const router = useRouter();
 	const { regionId } = writeStore();
+
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
@@ -47,22 +48,20 @@ export default function MagazineListPage() {
 				{(searchTerm && `"${searchTerm}"`) ||
 					selectedRegion.toUpperCase()}
 			</h1>
-			<div tw="relative w-full pt-10">
+			<div tw="relative flex gap-2 pt-10">
 				<MagazineSearchBar onSubmit={searchSubmit} />
 				<button
-					tw="absolute bottom-0 right-72 w-[134px] h-[38px] rounded bg-[#D9D9D9] text-white text-sm"
+					tw=" w-[134px] h-[38px] rounded bg-[#D9D9D9] text-white text-sm"
 					onClick={openCountry}>
 					Select a Country
 				</button>
 				{isOpen && (
-					<div tw="relative w-full" >
 						<Paper sx={style}>
 							<CountryModal
 								setIsOpen={setIsOpen}
 								setSelectedRegion={setSelectedRegion}
 							/>
 						</Paper>
-					</div>
 				)}
 			</div>
 			<div tw="flex items-center justify-center gap-32 text-center mt-10 mb-14 text-sm">

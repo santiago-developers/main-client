@@ -1,9 +1,4 @@
-import Box from "@mui/joy/Box";
-import Typography from "@mui/joy/Typography";
-
 import tw from "twin.macro";
-import DefautUserSvg from "@public/images/defaultUser.svg";
-import PostSvg from "@public/images/post.svg";
 import MoreMenu from "@utils/MoreMenu";
 import dayjs from "dayjs";
 import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutlined";
@@ -46,7 +41,7 @@ export default function PostPage({
 			<div tw="pt-6 text-2xl font-bold">{title}</div>
 			<div tw="mt-4 text-sm flex justify-between">
 				<div tw="flex justify-center items-center">
-					<span>
+					<span tw="flex justify-center items-center">
 						<Tooltip
 							title="I like this photo"
 							placement="top"
@@ -59,7 +54,7 @@ export default function PostPage({
 						</Tooltip>
 						{writingLikeCount}
 					</span>
-					<span tw="">
+					<span tw="flex justify-center items-center">
 						<Tooltip
 							title="I like this writing"
 							placement="top"
@@ -78,16 +73,22 @@ export default function PostPage({
 				</div>
 				<MoreMenu moreMenuType="post" />
 			</div>
-			<div tw="flex">
-				<DefautUserSvg tw="w-[30px] h-[30px]" />
-				<div tw="flex flex-col justify-center pl-4 pb-12">
+			<div tw="flex pl-2">
+				<Image
+					src={writer.imageUrl || "../images/defaultUser.svg"}
+					alt="userImage"
+					width={30}
+					height={30}
+					tw="self-start"
+				/>
+				<div tw="flex flex-col justify-center pl-4 mb-12">
 					<span tw="text-sm">{writer.name}</span>
 					<span tw="text-xs">{writer.region.name_en}</span>
 				</div>
 			</div>
 			{process.browser && (
 				<div
-					tw="py-10 leading-9"
+					tw="pt-4 leading-9"
 					dangerouslySetInnerHTML={{
 						__html: Dompurify.sanitize(String(content)),
 					}}

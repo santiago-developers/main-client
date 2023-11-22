@@ -29,9 +29,7 @@ const Magazines = ({
 		);
 		setMagazines(magazineList.data);
 	};
-	console.log(magazines);
 	
-
 	useEffect(() => {
 		getData();
 	}, [selectedType, regionId, searchTerm]);

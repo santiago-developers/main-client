@@ -3,6 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useRouter } from "next/navigation";
 
 type MoreMenuType = {
 	post: string[];
@@ -10,19 +11,24 @@ type MoreMenuType = {
 };
 
 const moreMenu: MoreMenuType = {
-	post: ["report", "edit", "html edit", "statistics"],
+	post: ["report", "edit", "html edit", "statistics","delete"],
 	comment: ["edit", "delete", "report"],
 };
 
 const ITEM_HEIGHT = 48;
 
 const MoreMenu = ({ moreMenuType }) => {
+	const router =useRouter();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
-	const handleClose = () => {
+	const handleClose = (item:string) => {
+		console.log(item);
+		
+		// if(item === "edit"){
+		// return router.push("/edit")}
 		setAnchorEl(null);
 	};
 
