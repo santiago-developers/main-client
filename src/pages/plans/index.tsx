@@ -19,7 +19,7 @@ export default function Plan() {
 
 	useEffect(()=> {
 		setLanguages(languagesSubcribed);
-		SetIsNeedToUpdate(!(allowedLanguageCount === languages.length));
+		SetIsNeedToUpdate(!(allowedLanguageCount === languagesSubcribed.length));
 	}, []);
 	return (
 		<>
@@ -60,21 +60,21 @@ export default function Plan() {
 						title="Pro Plan"
 						price="5.49 USD"
 						langCount="4"
-						productId="pro_plan"
+						planId="P-50416134KY263712SMVO3GJA"
 					/>
 					<div tw="w-[56px]" />
 					<PlanCard
-						title="Expert Plan"
+						title="P-7TC36008HN608045RMVO3EYA"
 						price="8.99 USD"
 						langCount="6"
-						productId="pro_plan"
+						planId="pro_plan"
 					/>
 					<div tw="w-[56px]" />
 					<PlanCard
 						title="Master Plan"
 						price="12.49 USD"
 						langCount="8"
-						productId="pro_plan"
+						planId="P-8WS879485V4869420MVO3I2Q"
 					/>
 				</div>
 				<div tw="h-14" />
