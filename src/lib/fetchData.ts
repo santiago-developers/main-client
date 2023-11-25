@@ -66,6 +66,24 @@ export async function SantiagoPut<T, R>(url: string, dto: T): Promise<R> {
 	return data;
 }
 
+export async function SantiagoPutWithAutorization<T, R>(url: string, dto: T): Promise<R> {
+	const accessToken = localStorage.getItem("accessToken");
+	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+		},
+		body: JSON.stringify(dto),
+	});
+
+	if (!res.ok) {
+		throw new Error(`Failed to fetch posts, received status ${res.status}`);
+	}
+	const data = await res.json();
+	return data;
+}
+
 export async function SantiagoGet<T>(url: string): Promise<T> {
 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
 		method: "GET",

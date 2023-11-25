@@ -3,38 +3,38 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { useRouter } from "next/router";
-import { SantiagoDelete, SantiagoPut } from "lib/fetchData";
+import { SantiagoDelete } from "lib/fetchData";
+
+type CommentMoreMenuProps ={
+	moreMenuType:MoreMenuType,
+	replyId:string,
+	onSelectCommentIdx: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+}
 
 type MoreMenuType = {
 	post: string[];
 	comment: string[];
-	report: stirng[];
+	report: string[];
 };
 
 const moreMenu: MoreMenuType = {
 	post: ["report", "edit", "html edit", "statistics", "delete"],
 	comment: ["edit", "delete", "report"],
-	report: ["report"]
+	report: ["report"],
 };
 
 const CommentMoreMenu = ({
 	moreMenuType,
 	replyId,
-	magazineId,
-	setOpenEdit,
-}) => {
-	const router = useRouter();
-
+	onSelectCommentIdx
+}:CommentMoreMenuProps) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 
-	const handleClose = (item: string) => {
-		let type = item.target.innerText;
-
+	const handleMenu = (type:string) => {
 		if (type === "delete") {
 			const fetchData = async () =>
 				await SantiagoDelete(
@@ -42,19 +42,10 @@ const CommentMoreMenu = ({
 				);
 			fetchData();
 		} else if (type === "edit") {
-			setOpenEdit(true);
-			// const fetchData = async () =>
-			// 	await SantiagoPut(
-			// 		`magazines/${magazineId}/replies/${replyId}`, {content}
-			// 	);
-			// fetchData();
+			onSelectCommentIdx()
 		}
 		setAnchorEl(null);
 	};
-
-	// useEffect(()=>{
-
-	// },[])
 
 	return (
 		<div>
@@ -74,19 +65,17 @@ const CommentMoreMenu = ({
 				}}
 				anchorEl={anchorEl}
 				open={open}
-				onClose={handleClose}>
-				{moreMenu[moreMenuType].map((option) => 
-				 (
-						<MenuItem
-							key={option}
-							sx={{ fontSize: 13, color: "#A3A3A3" }}
-							selected={option === "Pyxis"}
-							onClick={handleClose}
-							>
-							{option}
-						</MenuItem>
-					)
-				)}
+				onClose={handleMenu}>
+				{moreMenu[moreMenuType].map((option) => (
+					<MenuItem
+						key={option}
+						sx={{ fontSize: 13, color: "#A3A3A3" }}
+						selected={option === "Pyxis"}
+						onClick={(e)=>handleMenu(e.target.innerText)}
+						>
+						{option}
+					</MenuItem>
+				))}
 			</Menu>
 		</div>
 	);

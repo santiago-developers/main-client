@@ -12,7 +12,8 @@ export type MagazineProps = {
 };
 
 export type WriterProps = {
-	id: string;
+	userId?:string | undefined;
+	id?: string;
 	imageUrl?: string;
 	name: string;
 	region: RegionProps;

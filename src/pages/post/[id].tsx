@@ -5,7 +5,7 @@ import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutl
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import Comment from "@components/post/Comment";
+import CommentList from "@components/post/CommentList";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import CommentInput from "@components/post/CommentInput";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -31,11 +31,10 @@ export default function PostPage({
 		writingLikeCount,
 		writer,
 		tags,
-		imageUrl,
 	}: MagazineProps = post;
 
 	return (
-		<div tw="w-[60%] mx-auto flex flex-col justify-center">
+		<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
 			<div tw="pt-6 text-2xl font-bold">{title}</div>
 			<div tw="mt-4 text-sm flex justify-between">
 				<div tw="flex justify-center items-center">
@@ -106,7 +105,7 @@ export default function PostPage({
 			</div>
 			<div>
 				<CommentInput magazineId={magazineId} />
-				<Comment magazineId={magazineId} />
+				<CommentList magazineId={magazineId} />
 			</div>
 		</div>
 	);
@@ -121,7 +120,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = (async (context) => {
 	const { params } = context;
-	const magazineId = params.id;
+	const magazineId = params?.id;
 	console.log(params);
 	const post = await SantiagoGet<MagazineProps>(`magazines/${magazineId}`);
 	if (!post) {
