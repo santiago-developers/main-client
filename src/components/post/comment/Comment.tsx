@@ -8,6 +8,7 @@ import CommentMoreMenu from "./CommentMoreMenu";
 import { CommentProps } from "types/magazines";
 import myInfoStore from "store/myInfoStore";
 import { SantiagoPutWithAutorization } from "lib/fetchData";
+import ReplyComment from "./ReplyComment";
 
 type CommentComponentProps = {
 	magazineId: string | undefined;
@@ -25,6 +26,7 @@ const Comment = ({
 	index,
 	setSelectedCommentIdx,
 	isSelected,
+	commentList
 }: CommentComponentProps) => {
 	const { id } = myInfoStore();
 	const [editedContent, setEditedContent] = useState(comment.content);
@@ -39,7 +41,12 @@ const Comment = ({
 			`magazines/${magazineId}/replies/${replyId}`,
 			{ content: editedContent },
 		);
-		setSelectedCommentIdx(undefined)
+		setSelectedCommentIdx(undefined);
+	};
+
+	const [open, setOpen] = useState(false);
+	const handleReply = () => {
+		setOpen(!open);
 	};
 
 	return (
@@ -90,7 +97,9 @@ const Comment = ({
 								edit
 							</button>
 						) : (
-							<button tw="text-mint pl-4">reply</button>
+							<button tw="text-mint pl-4" onClick={handleReply}>
+								reply
+							</button>
 						)}
 					</p>
 				</Grid>
@@ -112,6 +121,16 @@ const Comment = ({
 					</div>
 				</Grid>
 			</Grid>
+			<ReplyComment
+				magazineId={magazineId}
+				open={open}
+				setOpen={setOpen}
+				parentId={comment.id}
+				commentList={commentList}
+				isSelected={isSelected}
+				setSelectedCommentIdx={setSelectedCommentIdx}
+				index={index}
+			/>
 			<Divider variant="fullWidth" style={{ margin: "10px 0" }} />
 		</div>
 	);

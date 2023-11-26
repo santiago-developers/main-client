@@ -5,9 +5,9 @@ import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutl
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import CommentList from "@components/post/CommentList";
+import CommentList from "@components/post/comment/CommentList";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
-import CommentInput from "@components/post/CommentInput";
+import CommentInput from "@components/post/comment/CommentInput";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";

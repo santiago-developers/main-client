@@ -7,27 +7,32 @@ import myInfoStore from "store/myInfoStore";
 
 type CommentInputProp = {
 	magazineId: string | undefined;
+	parentId: string | null;
+	setOpen(item: boolean): void;
 };
 
-const CommentInput = ({ magazineId }: CommentInputProp) => {
+const CommentInput = ({ magazineId, parentId,setOpen }: CommentInputProp) => {
 	const { id } = myInfoStore();
 	const [content, setContent] = useState("");
-
 	const handleCommentSubmit = () => {
 		const dto = {
 			content,
 			userId: id,
-			parentId: "",
+			parentId: parentId,
 		};
 		const fetchData = async () => {
 			await SantiagoPostWithAutorization(
 				`magazines/${magazineId}/replies`,
 				dto,
 			);
+			alert("댓글이 등록되었습니다.");
 		};
 		fetchData();
-		alert("댓글이 등록되었습니다.");
 		setContent("");
+	};
+
+	const handleClose = () => {
+		setOpen(!open)
 	};
 
 	return (
@@ -46,7 +51,9 @@ const CommentInput = ({ magazineId }: CommentInputProp) => {
 						/>
 					</Grid>
 					<Grid item>
-						<button tw="text-sm px-1 mr-2">Cancel</button>
+						<button tw="text-sm px-1 mr-2" onClick={handleClose}>
+							Cancel
+						</button>
 						<button
 							tw="border border-mint rounded-full text-mint text-sm px-1"
 							onClick={handleCommentSubmit}>
