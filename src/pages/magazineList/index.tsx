@@ -30,7 +30,7 @@ export default function MagazineListPage() {
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-	};
+	}; 
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writing"];
 	const [selectedType, setSelectedType] = useState<string>("Hot");
 	const handleSearchType = (type: string) => {
