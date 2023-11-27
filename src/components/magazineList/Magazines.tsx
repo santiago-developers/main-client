@@ -25,7 +25,7 @@ const Magazines = ({
 		const magazineList: string[] = await SantiagoGet(
 			`magazines?${regionId ? `region_id=${regionId}&` : ""}query_type=${
 				query_type || "hot"
-			}&base=0&limit=9${searchTerm ? `&search=${searchTerm}` : ""}`,
+			}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}`,
 		);
 		setMagazines(magazineList.data);
 	};

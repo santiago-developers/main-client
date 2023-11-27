@@ -15,6 +15,7 @@ import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps, TagProps } from "types/magazines";
 import Image from "next/image";
 import Dompurify from "dompurify";
+import { useState } from "react";
 
 export default function PostPage({
 	post,
@@ -32,6 +33,11 @@ export default function PostPage({
 		writer,
 		tags,
 	}: MagazineProps = post;
+
+	const [openComment, setOpenComment] =useState(false)
+	const handleComment =()=>{
+		setOpenComment(!openComment)
+	}
 
 	return (
 		<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
@@ -98,14 +104,20 @@ export default function PostPage({
 			</div>
 			<div tw="text-sm">
 				<ChatBubbleOutlineIcon tw="text-[16px] mr-2" />4
-				<button tw="border border-mint rounded-full text-mint pr-2 ml-4">
-					<ArrowDropDownIcon />
+				<button tw="border border-mint rounded-full text-mint pr-2 ml-4" onClick={handleComment}>
+					{openComment ? 
+				<ArrowDropUpIcon/>	:<ArrowDropDownIcon /> 
+					}
 					Open Comment
 				</button>
 			</div>
 			<div>
+				{openComment &&
+<>
 				<CommentInput magazineId={magazineId} />
 				<CommentList magazineId={magazineId} />
+</>
+				}
 			</div>
 		</div>
 	);
