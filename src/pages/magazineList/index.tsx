@@ -6,10 +6,10 @@ import RecentSvg from "@public/images/magazines/recent.svg";
 import BPicturesSvg from "@public/images/magazines/bPictures.svg";
 import BWritingsSvg from "@public/images/magazines/bWritings.svg";
 import LineSvg from "@public/images/line.svg";
-import BestList from "@components/magazines/BestList";
+import BestList from "@components/magazineList/BestList";
 import CountryModal from "@components/post/publish/CountryModal";
-import Magazines from "@components/magazines/Magazines";
-import MagazineSearchBar from "@components/magazines/MagazineSearchBar";
+import Magazines from "@components/magazineList/Magazines";
+import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
 import writeStore from "store/writeStore";
 import { Paper } from "@mui/material";
 

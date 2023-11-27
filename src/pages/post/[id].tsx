@@ -5,9 +5,9 @@ import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutl
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import Comment from "@components/post/Comment";
+import CommentList from "@components/post/comment/CommentList";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
-import CommentInput from "@components/post/CommentInput";
+import CommentInput from "@components/post/comment/CommentInput";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -15,6 +15,7 @@ import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps, TagProps } from "types/magazines";
 import Image from "next/image";
 import Dompurify from "dompurify";
+import { useState } from "react";
 
 export default function PostPage({
 	post,
@@ -31,13 +32,15 @@ export default function PostPage({
 		writingLikeCount,
 		writer,
 		tags,
-		imageUrl,
 	}: MagazineProps = post;
 
-	console.log(imageUrl);
+	const [openComment, setOpenComment] =useState(false)
+	const handleComment =()=>{
+		setOpenComment(!openComment)
+	}
 
 	return (
-		<div tw="w-[60%] mx-auto flex flex-col justify-center">
+		<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
 			<div tw="pt-6 text-2xl font-bold">{title}</div>
 			<div tw="mt-4 text-sm flex justify-between">
 				<div tw="flex justify-center items-center">
@@ -101,14 +104,20 @@ export default function PostPage({
 			</div>
 			<div tw="text-sm">
 				<ChatBubbleOutlineIcon tw="text-[16px] mr-2" />4
-				<button tw="border border-mint rounded-full text-mint pr-2 ml-4">
-					<ArrowDropDownIcon />
+				<button tw="border border-mint rounded-full text-mint pr-2 ml-4" onClick={handleComment}>
+					{openComment ? 
+				<ArrowDropUpIcon/>	:<ArrowDropDownIcon /> 
+					}
 					Open Comment
 				</button>
 			</div>
 			<div>
-				<CommentInput />
-				<Comment />
+				{openComment &&
+<>
+				<CommentInput magazineId={magazineId} />
+				<CommentList magazineId={magazineId} />
+</>
+				}
 			</div>
 		</div>
 	);
@@ -123,7 +132,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = (async (context) => {
 	const { params } = context;
-	const magazineId = params.id;
+	const magazineId = params?.id;
 	console.log(params);
 	const post = await SantiagoGet<MagazineProps>(`magazines/${magazineId}`);
 	if (!post) {
