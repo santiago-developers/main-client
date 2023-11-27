@@ -12,7 +12,8 @@ export type MagazineProps = {
 };
 
 export type WriterProps = {
-	id: string;
+	userId?:string | undefined;
+	id?: string;
 	imageUrl?: string;
 	name: string;
 	region: RegionProps;
@@ -25,4 +26,14 @@ export type RegionProps = {
 export type TagProps = {
 	tagId: string;
 	tag: string;
+};
+
+export type CommentProps = {
+	id: string;
+	content: string;
+	createdAt: string;
+	writer: WriterProps;
+	likeCount:number;
+	didILike:boolean;
+	parentId: string |null
 };
