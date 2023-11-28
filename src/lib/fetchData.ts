@@ -1,5 +1,5 @@
 import { error } from "console";
-
+//http://3.34.114.67:11009/
 export async function SantiagoPost<T, R>(url: string, dto: T): Promise<R> {
 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
 		method: "POST",

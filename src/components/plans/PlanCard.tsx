@@ -1,5 +1,6 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useState } from "react";
+import myInfoStore from "store/myInfoStore";
 import tw from "twin.macro";
 
 interface Props {
@@ -9,13 +10,9 @@ interface Props {
 	planId: string;
 }
 
-export default function PlanCard({
-	title,
-	price,
-	langCount,
-	planId,
-}: Props) {
-	const [message, setMessage] = useState('');
+export default function PlanCard({ title, price, langCount, planId }: Props) {
+	const [message, setMessage] = useState("");
+	const { id: userId, setAllowedLanguageCount } = myInfoStore();
 	const initialOptions = {
 		clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string,
 		"enable-funding": "",
@@ -74,58 +71,85 @@ export default function PlanCard({
 					<div tw="h-[36px]" />
 					<div>
 						<PayPalScriptProvider options={initialOptions}>
-							<PayPalButtons tw="absolute bottom-[18px]"
-							style={{
-								shape: "pill",
-							  }}
-							  createSubscription={async () => {
-								try {
-								  const response = await fetch("/payments/create-subscription", {
-									method: "POST",
-									headers: {
-									  "Content-Type": "application/json",
-									},
-									body: JSON.stringify({ planId, userAction: "SUBSCRIBE_NOW" }),
-								  });
-								  const data = await response.json();
-								  if (data?.id) {
-									setMessage(`Successful subscription...`);
-									return data.id;
-								  } else {
-									console.error(
-									  { callback: "createSubscription", serverResponse: data },
-									  JSON.stringify(data, null, 2),
-									);
-									// (Optional) The following hides the button container and shows a message about why checkout can't be initiated
-									const errorDetail = data?.details?.[0];
-									setMessage(
-									  `Could not initiate PayPal Subscription...<br><br>${
-										errorDetail?.issue || ""
-									  } ${errorDetail?.description || data?.message || ""} ` +
-										(data?.debug_id ? `(${data.debug_id})` : ""),
-									);
-								  }
-								} catch (error) {
-								  console.error(error);
-								  setMessage(`Could not initiate PayPal Subscription...${error}`);
-								}
-							  }}
-							  onApprove={async (data, actions) => {
-								/*
-								  No need to activate manually since SUBSCRIBE_NOW is being used.
-								  Learn how to handle other user actions from our docs:
-								  https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
-								*/
-								if (data.orderID) {
-								  setMessage(
-									`You have successfully subscribed to the plan. Your subscription id is: ${data.subscriptionID}`,
-								  );
-								} else {
-								  setMessage(
-									`Failed to activate the subscription: ${data.subscriptionID}`,
-								  );
-								}
-							  }}/>
+							<PayPalButtons
+								tw="absolute bottom-[18px]"
+								style={{
+									shape: "pill",
+									label: "subscribe",
+								}}
+								createSubscription={async (data, actions) => {
+									return actions.subscription
+										.create({
+											plan_id: planId,
+										})
+										.then(async (orderId) => {
+											// Your code here after create the order
+
+											return orderId;
+										});
+								}}
+								onApprove={async (order) => {
+									console.log(order.subscriptionID);
+									const response = await fetch(
+										"http://localhost:11009/payments/create-subscription",
+										{
+											method: "POST",
+											headers: {
+												"Content-Type":
+													"application/json",
+											},
+											body: JSON.stringify({
+												orderId: order.subscriptionID as string,
+												planId,
+												userId,
+											}),
+										},
+									).then((data)=> {
+										if(data.status == 200 || 201) {
+											return data.json();
+										}
+									});
+									console.log(response.allowedLanguageCount)
+									setAllowedLanguageCount(response.allowedLanguageCount);
+									location.reload();
+									/*
+									const data = await response.json();
+									if (data?.id) {
+										setMessage(
+											`Successful subscription...`,
+										);
+										return data.id;
+									} else {
+										console.error(
+											{
+												callback:
+													"createSubscription",
+												serverResponse: data,
+											},
+											JSON.stringify(
+												data,
+												null,
+												2,
+											),
+										);
+										// (Optional) The following hides the button container and shows a message about why checkout can't be initiated
+										const errorDetail =
+											data?.details?.[0];
+										setMessage(
+											`Could not initiate PayPal Subscription...<br><br>${
+												errorDetail?.issue || ""
+											} ${
+												errorDetail?.description ||
+												data?.message ||
+												""
+											} ` +
+												(data?.debug_id
+													? `(${data.debug_id})`
+													: ""),
+										);
+									}*/
+								}}
+							/>
 							{/**
 							 * <button
 								tw="p-2 bg-[#0085FF] text-[#FFFFFF] text-[10px] font-semibold rounded-full absolute bottom-[18px]"

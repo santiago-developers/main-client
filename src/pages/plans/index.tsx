@@ -38,7 +38,7 @@ export default function Plan() {
 					{" "}
 					<LanguageSelection
 						languages={languages}
-						allowedCount={5}
+						allowedCount={allowedLanguageCount}
 						isNeedToUpdate={isNeedToUpdate}
 						setIsNeedToUpdate={SetIsNeedToUpdate}
 					/>
@@ -60,21 +60,21 @@ export default function Plan() {
 						title="Pro Plan"
 						price="5.49 USD"
 						langCount="4"
-						planId="P-50416134KY263712SMVO3GJA"
+						planId="P-1RP04957X7097191DMVS5IRQ"
 					/>
 					<div tw="w-[56px]" />
 					<PlanCard
-						title="P-7TC36008HN608045RMVO3EYA"
+						title="Expert Plan"
 						price="8.99 USD"
 						langCount="6"
-						planId="pro_plan"
+						planId="P-1RP04957X7097191DMVS5IRQ"
 					/>
 					<div tw="w-[56px]" />
 					<PlanCard
 						title="Master Plan"
 						price="12.49 USD"
 						langCount="8"
-						planId="P-8WS879485V4869420MVO3I2Q"
+						planId="P-1RP04957X7097191DMVS5IRQ"
 					/>
 				</div>
 				<div tw="h-14" />
