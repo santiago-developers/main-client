@@ -12,14 +12,13 @@ export interface LanguageDto {
 export default function Plan() {
 	const [languages, setLanguages] = useState<LanguageDto[]>([]);
 	const [isNeedToUpdate, SetIsNeedToUpdate] = useState(true);
-	const {
-		allowedLanguageCount,
-		languagesSubcribed,
-	} = myInfoStore();
+	const { allowedLanguageCount, languagesSubcribed } = myInfoStore();
 
-	useEffect(()=> {
+	useEffect(() => {
 		setLanguages(languagesSubcribed);
-		SetIsNeedToUpdate(!(allowedLanguageCount === languagesSubcribed.length));
+		SetIsNeedToUpdate(
+			!(allowedLanguageCount === languagesSubcribed.length),
+		);
 	}, []);
 	return (
 		<>
@@ -30,7 +29,12 @@ export default function Plan() {
 					<div tw="font-light">
 						Currently, you are subscribed as&nbsp;
 					</div>
-					<div tw="font-semibold">Master</div>
+					<div tw="font-semibold">
+						{allowedLanguageCount === 4 ? <>Pro</> : null}{" "}
+						{allowedLanguageCount === 6 ? <>Expert</> : null}{" "}
+						{allowedLanguageCount === 8 ? <>Master</> : null}{" "}
+						{allowedLanguageCount === 2 ? <>Basic</> : null}
+					</div>
 					<div tw="font-light">&nbsp;plan.</div>
 				</div>
 				<div tw="h-12" />
@@ -61,6 +65,7 @@ export default function Plan() {
 						price="5.49 USD"
 						langCount="4"
 						planId="P-1RP04957X7097191DMVS5IRQ"
+						allowedLanguageCount={allowedLanguageCount}
 					/>
 					<div tw="w-[56px]" />
 					<PlanCard
@@ -68,6 +73,7 @@ export default function Plan() {
 						price="8.99 USD"
 						langCount="6"
 						planId="P-1RP04957X7097191DMVS5IRQ"
+						allowedLanguageCount={allowedLanguageCount}
 					/>
 					<div tw="w-[56px]" />
 					<PlanCard
@@ -75,6 +81,7 @@ export default function Plan() {
 						price="12.49 USD"
 						langCount="8"
 						planId="P-1RP04957X7097191DMVS5IRQ"
+						allowedLanguageCount={allowedLanguageCount}
 					/>
 				</div>
 				<div tw="h-14" />
