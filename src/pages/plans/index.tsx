@@ -1,5 +1,6 @@
 import LanguageSelection from "@components/plans/LanguageSelection";
 import PlanCard from "@components/plans/PlanCard";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import myInfoStore from "store/myInfoStore";
 import tw from "twin.macro";
@@ -13,8 +14,13 @@ export default function Plan() {
 	const [languages, setLanguages] = useState<LanguageDto[]>([]);
 	const [isNeedToUpdate, SetIsNeedToUpdate] = useState(true);
 	const { allowedLanguageCount, languagesSubcribed } = myInfoStore();
+	const router = useRouter();
 
 	useEffect(() => {
+		const userId = localStorage.getItem("userId");
+		if(!userId) {
+			router.push("/auth/sign-in");
+		}
 		setLanguages(languagesSubcribed);
 		SetIsNeedToUpdate(
 			!(allowedLanguageCount === languagesSubcribed.length),
@@ -30,10 +36,8 @@ export default function Plan() {
 						Currently, you are subscribed as&nbsp;
 					</div>
 					<div tw="font-semibold">
-						{allowedLanguageCount === 4 ? <>Pro</> : null}{" "}
-						{allowedLanguageCount === 6 ? <>Expert</> : null}{" "}
-						{allowedLanguageCount === 8 ? <>Master</> : null}{" "}
-						{allowedLanguageCount === 2 ? <>Basic</> : null}
+						{allowedLanguageCount === 4 ? <>Pro</> : allowedLanguageCount === 6 ? <>Expert</> : allowedLanguageCount === 8 ? <>Master</> : <>Basic</>}{" "}
+						
 					</div>
 					<div tw="font-light">&nbsp;plan.</div>
 				</div>
