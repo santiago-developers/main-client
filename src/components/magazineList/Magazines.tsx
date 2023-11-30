@@ -12,12 +12,14 @@ type MagazinesProps = {
 	selectedType: string;
 	regionId: string;
 	searchTerm: string;
+	user_id:string;
 };
 
 const Magazines = ({
 	selectedType,
 	regionId,
 	searchTerm,
+	user_id
 }: MagazinesProps) => {
 	const [magazines, setMagazines] = useState([]);
 	const getData = async () => {
@@ -25,7 +27,7 @@ const Magazines = ({
 		const magazineList: string[] = await SantiagoGet(
 			`magazines?${regionId ? `region_id=${regionId}&` : ""}query_type=${
 				query_type || "hot"
-			}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}`,
+			}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}${user_id ? `&user_id=${user_id}`:""}`,
 		);
 		setMagazines(magazineList.data);
 	};
