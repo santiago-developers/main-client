@@ -25,6 +25,7 @@ interface MyInfo {
 	setRegion: (newRegion: RegionResponse) => void;
 	setLanguagesSubcribed: (newLanguages: LanguageDto[]) =>void;
 	setAllowedLanguageCount: (newAllowedLanguageCount: number) => void;
+	imageStore : (newRegion: RegionResponse) => void;
 	reset: () => void;
 }
 

@@ -5,21 +5,14 @@ import { Grid, Paper } from "@mui/material";
 import Searchbar from "@components/main/SearchBar";
 import { useRouter } from "next/router";
 import { experimentalStyled as styled } from "@mui/material/styles";
-import { countinents } from "@statics/region";
+import { countinents } from "@statics/continents";
 import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 import { SantiagoGet } from "lib/fetchData";
+import { RegionProps, Regions } from "types/regions";
+import regionsStore from "store/regionsStore";
 
 // React.ComponentType<React.SVGProps<SVGSVGElement>>
-type Regions = {
-	data: string[];
-};
-
-type RegionProps = {
-	regionId: string;
-	name_en: string;
-	[key: string]: string;
-};
 
 export default function MainPage({
 	regions,
@@ -40,21 +33,21 @@ export default function MainPage({
 
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-		const regionsId = regions.data
+		const searchedRegion = regions.data
 			.map((item: RegionProps) => item)
 			.find((item: RegionProps) => item.name_en === "France");
 
-		if (searchTerm) {
-			router.push({
-				pathname: "/magazines",
-				query: {
-					regin_id: regionsId.regionId,
-					query_type: "hot",
-					base: 0,
-					limit: 8,
-				},
-			});
-		}
+		// if (searchTerm) {
+		// 	router.push({
+		// 		pathname: "/magazines",
+		// 		query: {
+		// 			regin_id: searchedRegion.regionId,
+		// 			query_type: "hot",
+		// 			base: 0,
+		// 			limit: 8,
+		// 		},
+		// 	});
+		// }
 		setSearchTerm("");
 	};
 
@@ -62,12 +55,12 @@ export default function MainPage({
 		let contient = item.toLowerCase().replace(/ /g, "_");
 		router.push({
 			pathname: "/magazines",
-			query: {
-				continent: contient,
-				query_type: "hot",
-				base: 0,
-				limit: 8,
-			},
+			// query: {
+			// 	continent: contient,
+			// 	query_type: "hot",
+			// 	base: 0,
+			// 	limit: 8,
+			// },
 		});
 	};
 
@@ -120,8 +113,9 @@ export default function MainPage({
 }
 
 export const getStaticProps = (async () => {
-	const regions = await SantiagoGet("regions");
-
+	const regions = await SantiagoGet<Regions>("regions");
+	regionsStore.setState((state) => ({ ...state, regions: regions.data }));
+	
 	return {
 		props: {
 			regions,

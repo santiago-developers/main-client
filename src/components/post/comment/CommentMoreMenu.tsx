@@ -2,33 +2,48 @@ import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useRouter } from "next/navigation";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { SantiagoDelete } from "lib/fetchData";
+
+type CommentMoreMenuProps ={
+	moreMenuType:MoreMenuType,
+	replyId:string,
+	onSelectCommentIdx: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+}
 
 type MoreMenuType = {
 	post: string[];
 	comment: string[];
+	report: string[];
 };
 
 const moreMenu: MoreMenuType = {
-	post: ["report", "edit", "html edit", "statistics","delete"],
+	post: ["report", "edit", "html edit", "statistics", "delete"],
 	comment: ["edit", "delete", "report"],
+	report: ["report"],
 };
 
-const ITEM_HEIGHT = 48;
-
-const MoreMenu = ({ moreMenuType }) => {
-	const router =useRouter();
+const CommentMoreMenu = ({
+	moreMenuType,
+	replyId,
+	onSelectCommentIdx
+}:CommentMoreMenuProps) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
-	const handleClose = (item:string) => {
-		console.log(item);
-		
-		// if(item === "edit"){
-		// return router.push("/edit")}
+
+	const handleMenu = (type:string) => {
+		if (type === "delete") {
+			const fetchData = async () =>
+				await SantiagoDelete(
+					`magazines/{magazineId}/replies/${replyId}`,
+				);
+			fetchData();
+		} else if (type === "edit") {
+			onSelectCommentIdx()
+		}
 		setAnchorEl(null);
 	};
 
@@ -41,7 +56,7 @@ const MoreMenu = ({ moreMenuType }) => {
 				aria-expanded={open ? "true" : undefined}
 				aria-haspopup="true"
 				onClick={handleClick}>
-				<MoreVertIcon />
+				<MoreHorizIcon />
 			</IconButton>
 			<Menu
 				id="long-menu"
@@ -50,18 +65,14 @@ const MoreMenu = ({ moreMenuType }) => {
 				}}
 				anchorEl={anchorEl}
 				open={open}
-				onClose={handleClose}
-				PaperProps={{
-					style: {
-						maxHeight: ITEM_HEIGHT * 4.5,
-						width: "13ch",
-					},
-				}}>
+				onClose={handleMenu}>
 				{moreMenu[moreMenuType].map((option) => (
 					<MenuItem
 						key={option}
+						sx={{ fontSize: 13, color: "#A3A3A3" }}
 						selected={option === "Pyxis"}
-						onClick={handleClose}>
+						onClick={(e)=>handleMenu(e.target.innerText)}
+						>
 						{option}
 					</MenuItem>
 				))}
@@ -69,4 +80,4 @@ const MoreMenu = ({ moreMenuType }) => {
 		</div>
 	);
 };
-export default MoreMenu;
+export default CommentMoreMenu;

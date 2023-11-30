@@ -1,104 +1,107 @@
-import dynamic from "next/dynamic";
+import { useRef, useMemo, useState, useEffect } from "react";
+import tw from "twin.macro";
+import { SantiagoImagePost } from "lib/fetchData";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import QuillNoSSRWrapper from "./reactQuill/QuillNoSSRWrapper";
+import writeStore from "store/writeStore";
 
-const QuillWrapper = dynamic(() => import("react-quill"), {
-	ssr: false,
-	loading: () => <p>Loading ...</p>,
-});
-
-//normal: 16px
-const modules = {
-	toolbar: [
-		[{ header: [1, 2, 3, false] }],
-		[
-			"bold",
-			"italic",
-			"underline",
-			"strike",
-			"blockquote",
-			{
-				color: [
-					"#000000",
-					"#e60000",
-					"#ff9900",
-					"#ffff00",
-					"#008a00",
-					"#0066cc",
-					"#9933ff",
-					"#ffffff",
-					"#facccc",
-					"#ffebcc",
-					"#ffffcc",
-					"#cce8cc",
-					"#cce0f5",
-					"#ebd6ff",
-					"#bbbbbb",
-					"#f06666",
-					"#ffc266",
-					"#ffff66",
-					"#66b966",
-					"#66a3e0",
-					"#c285ff",
-					"#888888",
-					"#a10000",
-					"#b26b00",
-					"#b2b200",
-					"#006100",
-					"#0047b2",
-					"#6b24b2",
-					"#444444",
-					"#5c0000",
-					"#663d00",
-					"#666600",
-					"#003700",
-					"#002966",
-					"#3d1466",
-				],
-			},
-		],
-		[
-			{ align: [] },
-			{ list: "ordered" },
-			{ list: "bullet" },
-			{ indent: "-1" },
-			{ indent: "+1" },
-		],
-		["link", "image"],
-		["clean"],
-	],
-	clipboard: {
-		// toggle to add extra line breaks when pasting HTML:
-		matchVisual: false,
-	},
+type ImageProps = {
+	url: string;
+	id: string;
 };
-/*
- * Quill editor formats
- * See https://quilljs.com/docs/formats/
- */
-const formats = [
-	"header",
-	"font",
-	"color",
-	"size",
-	"bold",
-	"italic",
-	"underline",
-	"strike",
-	"blockquote",
-	"list",
-	"bullet",
-	"indent",
-	"link",
-	"image",
-	"align",
-];
 
-export default function QuillEditer() {
+export default function QuillEditer({ value, setContent }) {
+	const { setImageId } = writeStore();
+	const quillRef = useRef<ReactQuill>(null);
+	const [imgUrlIds, setImgUrlIds] = useState<string[]>([]);
+
+	const imageHandler = () => {
+		const input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("accept", "image/*");
+		input.click();
+		input.addEventListener("change", async () => {
+			const file = input.files;
+			const formData = new FormData();
+			if (file) {
+				formData.append("file", file[0]);
+			}
+			if (quillRef.current) {
+				const fetchData: ImageProps = await SantiagoImagePost(formData);
+				const url = fetchData.url;
+				console.log(fetchData.id);
+				// setImgUrlIds([fetchData.id]);
+				// // setImgUrlIds([...imgUrlIds,fetchData.id])
+				setImgUrlIds((prevImgUrlIds) => [...prevImgUrlIds, fetchData.id]);
+				const editor = quillRef.current.getEditor();
+				const range = editor.getSelection();
+				editor.insertEmbed(range.index, "image", url);
+				editor.setSelection(range.index + 1);
+			}
+		});
+	
+	};
+
+	useEffect(() => {
+		setImageId(imgUrlIds);
+		console.log("이미지useEffect", imgUrlIds);
+	}, [imgUrlIds]);
+
+	const modules = useMemo(
+		() => ({
+			toolbar: {
+				container: [
+					[{ header: [1, 2, 3, false] }],
+					["bold", "italic", "underline", "strike", "blockquote"],
+					[
+						{ align: [] },
+						{ list: "ordered" },
+						{ list: "bullet" },
+						{ indent: "-1" },
+						{ indent: "+1" },
+						{ color: [] },
+					],
+					["link", "image"],
+					["clean"],
+				],
+				handlers: { image: imageHandler },
+			},
+			clipboard: {
+				matchVisual: false,
+			},
+		}),
+		[],
+	);
+
+	const formats = [
+		"header",
+		"font",
+		"color",
+		"size",
+		"bold",
+		"italic",
+		"underline",
+		"strike",
+		"blockquote",
+		"list",
+		"bullet",
+		"indent",
+		"link",
+		"image",
+		"align",
+	];
+
 	return (
-		<QuillWrapper
+		<QuillNoSSRWrapper
+			tw="leading-9"
+			forwardedRef={quillRef}
 			modules={modules}
 			formats={formats}
 			theme="snow"
-			placeholder="Please enter your content"
+			placeholder="Tell your story.."
+			value={value || ""}
+			onChange={(e) => setContent(e)}
 		/>
 	);
 }

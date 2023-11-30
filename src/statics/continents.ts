@@ -7,8 +7,4 @@ export const countinents: string[] = [
 	"Oceania",
 	"Southeast Asia",
 	"South America",
-	"Korea",
-	"Japan",
-	"Spain",
-	"France",
 ];
