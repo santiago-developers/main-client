@@ -1,3 +1,4 @@
+import { LanguageDto } from "@pages/plans";
 import { RegionResponse } from "lib/dto/region/region";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -10,8 +11,9 @@ interface MyInfo {
 	followingCount: number;
 	photoScore: number;
 	writingScore: number;
-	languagesSubcribed:string[];
 	region: RegionResponse | null;
+	languagesSubcribed: LanguageDto[];
+    allowedLanguageCount: number;
 
 	setId: (newId: string) => void;
 	setName: (newName: string) => void;
@@ -20,9 +22,10 @@ interface MyInfo {
 	setFollowingCount: (newFollowingCount: number) => void;
 	setPhotoScore: (newPhotoScore: number) => void;
 	setWritingScore: (newWritingScore: number) => void;
-	setLanguagesSubcribed:(newLanguagesSubcribed: string[])=>void;
+	setRegion: (newRegion: RegionResponse) => void;
+	setLanguagesSubcribed: (newLanguages: LanguageDto[]) =>void;
+	setAllowedLanguageCount: (newAllowedLanguageCount: number) => void;
 	imageStore : (newRegion: RegionResponse) => void;
-
 	reset: () => void;
 }
 
@@ -35,8 +38,10 @@ const myInfoStore = create(persist<MyInfo>((set) => ({
 	followingCount: 0,
 	photoScore: 0,
 	writingScore: 0,
-	languagesSubcribed:[],
 	region: null,
+	languagesSubcribed: [],
+    allowedLanguageCount: -1,
+
 
 	setId: (newId) => set({ id: newId }),
 	setName: (newName) => set({ name: newName }),
@@ -45,8 +50,9 @@ const myInfoStore = create(persist<MyInfo>((set) => ({
 	setFollowingCount: (count) => set({ followingCount: count }),
 	setPhotoScore: (score) => set({ photoScore: score }),
 	setWritingScore: (score) => set({ writingScore: score }),
-	setLanguagesSubcribed:(language)=> set({languagesSubcribed:language}),
 	setRegion: (region) => set({ region }),
+	setLanguagesSubcribed: (newLanguages) => set({languagesSubcribed: newLanguages}),
+	setAllowedLanguageCount: (newAllowedLanguageCount) => set({allowedLanguageCount: newAllowedLanguageCount}),
 	reset: () =>
 		set({
 			id: "",
@@ -56,8 +62,9 @@ const myInfoStore = create(persist<MyInfo>((set) => ({
 			followingCount: 0,
 			photoScore: 0,
 			writingScore: 0,
-			languagesSubcribed:[],
 			region: null,
+			allowedLanguageCount: -1,
+			languagesSubcribed: []
 		}),
 }), {name: 'my-info'}));
 

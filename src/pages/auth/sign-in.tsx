@@ -37,6 +37,8 @@ export default function SignIn() {
 		setPhotoScore,
 		setWritingScore,
 		setRegion,
+		setLanguagesSubcribed,
+		setAllowedLanguageCount
 	} = myInfoStore();
 
 	const storeMyInfo = async (userId: string) => {
@@ -49,6 +51,8 @@ export default function SignIn() {
 		setPhotoScore(myInfo.photoScore);
 		setWritingScore(myInfo.writingScore);
 		setRegion(myInfo.region);
+		setLanguagesSubcribed(myInfo.languagesSubcribed);
+		setAllowedLanguageCount(myInfo.allowedLanguageCount);
 	};
 
 	const loadUserInfo = (data: SignInResponse) => {
