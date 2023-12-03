@@ -4,12 +4,16 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { SantiagoDelete } from "lib/fetchData";
+import { useRouter } from "next/router";
 
-type CommentMoreMenuProps ={
-	moreMenuType:MoreMenuType,
-	replyId:string,
-	onSelectCommentIdx: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
-}
+type CommentMoreMenuProps = {
+	moreMenuType: MoreMenuType;
+	replyId: string;
+	onSelectCommentIdx: (
+		e: React.MouseEvent<HTMLButtonElement>,
+		index: number,
+	) => void;
+};
 
 type MoreMenuType = {
 	post: string[];
@@ -26,15 +30,16 @@ const moreMenu: MoreMenuType = {
 const CommentMoreMenu = ({
 	moreMenuType,
 	replyId,
-	onSelectCommentIdx
-}:CommentMoreMenuProps) => {
+	onSelectCommentIdx,
+}: CommentMoreMenuProps) => {
+	const router =useRouter();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 
-	const handleMenu = (type:string) => {
+	const handleMenu = (type: string) => {
 		if (type === "delete") {
 			const fetchData = async () =>
 				await SantiagoDelete(
@@ -42,7 +47,9 @@ const CommentMoreMenu = ({
 				);
 			fetchData();
 		} else if (type === "edit") {
-			onSelectCommentIdx()
+			onSelectCommentIdx();
+		} else if (type === "report") {
+		router.push("/report")
 		}
 		setAnchorEl(null);
 	};
@@ -71,8 +78,7 @@ const CommentMoreMenu = ({
 						key={option}
 						sx={{ fontSize: 13, color: "#A3A3A3" }}
 						selected={option === "Pyxis"}
-						onClick={(e)=>handleMenu(e.target.innerText)}
-						>
+						onClick={(e) => handleMenu(e.target.innerText)}>
 						{option}
 					</MenuItem>
 				))}

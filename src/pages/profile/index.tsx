@@ -38,7 +38,7 @@ const ProfilePage = () => {
 						/>
 						<div tw="flex flex-col justify-center pl-2">
 							<span tw="text-[24px]">{name}</span>
-							<span tw="text-[18px]">{region.name_en}</span>
+							<span tw="text-[18px]">{region?.name_en}</span>
 						</div>
 						<button tw="text-mint">edit</button>
 					</div>
