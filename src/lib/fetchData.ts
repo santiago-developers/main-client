@@ -1,4 +1,5 @@
-import { error } from "console";
+import { useRouter } from "next/router";
+
 
 export async function SantiagoPost<T, R>(url: string, dto: T): Promise<R> {
 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {
@@ -16,7 +17,7 @@ export async function SantiagoPost<T, R>(url: string, dto: T): Promise<R> {
 }
 export async function SantiagoPostWithAutorization<T, R>(
 	url: string,
-	dto: T,
+	dto?: T,
 ): Promise<R> {
 	const accessToken = localStorage.getItem("accessToken");
 
@@ -104,7 +105,9 @@ export async function SantiagoGet<T>(url: string): Promise<T> {
 
 export async function SantiagoDelete<T>(url: string): Promise<T> {
 	const accessToken = localStorage.getItem("accessToken");
+	const router = useRouter()
 	if (!accessToken) {
+		router.push("/login")
 		throw new Error("Access token is not available");
 	}
 	const res = await fetch(`http://3.34.114.67:11009/${url}`, {

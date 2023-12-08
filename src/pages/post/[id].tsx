@@ -5,17 +5,12 @@ import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutl
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import CommentList from "@components/post/comment/CommentList";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
-import CommentInput from "@components/post/comment/CommentInput";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { SantiagoGet } from "lib/fetchData";
+import { SantiagoGet, SantiagoPostWithAutorization } from "lib/fetchData";
 import { MagazineProps, TagProps } from "types/magazines";
 import Image from "next/image";
 import Dompurify from "dompurify";
-import { useState } from "react";
+import CommentWrap from "@components/post/comment/CommentWrap";
 
 export default function PostPage({
 	post,
@@ -34,10 +29,12 @@ export default function PostPage({
 		tags,
 	}: MagazineProps = post;
 
-	const [openComment, setOpenComment] = useState(false);
-	const handleComment = () => {
-		setOpenComment(!openComment);
-	};
+
+
+	const handleLike = (type:string)=>{
+		const fetchData =async ()=>await SantiagoPostWithAutorization(`magazines/${magazineId}/likes?type=${type}`);
+		fetchData();
+	}
 
 	return (
 		<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
@@ -49,26 +46,28 @@ export default function PostPage({
 							title="I like this photo"
 							placement="top"
 							arrow>
-							<IconButton>
+							<IconButton onClick={(e)=> {e.stopPropagation();
+								handleLike("photo");}}>
 								<PhotoCameraBackOutlinedIcon
 									sx={{ fontSize: "medium" }}
 								/>
 							</IconButton>
 						</Tooltip>
-						{writingLikeCount}
+						{photoLikeCount}
 					</span>
 					<span tw="flex justify-center items-center">
 						<Tooltip
 							title="I like this writing"
 							placement="top"
 							arrow>
-							<IconButton>
+							<IconButton onClick={(e)=> {e.stopPropagation();
+								handleLike("writing");}}>
 								<ArticleOutlinedIcon
 									sx={{ fontSize: "medium" }}
 								/>
 							</IconButton>
 						</Tooltip>
-						{photoLikeCount}
+						{writingLikeCount}
 					</span>
 					<span tw="text-[#A3A3A3] pl-4">
 						{dayjs(createdAt).format("MMM DD, YYYY")}
@@ -76,7 +75,7 @@ export default function PostPage({
 				</div>
 				<MoreMenu moreMenuType="post" />
 			</div>
-			<div tw="flex pl-2">
+			<div tw="flex pl-2 mt-2">
 				<Image
 					src={writer.imageUrl || "../images/defaultUser.svg"}
 					alt="userImage"
@@ -102,22 +101,8 @@ export default function PostPage({
 					<div key={item.tagId}> #{item.tag}</div>
 				))}
 			</div>
-			<div tw="text-sm">
-				<ChatBubbleOutlineIcon tw="text-[16px] mr-2" />4
-				<button
-					tw="border border-mint rounded-full text-mint pr-2 ml-4"
-					onClick={handleComment}>
-					{openComment ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-					Open Comment
-				</button>
-			</div>
 			<div>
-				{openComment && (
-					<>
-						<CommentInput magazineId={magazineId} />
-						<CommentList magazineId={magazineId} />
-					</>
-				)}
+				<CommentWrap magazineId={magazineId}/>
 			</div>
 		</div>
 	);

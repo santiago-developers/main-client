@@ -1,29 +1,19 @@
 import tw from "twin.macro";
 import { Paper } from "@mui/material";
-import { SantiagoGet } from "lib/fetchData";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { CommentProps } from "types/magazines";
 import Comment from "./Comment";
 
 type CommentListProp = {
 	magazineId: string | undefined;
+	commentList:string[];
 };
 
-const CommentList = ({ magazineId }: CommentListProp) => {
-	const [commentList, setCommentList] = useState([]);
+const CommentList = ({ magazineId,commentList }: CommentListProp) => {
 	const [selectedCommentIdx, setSelectedCommentIdx] = useState<
 		number | undefined
 	>(undefined);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const result = await SantiagoGet(
-				`magazines/${magazineId}/replies?base=0&limit=20`,
-			);
-			setCommentList(result.data);
-		};
-		fetchData();
-	}, []);
 	// TODO 이거 테스트
 	// FIXME 이것도 테스트
 
