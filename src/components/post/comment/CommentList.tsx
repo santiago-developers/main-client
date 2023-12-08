@@ -6,7 +6,7 @@ import Comment from "./Comment";
 
 type CommentListProp = {
 	magazineId: string | undefined;
-	commentList:string[];
+	// commentList:string[];
 };
 
 const CommentList = ({ magazineId,commentList }: CommentListProp) => {
@@ -19,11 +19,12 @@ const CommentList = ({ magazineId,commentList }: CommentListProp) => {
 
 	return (
 		<>
-			<Paper style={{ padding: "30px 20px", fontSize: 14 }}>
+			<Paper style={{ padding: "20px 0px 20px 20px", fontSize: 14}}>
+				<div tw="relative h-[410px] overflow-y-scroll">
 				{commentList?.map(
 					(item: CommentProps, index) =>
-						!item.parentId && (
-							<Comment
+					!item.parentId && (
+						<Comment
 								key={item.id}
 								magazineId={magazineId}
 								comment={item}
@@ -33,9 +34,10 @@ const CommentList = ({ magazineId,commentList }: CommentListProp) => {
 									selectedCommentIdx === index ? true : false
 								}
 								commentList={commentList}
-							/>
-						),
-				)}
+								/>
+								),
+								)}
+								</div>
 			</Paper>
 		</>
 	);
