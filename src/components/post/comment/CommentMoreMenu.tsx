@@ -4,86 +4,102 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { SantiagoDelete } from "lib/fetchData";
-import { useRouter } from "next/router";
+import ReportModal from "../ReportModal";
 
 type CommentMoreMenuProps = {
-	moreMenuType: MoreMenuType;
+	commentType: boolean;
 	replyId: string;
 	onSelectCommentIdx: (
 		e: React.MouseEvent<HTMLButtonElement>,
 		index: number,
 	) => void;
-};
-
-type MoreMenuType = {
-	post: string[];
-	comment: string[];
-	report: string[];
-};
-
-const moreMenu: MoreMenuType = {
-	post: ["report", "edit", "html edit", "statistics", "delete"],
-	comment: ["edit", "delete", "report"],
-	report: ["report"],
+	magazineId: string | undefined;
 };
 
 const CommentMoreMenu = ({
-	moreMenuType,
+	commentType,
 	replyId,
 	onSelectCommentIdx,
+	magazineId,
 }: CommentMoreMenuProps) => {
-	const router =useRouter();
+	const [openModal, setOpenModal] = React.useState(false);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 
-	const handleMenu = (type: string) => {
-		if (type === "delete") {
-			const fetchData = async () =>
-				await SantiagoDelete(
-					`magazines/{magazineId}/replies/${replyId}`,
-				);
-			fetchData();
-		} else if (type === "edit") {
-			onSelectCommentIdx();
-		} else if (type === "report") {
-		router.push("/report")
-		}
+	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
+	const handleEdit = () => {
+		onSelectCommentIdx();
+	};
+
+	const handleDelete = () => {
+		const fetchData = async () =>
+			await SantiagoDelete(`magazines/{magazineId}/replies/${replyId}`);
+		fetchData();
+		alert("This comment is deleted");
+	};
+
+	const handleReport = () => {
+		console.log(openModal);
+
+		setOpenModal(true);
+	};
+
 	return (
-		<div>
-			<IconButton
-				aria-label="more"
-				id="long-button"
-				aria-controls={open ? "long-menu" : undefined}
-				aria-expanded={open ? "true" : undefined}
-				aria-haspopup="true"
-				onClick={handleClick}>
-				<MoreHorizIcon />
-			</IconButton>
-			<Menu
-				id="long-menu"
-				MenuListProps={{
-					"aria-labelledby": "long-button",
-				}}
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleMenu}>
-				{moreMenu[moreMenuType].map((option) => (
-					<MenuItem
-						key={option}
-						sx={{ fontSize: 13, color: "#A3A3A3" }}
-						selected={option === "Pyxis"}
-						onClick={(e) => handleMenu(e.target.innerText)}>
-						{option}
-					</MenuItem>
-				))}
-			</Menu>
-		</div>
+		<>
+			<div>
+				<IconButton
+					aria-label="more"
+					id="long-button"
+					aria-controls={open ? "long-menu" : undefined}
+					aria-expanded={open ? "true" : undefined}
+					aria-haspopup="true"
+					onClick={handleClick}>
+					<MoreHorizIcon />
+				</IconButton>
+				<Menu
+					id="long-menu"
+					MenuListProps={{
+						"aria-labelledby": "long-button",
+					}}
+					anchorEl={anchorEl}
+					open={open}
+					onClose={handleClose}>
+					{commentType ? (
+						<>
+							<MenuItem
+								sx={{ fontSize: 13, color: "#A3A3A3" }}
+								onClick={handleEdit}>
+								edit
+							</MenuItem>
+							<MenuItem
+								sx={{ fontSize: 13, color: "#A3A3A3" }}
+								onClick={handleDelete}>
+								delete
+							</MenuItem>
+						</>
+					) : (
+						<MenuItem
+							sx={{ fontSize: 13, color: "#A3A3A3" }}
+							onClick={handleReport}>
+							report
+						</MenuItem>
+					)}
+				</Menu>
+			</div>
+			{openModal && (
+				<ReportModal
+					setOpenModal={setOpenModal}
+					magazineId={magazineId}
+					replyId={replyId}
+				/>
+			)}
+		</>
 	);
 };
 export default CommentMoreMenu;

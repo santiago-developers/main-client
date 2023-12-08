@@ -20,27 +20,32 @@ const CommentList = ({ magazineId }: CommentListProp) => {
 			const result = await SantiagoGet(
 				`magazines/${magazineId}/replies?base=0&limit=20`,
 			);
-			setCommentList(result.data)
+			setCommentList(result.data);
 		};
 		fetchData();
-	}, [commentList]);
+	}, []);
+	// TODO 이거 테스트
+	// FIXME 이것도 테스트
 
 	return (
 		<>
 			<Paper style={{ padding: "30px 20px", fontSize: 14 }}>
-				{commentList?.map((item: CommentProps, index) => (
-					(!item.parentId &&
-						<Comment
-						key={item.id}
-						magazineId={magazineId}
-						comment={item}
-						index={index}
-						setSelectedCommentIdx={setSelectedCommentIdx}
-						isSelected={selectedCommentIdx === index ? true : false}
-						commentList={commentList}
-						/>
-						)
-				))}
+				{commentList?.map(
+					(item: CommentProps, index) =>
+						!item.parentId && (
+							<Comment
+								key={item.id}
+								magazineId={magazineId}
+								comment={item}
+								index={index}
+								setSelectedCommentIdx={setSelectedCommentIdx}
+								isSelected={
+									selectedCommentIdx === index ? true : false
+								}
+								commentList={commentList}
+							/>
+						),
+				)}
 			</Paper>
 		</>
 	);

@@ -57,6 +57,8 @@ const MoreMenu = ({ moreMenuType }) => {
 						width: "13ch",
 					},
 				}}>
+					<MenuItem>
+					</MenuItem>
 				{moreMenu[moreMenuType].map((option) => (
 					<MenuItem
 						key={option}

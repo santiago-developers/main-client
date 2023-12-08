@@ -110,13 +110,14 @@ const Comment = ({
 					</div>
 					<div tw="content-end">
 						<CommentMoreMenu
-							moreMenuType={
+							commentType={
 								comment.writer.userId === id
-									? "comment"
-									: "report"
+									? true
+									: false
 							}
 							replyId={comment.id}
 							onSelectCommentIdx={onSelectCommentIdx}
+							magazineId={magazineId}
 						/>
 					</div>
 				</Grid>

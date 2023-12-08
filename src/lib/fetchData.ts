@@ -32,10 +32,11 @@ export async function SantiagoPostWithAutorization<T, R>(
 		body: JSON.stringify(dto),
 	});
 	if (!res.ok) {
-		alert("다시 작성해주세요.");
+		alert("Try Again");
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
-	const data = await res.json();
+	
+	const data = await res?.json();
 	return data;
 }
 
