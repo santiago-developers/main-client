@@ -28,7 +28,7 @@ import {
 	formatDateToDayMonth,
 } from "lib/formatDate";
 
-export default function Statistics({
+export default function StatisticsPage({
 	statistic,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [selectedData, setSelectedData] = useState(statistic.viewCount);
@@ -103,7 +103,11 @@ export default function Statistics({
 
 	useEffect(() => {
 		if (timeUnit == "Daily")
-			setLabelX(fillDates(statistic.viewCount).map((vc)=>formatDateToDayMonth(vc.date)));
+			setLabelX(
+				fillDates(statistic.viewCount).map((vc) =>
+					formatDateToDayMonth(vc.date),
+				),
+			);
 		else if (timeUnit == "Monthly")
 			setLabelX(selectedData.map((sd) => sd.date));
 		else setLabelX(selectedData.map((sd) => sd.date));
@@ -209,7 +213,12 @@ export default function Statistics({
 				<div tw="h-[20px]" />
 				<div>
 					<div tw="overflow-auto">
-						<Line options={options} data={data} height={350} width={5000}/>
+						<Line
+							options={options}
+							data={data}
+							height={350}
+							width={5000}
+						/>
 					</div>
 				</div>
 			</div>

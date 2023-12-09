@@ -45,8 +45,6 @@ const CommentMoreMenu = ({
 	};
 
 	const handleReport = () => {
-		console.log(openModal);
-
 		setOpenModal(true);
 	};
 

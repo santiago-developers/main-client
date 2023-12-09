@@ -3,33 +3,37 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useRouter } from "next/navigation";
+import ReportModal from "@components/post/ReportModal";
+import Link from "next/link";
+import { SantiagoDelete } from "lib/fetchData";
 
-type MoreMenuType = {
-	post: string[];
-	comment: string[];
+type MoreMenuTypeProp = {
+	moreMenuType: boolean;
+	magazineId: string |undefined;
 };
 
-const moreMenu: MoreMenuType = {
-	post: ["report", "edit", "html edit", "statistics","delete"],
-	comment: ["edit", "delete", "report"],
-};
-
-const ITEM_HEIGHT = 48;
-
-const MoreMenu = ({ moreMenuType }) => {
-	const router =useRouter();
+const MoreMenu = ({ moreMenuType, magazineId }: MoreMenuTypeProp) => {
+	const [openModal, setOpenModal] = React.useState(false);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
-	const handleClose = (item:string) => {
-		console.log(item);
-		
-		// if(item === "edit"){
-		// return router.push("/edit")}
+
+	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleDelete = () => {
+		// const fetchData = async () =>
+		// 	await SantiagoDelete(`magazines/${magazineId}`);
+		// fetchData();
+		alert("This post is deleted");
+		history.back()
+	};
+
+	const handleReport = () => {
+		setOpenModal(true);
 	};
 
 	return (
@@ -50,24 +54,46 @@ const MoreMenu = ({ moreMenuType }) => {
 				}}
 				anchorEl={anchorEl}
 				open={open}
-				onClose={handleClose}
-				PaperProps={{
-					style: {
-						maxHeight: ITEM_HEIGHT * 4.5,
-						width: "13ch",
-					},
-				}}>
-					<MenuItem>
-					</MenuItem>
-				{moreMenu[moreMenuType].map((option) => (
+				onClose={handleClose}>
+				{moreMenuType ? (
+					<div>
+						<Link href={`/post/${magazineId}/edit`}>
+							<MenuItem sx={{ color: "#A3A3A3" }}>
+								edit
+							</MenuItem>
+						</Link>
+						<Link href={`/post/${magazineId}/htmlEdit`}>
+							<MenuItem
+								sx={{color: "#A3A3A3" }}>
+								html edit
+							</MenuItem>
+						</Link>
+						<Link href={`/post/${magazineId}/statistics`}>
+							<MenuItem
+								sx={{color: "#A3A3A3" }}>
+								statistics
+							</MenuItem>
+						</Link>
+						<MenuItem
+							sx={{color: "#A3A3A3" }}
+							onClick={handleDelete}>
+							delete
+						</MenuItem>
+					</div>
+				) : (
 					<MenuItem
-						key={option}
-						selected={option === "Pyxis"}
-						onClick={handleClose}>
-						{option}
+						sx={{color: "#A3A3A3" }}
+						onClick={handleReport}>
+						report
 					</MenuItem>
-				))}
+				)}
 			</Menu>
+			{openModal && (
+				<ReportModal
+					setOpenModal={setOpenModal}
+					magazineId={magazineId}
+				/>
+			)}
 		</div>
 	);
 };

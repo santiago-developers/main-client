@@ -11,6 +11,7 @@ import { MagazineProps, TagProps } from "types/magazines";
 import Image from "next/image";
 import Dompurify from "dompurify";
 import CommentWrap from "@components/post/comment/CommentWrap";
+import myInfoStore from "store/myInfoStore";
 
 export default function PostPage({
 	post,
@@ -28,8 +29,7 @@ export default function PostPage({
 		writer,
 		tags,
 	}: MagazineProps = post;
-
-
+	const {id}=myInfoStore();
 
 	const handleLike = (type:string)=>{
 		const fetchData =async ()=>await SantiagoPostWithAutorization(`magazines/${magazineId}/likes?type=${type}`);
@@ -73,7 +73,13 @@ export default function PostPage({
 						{dayjs(createdAt).format("MMM DD, YYYY")}
 					</span>
 				</div>
-				<MoreMenu moreMenuType="post" />
+				<MoreMenu moreMenuType={
+								writer.userId === id
+									? true
+									: false
+							}
+							magazineId={magazineId}
+							/>
 			</div>
 			<div tw="flex pl-2 mt-2">
 				<Image
@@ -109,8 +115,9 @@ export default function PostPage({
 }
 
 export const getStaticPaths = async () => {
+	
 	return {
-		paths: [{ params: { id: "1번" } }],
+		paths: [{ params: { id: "1" } }],
 		fallback: true,
 	};
 };
@@ -118,7 +125,6 @@ export const getStaticPaths = async () => {
 export const getStaticProps = (async (context) => {
 	const { params } = context;
 	const magazineId = params?.id;
-	console.log(params);
 	const post = await SantiagoGet<MagazineProps>(`magazines/${magazineId}`);
 	if (!post) {
 		return { notFound: true };

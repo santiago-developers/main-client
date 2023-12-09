@@ -101,7 +101,7 @@ export default function QuillEditer({ value, setContent }) {
 			theme="snow"
 			placeholder="Tell your story.."
 			value={value || ""}
-			onChange={(e) => setContent(e)}
+			// onChange={(e) => setContent(e)}
 		/>
 	);
 }
