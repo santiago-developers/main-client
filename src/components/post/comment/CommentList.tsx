@@ -1,6 +1,6 @@
 import tw from "twin.macro";
 import { Paper } from "@mui/material";
-import {  useState } from "react";
+import { useState } from "react";
 import { CommentProps } from "types/magazines";
 import Comment from "./Comment";
 
@@ -9,7 +9,7 @@ type CommentListProp = {
 	// commentList:string[];
 };
 
-const CommentList = ({ magazineId,commentList }: CommentListProp) => {
+const CommentList = ({ magazineId, commentList }: CommentListProp) => {
 	const [selectedCommentIdx, setSelectedCommentIdx] = useState<
 		number | undefined
 	>(undefined);
@@ -19,25 +19,31 @@ const CommentList = ({ magazineId,commentList }: CommentListProp) => {
 
 	return (
 		<>
-			<Paper style={{ padding: "20px 0px 20px 20px", fontSize: 14}}>
-				<div tw="relative h-[410px] overflow-y-scroll">
-				{commentList?.map(
-					(item: CommentProps, index) =>
-					!item.parentId && (
-						<Comment
-								key={item.id}
-								magazineId={magazineId}
-								comment={item}
-								index={index}
-								setSelectedCommentIdx={setSelectedCommentIdx}
-								isSelected={
-									selectedCommentIdx === index ? true : false
-								}
-								commentList={commentList}
+			<Paper style={{ padding: "20px 0px 20px 20px", fontSize: 14 }}>
+				<div
+					tw="relative h-[410px] overflow-y-scroll"
+					className="customScrollbar">
+					{commentList?.map(
+						(item: CommentProps, index) =>
+							!item.parentId && (
+								<Comment
+									key={item.id}
+									magazineId={magazineId}
+									comment={item}
+									index={index}
+									setSelectedCommentIdx={
+										setSelectedCommentIdx
+									}
+									isSelected={
+										selectedCommentIdx === index
+											? true
+											: false
+									}
+									commentList={commentList}
 								/>
-								),
-								)}
-								</div>
+							),
+					)}
+				</div>
 			</Paper>
 		</>
 	);
