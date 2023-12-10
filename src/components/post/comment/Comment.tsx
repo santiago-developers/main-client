@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import tw from "twin.macro";
 import Image from "next/image";
 import HeartSvg from "@public/images/heart.svg";
@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import CommentMoreMenu from "./CommentMoreMenu";
 import { CommentProps } from "types/magazines";
 import myInfoStore from "store/myInfoStore";
-import { SantiagoPutWithAutorization } from "lib/fetchData";
+import { SantiagoDeletetNoRes, SantiagoPostNoRes,SantiagoPutWithAutorization } from "lib/fetchData";
 import ReplyComment from "./ReplyComment";
 
 type CommentComponentProps = {
@@ -18,6 +18,7 @@ type CommentComponentProps = {
 		React.SetStateAction<number | undefined>
 	>;
 	isSelected: boolean;
+	commentList: CommentProps[];
 };
 
 const Comment = ({
@@ -26,9 +27,10 @@ const Comment = ({
 	index,
 	setSelectedCommentIdx,
 	isSelected,
-	commentList
+	commentList,
 }: CommentComponentProps) => {
 	const { id } = myInfoStore();
+	const replyId = comment.id;
 	const [editedContent, setEditedContent] = useState(comment.content);
 
 	const onSelectCommentIdx = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,7 +38,6 @@ const Comment = ({
 	};
 
 	const handleEdit = async () => {
-		const replyId = comment.id;
 		await SantiagoPutWithAutorization(
 			`magazines/${magazineId}/replies/${replyId}`,
 			{ content: editedContent },
@@ -48,6 +49,32 @@ const Comment = ({
 	const handleReply = () => {
 		setOpen(!open);
 	};
+
+	const handleClose = () => {
+		// setOpen(!open);
+	};
+
+	const [like, setLike]=useState(false)
+	const handleLike = async()=>{
+		if(like){
+			const fetchData = async()=>{
+				await SantiagoPostNoRes(`magazines/${magazineId}/replies/${replyId}/like`)
+			}
+			fetchData()
+		}else{
+			// const fetchData = async()=>{
+				// 	await SantiagoDeletetNoRes(`magazines/${magazineId}/replies/${replyId}/like`)
+				// }
+				// fetchData()
+				// setLike(false)
+			}
+			setLike(!like)
+		console.log(like);
+	}
+
+	useEffect(()=>{
+
+	},[editedContent])
 
 	return (
 		<div>
@@ -72,55 +99,78 @@ const Comment = ({
 						</div>
 					</div>
 				</Grid>
-				<Grid justifyContent="left" item xs>
 					{isSelected ? (
-						<input
-							type="text"
+				<Grid justifyContent="left" item xs>
+						<textarea
+							id="commentEdit"
 							autoFocus
-							tw="w-[100%]"
+							tw=" w-full h-full resize-none block w-full border rounded focus:outline-[#D4D4D4] p-1"
+							rows={1}
+							maxLength={200}
 							placeholder="Editing... "
 							value={editedContent}
 							onChange={(e) => setEditedContent(e.target.value)}
-						/>
+							/>
+							</Grid>
 					) : (
-						<p style={{ textAlign: "left" }}>{comment.content}</p>
+						<Grid justifyContent="left" item xs>
+							<p style={{ textAlign: "left" }}>
+								{comment.content}
+							</p>
+							<p
+								style={{
+									textAlign: "left",
+									color: "#A3A3A3",
+									fontSize: 11,
+									marginTop:5,
+								}}>
+								{dayjs(comment.createdAt).format(
+									"MMM DD, YYYY",
+								)}
+								<button
+									tw="text-mint pl-4"
+									onClick={handleReply}>
+									reply
+								</button>
+							</p>
+							</Grid>
 					)}
-					<p
-						style={{
-							textAlign: "left",
-							color: "#A3A3A3",
-							fontSize: 11,
-						}}>
-						{dayjs(comment.createdAt).format("MMM DD, YYYY")}
-						{isSelected ? (
-							<button tw="text-mint pl-4" onClick={handleEdit}>
-								edit
-							</button>
-						) : (
-							<button tw="text-mint pl-4" onClick={handleReply}>
-								reply
-							</button>
-						)}
-					</p>
-				</Grid>
+					{isSelected ? (
 				<Grid item>
-					<div tw="flex items-center justify-center gap-1">
-						<HeartSvg fill="#A3A3A3" />
-						<span tw="text-xs">{comment.likeCount}</span>
-					</div>
-					<div tw="content-end">
-						<CommentMoreMenu
-							commentType={
-								comment.writer.userId === id
-									? true
-									: false
-							}
-							replyId={comment.id}
-							onSelectCommentIdx={onSelectCommentIdx}
-							magazineId={magazineId}
-						/>
-					</div>
-				</Grid>
+					
+							<button
+								tw="border border-mint rounded-full text-mint text-sm px-1.5 content-end"
+								onClick={handleEdit}>
+								Upload
+							</button>
+							<button
+								tw="block text-sm px-1 mr-2 mt-5"
+								onClick={handleClose}>
+								Cancel
+							</button>
+					
+						</Grid>
+					) : (
+						<Grid item>
+							<div tw="flex items-center justify-center gap-1">
+								<HeartSvg fill={`${like ? "#E84033":"#A3A3A3"}`} onClick={(e)=> {e.stopPropagation();
+								handleLike();}} tw="cursor-pointer"/>
+								<span tw="text-xs">{comment.likeCount}</span>
+							</div>
+							<div tw="content-end mt-1">
+								<CommentMoreMenu
+									commentType={
+										comment.writer.userId === id
+											? true
+											: false
+									}
+									replyId={comment.id}
+									onSelectCommentIdx={onSelectCommentIdx}
+									magazineId={magazineId}
+								/>
+							</div>
+							</Grid>
+					)}
 			</Grid>
 			<ReplyComment
 				magazineId={magazineId}
@@ -132,7 +182,7 @@ const Comment = ({
 				setSelectedCommentIdx={setSelectedCommentIdx}
 				index={index}
 			/>
-			<Divider variant="fullWidth" style={{ margin: "10px 0" }} />
+			<Divider variant="fullWidth" style={{ marginBottom: "10px" }} />
 		</div>
 	);
 };

@@ -11,7 +11,7 @@ type CommentInputProp = {
 	setOpen(item: boolean): void;
 };
 
-const CommentInput = ({ magazineId, parentId,setOpen }: CommentInputProp) => {
+const CommentInput = ({ magazineId, parentId, setOpen }: CommentInputProp) => {
 	const { id } = myInfoStore();
 	const [content, setContent] = useState("");
 	const handleCommentSubmit = () => {
@@ -32,20 +32,23 @@ const CommentInput = ({ magazineId, parentId,setOpen }: CommentInputProp) => {
 	};
 
 	const handleClose = () => {
-		setOpen(!open)
+		setOpen(!open);
 	};
 
 	return (
 		<div tw="py-4">
-			<Paper style={{ padding: "10px 18px", fontSize: 14 }}>
+			<Paper style={{ paddingLeft: "18px", paddingRight: "18px" , fontSize: 14 }}>
 				<Grid container wrap="nowrap" spacing={2}>
 					<Grid item style={{ display: "flex" }}>
 						<DefautUserSvg tw="w-[20px] h-[20px]" />
 					</Grid>
 					<Grid item xs>
-						<input
+						<textarea
+							id="comment"
 							placeholder="Add a comment..."
-							width="100%"
+							tw="w-full h-full resize-none focus:outline-none" 
+							rows={1}
+							maxLength={200}
 							value={content}
 							onChange={(e) => setContent(e.target.value)}
 						/>
@@ -55,7 +58,7 @@ const CommentInput = ({ magazineId, parentId,setOpen }: CommentInputProp) => {
 							Cancel
 						</button>
 						<button
-							tw="border border-mint rounded-full text-mint text-sm px-1"
+							tw="border border-mint rounded-full text-mint text-sm px-1.5"
 							onClick={handleCommentSubmit}>
 							Respond
 						</button>

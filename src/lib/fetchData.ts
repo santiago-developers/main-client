@@ -33,7 +33,7 @@ export async function SantiagoPostWithAutorization<T, R>(
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
 	
-	const data = await res?.json();
+	const data = await res.json();
 	return data;
 }
 
@@ -83,9 +83,8 @@ export async function SantiagoPutWithAutorization<T, R>(url: string, dto: T): Pr
 	return data;
 }
 
-export async function SantiagoPostReport<T>(url: string, dto: T) {
+export async function SantiagoPostNoRes<T>(url: string, dto?: T) {
 	const accessToken = localStorage.getItem("accessToken");
-
 	try {
 		const response = await fetch(`http://3.34.114.67:11009/${url}`, {
 			method: "POST",
@@ -95,9 +94,25 @@ export async function SantiagoPostReport<T>(url: string, dto: T) {
 			},
 			body: JSON.stringify(dto),
 		});
-		if (response.ok) {
-			alert("Thank you for your opinion");
-		} else {
+		if (!response.ok){ 
+			throw new Error(`Failed to fetch posts, received status ${response.statusText}`);
+		}
+	} catch (error) {
+		alert("Try Again");
+		throw error; 
+	}
+}
+export async function SantiagoDeletetNoRes(url: string) {
+	const accessToken = localStorage.getItem("accessToken");
+	try {
+		const response = await fetch(`http://3.34.114.67:11009/${url}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+		if (!response.ok){ 
 			throw new Error(`Failed to fetch posts, received status ${response.statusText}`);
 		}
 	} catch (error) {
