@@ -17,14 +17,14 @@ import regionsStore from "store/regionsStore";
 export default function MainPage({
 	regions,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-	const router = useRouter();
+	console.log(regions);
 
+	const router = useRouter();
 	const Item = styled(Paper)(({ theme }) => ({
 		// background image 삽입
-		backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-		width: 200,
-		height: 186,
-		padding: theme.spacing(9),
+		width: 179,
+		height: 170,
+		padding: theme.spacing(7),
 		justifyContent: "center",
 		textAlign: "center",
 	}));
@@ -32,22 +32,23 @@ export default function MainPage({
 	const [searchTerm, setSearchTerm] = useState<string>("");
 
 	const searchSubmit = (searchTerm: string) => {
-		setSearchTerm(searchTerm);
+		console.log(searchTerm);
 		const searchedRegion = regions.data
 			.map((item: RegionProps) => item)
-			.find((item: RegionProps) => item.name_en === "France");
+			.find((item: RegionProps) => item.name_en === searchTerm);
+console.log(searchedRegion);
 
-		// if (searchTerm) {
-		// 	router.push({
-		// 		pathname: "/magazines",
-		// 		query: {
-		// 			regin_id: searchedRegion.regionId,
-		// 			query_type: "hot",
-		// 			base: 0,
-		// 			limit: 8,
-		// 		},
-		// 	});
-		// }
+		if (searchTerm) {
+			router.push({
+				pathname: "/magazineList",
+				query: {
+					region_id: searchedRegion.regionId,
+					query_type: "hot",
+					base: 0,
+					limit: 8,
+				},
+			});
+		}
 		setSearchTerm("");
 	};
 
@@ -63,11 +64,11 @@ export default function MainPage({
 			// },
 		});
 	};
-
+	//  translate-y-1/2
 	return (
 		<>
-			<div tw="w-full">
-				<div tw="text-white absolute top-36 left-16 z-1 font-serif text-center pt-20">
+			<div tw="w-full flex flex-col justify-center items-center relative">
+				<div tw="text-white absolute top-20 left-auto z-1 font-serif text-center pt-20">
 					<div tw="font-light text-[28px]">
 						Share your story with people all around the world from
 						Santiago.
@@ -88,10 +89,10 @@ export default function MainPage({
 					<MainSvg />
 				</div>
 				<div tw="mt-10 mb-16">
-					<Searchbar onSubmit={searchSubmit} />
+					<Searchbar onSubmit={searchSubmit} regions={regions.data} />
 				</div>
 				{/* 대륙파트 */}
-				<div tw="w-[67%] mx-auto pb-[130px]">
+				<div tw="w-[831px] mx-auto pb-[130px]">
 					<Grid container spacing={2}>
 						{countinents.map((item, index) => (
 							<Grid item xs={4} md={3} key={index}>
@@ -115,7 +116,7 @@ export default function MainPage({
 export const getStaticProps = (async () => {
 	const regions = await SantiagoGet<Regions>("regions");
 	regionsStore.setState((state) => ({ ...state, regions: regions.data }));
-	
+
 	return {
 		props: {
 			regions,

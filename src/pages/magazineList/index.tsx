@@ -25,7 +25,9 @@ export default function MagazineListPage() {
 	};
 
 	const router = useRouter();
-	const { regionId } = writeStore();
+	console.log("router", router.query.region_id);
+	const regionId =  router.query.region_id
+	// const { regionId } = writeStore();
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {

@@ -1,6 +1,6 @@
+import tw from "twin.macro";
 import { SearchOutlined } from "@mui/icons-material";
 import { ListItemText, MenuItem, MenuList, Paper } from "@mui/material";
-import tw from "twin.macro";
 
 type RegionSearchProps = {
 	regionsList: string[];
@@ -12,6 +12,8 @@ const RegionSearch = ({ regionsList, onSubmit }: RegionSearchProps) => {
 		<div tw="absolute w-full">
 			<Paper
 				sx={{
+					width:500,
+					maxHeight:300,
 					display: "flex",
 					flexDirection: "column",
 					mx: 44,
@@ -20,7 +22,7 @@ const RegionSearch = ({ regionsList, onSubmit }: RegionSearchProps) => {
 					position: "absolute",
 					top: 0,
 					left: 0,
-					right: 0,
+					overflowY:"scroll"
 				}}>
 				{!regionsList.length ? (
 					<>
