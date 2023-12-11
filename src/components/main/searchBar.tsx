@@ -1,12 +1,12 @@
+import tw from "twin.macro";
 import { SearchOutlined } from "@mui/icons-material";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
-import tw from "twin.macro";
 import RegionSearch from "./RegionSearch";
-import regionsStore from "store/regionsStore";
 
 type SearchbarProps = {
 	onSubmit(searchTerm: string): void;
+	regions:RegionsProps[];
 };
 
 type RegionsProps = {
@@ -16,16 +16,15 @@ type RegionsProps = {
 };
 
 const Searchbar = (props: SearchbarProps) => {
-	const { regions } = regionsStore();
 	const [searchTerm, setSearchTerm] = useState<string>("");
-	// const [names, setNames] = useState<string[]>([]);
+	const [filteredList, setfilteredList] = useState<string[]>([]);
 	const [regionsList, setRegionsList] = useState<string[]>([]);
 	const [open, setOpen] = useState<boolean>(false);
 
 	useEffect(() => {
-		const regionsName = regions.map((item: RegionsProps) => item.name_en);
+		const regionsName = props.regions.map((item: RegionsProps) => item.name_en);
 		setRegionsList(regionsName);
-	}, [regions]);
+	}, [props.regions]);
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value);
@@ -34,11 +33,10 @@ const Searchbar = (props: SearchbarProps) => {
 		} else {
 			setOpen(true);
 		}
-
 		const filteredRegion = regionsList.filter((item: string) =>
 			item.toLowerCase().includes(value.toLowerCase()),
 		);
-		setRegionsList(filteredRegion);
+		setfilteredList(filteredRegion);
 	};
 
 	return (
@@ -73,7 +71,7 @@ const Searchbar = (props: SearchbarProps) => {
 			</Paper>
 			{open && (
 				<RegionSearch
-					regionsList={regionsList}
+					regionsList={filteredList}
 					onSubmit={props.onSubmit}
 				/>
 			)}

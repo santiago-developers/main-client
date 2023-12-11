@@ -41,6 +41,7 @@ body {
 	/* 1280px 피그마 */
 	/* 1903px */
 	max-width: 1880px;
+	overflow: hidden;
 }
 input:focus {
 	border: none;
