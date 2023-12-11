@@ -13,22 +13,36 @@ type MagazinesProps = {
 	regionId: string;
 	searchTerm: string;
 	user_id:string;
+	continent:string;
 };
 
 const Magazines = ({
 	selectedType,
 	regionId,
 	searchTerm,
-	user_id
+	user_id,
+	continent,
 }: MagazinesProps) => {
 	const [magazines, setMagazines] = useState([]);
+console.log("selectedType: ",selectedType);
+console.log("searchTerm: ",searchTerm);
+console.log("continent: ",continent);
+console.log("regionId: ",regionId);
+console.log("user_id: ",user_id);
+
 	const getData = async () => {
 		const query_type = selectedType.toLowerCase().replace(/ /g, "-");
 		const magazineList: string[] = await SantiagoGet(
-			`magazines?${regionId ? `region_id=${regionId}&` : ""}query_type=${
+			`magazines?${continent? `continent=${continent}&`:""}${regionId ? `region_id=${regionId}&` : ""}query_type=${
 				query_type || "hot"
 			}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}${user_id ? `&user_id=${user_id}`:""}`,
 		);
+		const urlName =`magazines?${continent? `continent=${continent}&`:""}${regionId ? `region_id=${regionId}&` : ""}query_type=${
+			query_type || "hot"
+		}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}${user_id ? `&user_id=${user_id}`:""}`
+		console.log(magazineList);
+		console.log("urlName",urlName);
+		
 		setMagazines(magazineList.data);
 	};
 	

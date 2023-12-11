@@ -25,8 +25,9 @@ export default function MagazineListPage() {
 	};
 
 	const router = useRouter();
-	console.log("router", router.query.region_id);
 	const regionId =  router.query.region_id
+	const continent = router.query.continent
+	const title = router.query.title
 	// const { regionId } = writeStore();
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
@@ -47,7 +48,7 @@ export default function MagazineListPage() {
 	return (
 		<div tw="flex flex-col items-center mb-20">
 			<h1 tw="text-4xl font-bold">
-				{(searchTerm && `"${searchTerm}"`) ||
+				{(title || searchTerm && `"${searchTerm}"`) ||
 					selectedRegion.toUpperCase()}
 			</h1>
 			<div tw="relative flex gap-2 pt-10">
@@ -120,6 +121,7 @@ export default function MagazineListPage() {
 					selectedType={selectedType}
 					regionId={regionId}
 					searchTerm={searchTerm}
+					continent={continent}
 				/>
 				<LineSvg />
 				{/* best들 */}
