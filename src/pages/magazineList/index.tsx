@@ -7,7 +7,7 @@ import BPicturesSvg from "@public/images/magazines/bPictures.svg";
 import BWritingsSvg from "@public/images/magazines/bWritings.svg";
 import LineSvg from "@public/images/line.svg";
 import BestList from "@components/magazineList/BestList";
-import CountryModal from "@components/post/publish/CountryModal";
+import CountryModal from "@utils/CountryModal";
 import Magazines from "@components/magazineList/Magazines";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
 import writeStore from "store/writeStore";
@@ -25,22 +25,27 @@ export default function MagazineListPage() {
 	};
 
 	const router = useRouter();
-	const regionId =  router.query.region_id
-	const continent = router.query.continent
-	const title = router.query.title
+	const [title, setTitle] = useState("");
+	const regionIdFromMain = router.query.region_id;
+	const continent = router.query.continent;
+	const titleFromMain = router.query.title;
 	// const { regionId } = writeStore();
+
+	useState(() => {
+		setTitle(titleFromMain);
+	}, []);
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
-	}; 
+		setTitle(searchTerm);
+	};
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writing"];
 	const [selectedType, setSelectedType] = useState<string>("Hot");
 	const handleSearchType = (type: string) => {
 		setSelectedType(type);
 	};
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [selectedRegion, setSelectedRegion] = useState<string>("All");
 	const openCountry = () => {
 		setIsOpen(!isOpen);
 	};
@@ -48,8 +53,7 @@ export default function MagazineListPage() {
 	return (
 		<div tw="flex flex-col items-center mb-20">
 			<h1 tw="text-4xl font-bold">
-				{(title || searchTerm && `"${searchTerm}"`) ||
-					selectedRegion.toUpperCase()}
+				{title}
 			</h1>
 			<div tw="relative flex gap-2 pt-10">
 				<MagazineSearchBar onSubmit={searchSubmit} />
@@ -59,12 +63,12 @@ export default function MagazineListPage() {
 					Select a Country
 				</button>
 				{isOpen && (
-						<Paper sx={style}>
-							<CountryModal
-								setIsOpen={setIsOpen}
-								setSelectedRegion={setSelectedRegion}
-							/>
-						</Paper>
+					<Paper sx={style}>
+						<CountryModal
+							setIsOpen={setIsOpen}
+							setTitle={setTitle}
+						/>
+					</Paper>
 				)}
 			</div>
 			<div tw="flex items-center justify-center gap-32 text-center mt-10 mb-14 text-sm">
@@ -119,7 +123,7 @@ export default function MagazineListPage() {
 			<div tw="w-[1021px] flex justify-center gap-10">
 				<Magazines
 					selectedType={selectedType}
-					regionId={regionId}
+					regionIdFromMain={regionIdFromMain}
 					searchTerm={searchTerm}
 					continent={continent}
 				/>

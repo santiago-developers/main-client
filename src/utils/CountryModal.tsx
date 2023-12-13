@@ -9,7 +9,7 @@ type ContryModalProps = {
 	setSelectedRegion(value: string): void;
 };
 
-const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
+const CountryModal = ({ setIsOpen, setSelectedRegion, setTitle }: ContryModalProps) => {
 	const { regionList } = regionsStore();
 	const { setRegionId } = writeStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);
@@ -31,7 +31,7 @@ const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
 	};
 
 	const handleRegionClick = (selectedName: string) => {
-		setSelectedRegion(selectedName);
+		setTitle(selectedName)
 		const region = regionList
 			.map((item) => item)
 			.find((item) => item.name_en === selectedName);

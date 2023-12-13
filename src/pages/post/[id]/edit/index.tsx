@@ -1,7 +1,7 @@
 import { Divider } from "@mui/material";
 import QuillEditer from "@utils/QuillEditer";
 import tw from "twin.macro";
-import CountryModal from "@components/post/publish/CountryModal";
+import CountryModal from "@utils/CountryModal";
 import { useEffect, useState } from "react";
 import { SantiagoGet } from "lib/fetchData";
 import { useRouter } from "next/router";
@@ -22,24 +22,23 @@ type TagProps = {
 const EditPage = () => {
 	const router = useRouter();
 	const magazineId = router.query.id;
-	
+
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
 		setIsOpen(!isOpen);
 	};
-	
+
 	// const [editedPost, setEditedPost] = useState<MagazineProps>([]);
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	const [tags, setTags] = useState<string>("");
-	
-	
+
 	const fetchData = async () => {
 		const post = await SantiagoGet(`magazines/${magazineId}`);
 		console.log(post);
-		setTitle(post.title)
-		
-		setContent(post.content)
+		setTitle(post.title);
+
+		setContent(post.content);
 		// setEditedPost(post);
 		const tag = post.tags?.map((item: TagProps) => "#" + item.tag);
 		setTags(tag);
@@ -49,13 +48,13 @@ const EditPage = () => {
 		fetchData();
 	}, []);
 
-	if(!magazineId){
+	if (!magazineId) {
 		return <p>Loading...</p>;
 	}
 	// useEffect(() => {
 	// 	setTitle(editedPost.title);
 	// }, [editedPost.title]);
-	
+
 	// useEffect(() => {
 	// 	setContent(editedPost.content);
 	// }, [editedPost.content]);

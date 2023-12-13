@@ -25,9 +25,7 @@ export default function MainPage({
 				pathname: "/magazineList",
 				query: {
 					region_id: searchedRegion.regionId,
-					query_type: "hot",
-					base: 0,
-					limit: 8,
+					title: searchedRegion.name_en
 				},
 			});
 		} else {

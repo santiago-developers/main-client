@@ -1,7 +1,7 @@
 import React from "react";
 import { Divider, Paper } from "@mui/material";
 import tw from "twin.macro";
-import CountryModal from "@components/post/publish/CountryModal";
+import CountryModal from "@utils/CountryModal";
 import { useState } from "react";
 import { SantiagoPostWithAutorization } from "lib/fetchData";
 import QuillEditer from "@utils/QuillEditer";
@@ -19,7 +19,7 @@ const WritePage = () => {
 		zIndex: 1,
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
 	};
-	const router =useRouter()
+	const router = useRouter();
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
@@ -63,9 +63,9 @@ const WritePage = () => {
 			await SantiagoPostWithAutorization("magazines", dto);
 		};
 		fetchData();
-		setRegionId("")
-		setImageId([])
-		router.push("/magazineList")
+		setRegionId("");
+		setImageId([]);
+		router.push("/magazineList");
 	};
 
 	return (
