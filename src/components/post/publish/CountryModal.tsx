@@ -2,7 +2,7 @@ import { countinents } from "@statics/continents";
 import React, { useState } from "react";
 import tw from "twin.macro";
 import writeStore from "store/writeStore";
-import regionsStore from "store/regionsStore";
+import regionsStore from "store/regionStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;
