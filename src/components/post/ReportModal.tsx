@@ -1,11 +1,11 @@
-import { SantiagoPost, SantiagoPostWithAutorization } from "lib/fetchData";
+import { SantiagoPostNoRes } from "lib/fetchData";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
 
 type ReportModalProps ={
 	setOpenModal(item:boolean):void;
 	magazineId:string;
-	replyId:string
+	replyId?:string
 }
 
 const ReportModal = ({setOpenModal,magazineId,replyId}:ReportModalProps) => {
@@ -51,15 +51,15 @@ const ReportModal = ({setOpenModal,magazineId,replyId}:ReportModalProps) => {
 	const [onCheckedItem, setOnCheckedItem] = useState("");
 	
 	const handleReport = () => {
-		console.log(magazineId,replyId);
+		
 		const fetchData = async()=>{
-			await SantiagoPostWithAutorization(
-				`magazines/${magazineId}/replies/${replyId}/report`,
+			await SantiagoPostNoRes(
+				`magazines/${magazineId}${replyId? `/replies/${replyId}`: ""}/report`,
 				{ content: onCheckedItem },
 				);
 			} 
 		fetchData();
-		alert("Thank you for your opinion");
+		alert("Thank you for your opinion")
 		setOpenModal(false)
 	};
 

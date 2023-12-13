@@ -20,6 +20,7 @@ type ReplyCommentProps = {
 		React.SetStateAction<number | undefined>
 	>;
 	isSelected: boolean;
+	commentList: CommentProps[];
 };
 
 const ReplyComment = ({
@@ -32,13 +33,13 @@ const ReplyComment = ({
 	isSelected,
 }: ReplyCommentProps) => {
 	const { id } = myInfoStore();
-	const [editedContent, setEditedContent] = useState("");
-	const onSelectCommentIdx = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index,
-	) => {
-		setSelectedCommentIdx(index);
-	};
+	// const [editedContent, setEditedContent] = useState("");
+	// const onSelectCommentIdx = (
+	// 	e: React.MouseEvent<HTMLButtonElement>,
+	// 	index,
+	// ) => {
+	// 	setSelectedCommentIdx(index);
+	// };
 
 	const handleEdit = async (replyId: string) => {
 		// await SantiagoPutWithAutorization(
@@ -50,12 +51,14 @@ const ReplyComment = ({
 
 	const renderReplyComment = (parentId: string | null) =>
 		commentList.map((comment: CommentProps, index) => (
-			<>
+			<div key={index}>
+
+		
 				{comment.parentId === parentId && (
 					<div>
 						<Divider
 							variant="fullWidth"
-							style={{ margin: "10px 0" }}
+							style={{ marginBottom: "10px" }}
 						/>
 						<Grid
 							container
@@ -85,7 +88,10 @@ const ReplyComment = ({
 								</div>
 							</Grid>
 							<Grid justifyContent="left" item xs>
-								{isSelected ? (
+								<p style={{ textAlign: "left" }}>
+									{comment.content}
+								</p>
+								{/* {isSelected ? (
 									<input
 										type="text"
 										autoFocus
@@ -100,7 +106,7 @@ const ReplyComment = ({
 									<p style={{ textAlign: "left" }}>
 										{comment.content}
 									</p>
-								)}
+								)} */}
 								<p
 									style={{
 										textAlign: "left",
@@ -128,20 +134,21 @@ const ReplyComment = ({
 								</div>
 								<div tw="content-end">
 									<CommentMoreMenu
-										moreMenuType={
+										commentType={
 											comment.writer.userId === id
-												? "comment"
-												: "report"
+												? true
+												: false
 										}
 										replyId={comment.id}
-										onSelectCommentIdx={onSelectCommentIdx}
+										// onSelectCommentIdx={onSelectCommentIdx}
+										magazineId={magazineId}
 									/>
 								</div>
 							</Grid>
 						</Grid>
 					</div>
 				)}
-			</>
+					</div>
 		));
 
 	return (

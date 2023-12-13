@@ -4,6 +4,8 @@ import tw from "twin.macro";
 import CountryModal from "@components/post/publish/CountryModal";
 import { useEffect, useState } from "react";
 import { SantiagoGet } from "lib/fetchData";
+import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 
 type MagazineProps = {
 	magazineId: string;
@@ -18,20 +20,28 @@ type TagProps = {
 };
 
 const EditPage = () => {
+	const router = useRouter();
+	const magazineId = router.query.id;
+	
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
 		setIsOpen(!isOpen);
 	};
-
-	const [editedPost, setEditedPost] = useState<MagazineProps>([]);
-	const [title, setTitle] = useState<string>(editedPost.title);
-	const [content, setContent] = useState<string>(editedPost.content);
+	
+	// const [editedPost, setEditedPost] = useState<MagazineProps>([]);
+	const [title, setTitle] = useState<string>("");
+	const [content, setContent] = useState<string>("");
 	const [tags, setTags] = useState<string>("");
-
+	
+	
 	const fetchData = async () => {
-		const post = await SantiagoGet("magazines/tesgt");
-		setEditedPost(post);
-		const tag = editedPost.tags.map((item: TagProps) => "#" + item.tag);
+		const post = await SantiagoGet(`magazines/${magazineId}`);
+		console.log(post);
+		setTitle(post.title)
+		
+		setContent(post.content)
+		// setEditedPost(post);
+		const tag = post.tags?.map((item: TagProps) => "#" + item.tag);
 		setTags(tag);
 	};
 
@@ -39,14 +49,16 @@ const EditPage = () => {
 		fetchData();
 	}, []);
 
-	useEffect(() => {
-		setTitle(editedPost.title);
-	}, [editedPost.title]);
-
-	useEffect(() => {
-		setContent(editedPost.content);
-	}, [editedPost.content]);
-
+	if(!magazineId){
+		return <p>Loading...</p>;
+	}
+	// useEffect(() => {
+	// 	setTitle(editedPost.title);
+	// }, [editedPost.title]);
+	
+	// useEffect(() => {
+	// 	setContent(editedPost.content);
+	// }, [editedPost.content]);
 	// console.log(editedPost.tags);
 
 	// const tag = "paris";

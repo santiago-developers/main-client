@@ -35,6 +35,7 @@ const CommentMoreMenu = ({
 
 	const handleEdit = () => {
 		onSelectCommentIdx();
+		setAnchorEl(null);
 	};
 
 	const handleDelete = () => {
@@ -45,8 +46,6 @@ const CommentMoreMenu = ({
 	};
 
 	const handleReport = () => {
-		console.log(openModal);
-
 		setOpenModal(true);
 	};
 
@@ -71,7 +70,7 @@ const CommentMoreMenu = ({
 					open={open}
 					onClose={handleClose}>
 					{commentType ? (
-						<>
+						<div>
 							<MenuItem
 								sx={{ fontSize: 13, color: "#A3A3A3" }}
 								onClick={handleEdit}>
@@ -82,7 +81,7 @@ const CommentMoreMenu = ({
 								onClick={handleDelete}>
 								delete
 							</MenuItem>
-						</>
+						</div>
 					) : (
 						<MenuItem
 							sx={{ fontSize: 13, color: "#A3A3A3" }}
