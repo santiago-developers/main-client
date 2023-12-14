@@ -12,65 +12,71 @@ import writeStore from "store/writeStore";
 type MagazinesProps = {
 	selectedType: string;
 	regionId?: string;
-	searchTerm: string;
-	user_id: string;
+	searchTerm?: string;
+	user_id?: string;
 	continent?: string;
-	regionIdFromMain?: string;
+	regionIdFromMain?: string | string[];
+	setSearchTerm(searchTerm: string): void;
+	setContinent(continent: string): void;
 };
 
 const Magazines = ({
 	selectedType,
 	regionIdFromMain,
 	searchTerm,
+	setSearchTerm,
 	user_id,
 	continent,
+	setContinent,
 }: MagazinesProps) => {
 	const { regionId, setRegionId } = writeStore();
 	const [magazines, setMagazines] = useState<MagazineProps[]>([]);
 
 	const getData = async () => {
-		const currentRegionId = regionId;
 		const query_type = selectedType.toLowerCase().replace(/ /g, "-");
-		const magazineList = await SantiagoGet(
-			`magazines?${continent ? `continent=${continent}&` : ""}${
-				currentRegionId
-					? `region_id=${currentRegionId}&`
-					: regionIdFromMain
-					? `region_id=${regionIdFromMain}&`
-					: ""
-			}query_type=${query_type || "hot"}&base=0&limit=50${
-				searchTerm ? `&search=${searchTerm}` : ""
-			}${user_id ? `&user_id=${user_id}` : ""}`,
-		);
-		const urlName = `magazines?${
-			continent ? `continent=${continent}&` : ""
-		}${
-			currentRegionId
-				? `region_id=${currentRegionId}&`
-				: regionIdFromMain
-				? `region_id=${regionIdFromMain}&`
-				: ""
-		}query_type=${query_type || "hot"}&base=0&limit=50${
-			searchTerm ? `&search=${searchTerm}` : ""
-		}${user_id ? `&user_id=${user_id}` : ""}`;
-		console.log("magazineList: ", magazineList);
-		console.log("url", urlName);
-
-		console.log("regionId", regionId);
-		console.log("currentRegionId", currentRegionId);
-		setMagazines(magazineList.data);
+		if (searchTerm) {
+			const magazineList = await SantiagoGet(
+				`magazines?query_type=${
+					query_type || "hot"
+				}&base=0&limit=50&search=${searchTerm}${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setSearchTerm("");
+		} else if (regionId || regionIdFromMain) {
+			const magazineList = await SantiagoGet(
+				`magazines?${
+					regionId
+						? `region_id=${regionId}&`
+						: regionIdFromMain
+						? `region_id=${regionIdFromMain}&`
+						: ""
+				}query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setRegionId("");
+		} else if (continent) {
+			let continentSearch = continent;
+			if (continent === "all") {
+				continentSearch = "";
+			}
+			const magazineList = await SantiagoGet(
+				`magazines?${
+					continentSearch ? `continent=${continentSearch}&` : ""
+				}query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setContinent("");
+		}
 	};
 
 	useEffect(() => {
-		console.log("selectedType: ", selectedType);
-		console.log("searchTerm: ", searchTerm);
-		console.log("regionIdFromMain: ", regionIdFromMain);
-		console.log("continentFromMain: ", continent);
-		// console.log("regionId: ", regionId);
-		console.log("user_id: ", user_id);
-
 		getData();
-		// setRegionId("");
 	}, [selectedType, regionId, searchTerm]);
 
 	return (
@@ -134,7 +140,7 @@ const Magazines = ({
 					))}
 				</>
 			) : (
-				<p>Theres no result..</p>
+				<p>There&#8216;s no result...</p>
 			)}
 		</div>
 	);

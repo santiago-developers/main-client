@@ -26,13 +26,14 @@ export default function MagazineListPage() {
 
 	const router = useRouter();
 	const [title, setTitle] = useState("");
+	const [continent, setContinent] = useState("");
 	const regionIdFromMain = router.query.region_id;
-	const continent = router.query.continent;
+	const continentFromMain = router.query.continent;
 	const titleFromMain = router.query.title;
-	// const { regionId } = writeStore();
 
 	useState(() => {
 		setTitle(titleFromMain);
+		setContinent(continentFromMain);
 	}, []);
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
@@ -52,9 +53,7 @@ export default function MagazineListPage() {
 
 	return (
 		<div tw="flex flex-col items-center mb-20">
-			<h1 tw="text-4xl font-bold">
-				{title}
-			</h1>
+			<h1 tw="text-4xl font-bold">{title}</h1>
 			<div tw="relative flex gap-2 pt-10">
 				<MagazineSearchBar onSubmit={searchSubmit} />
 				<button
@@ -126,6 +125,8 @@ export default function MagazineListPage() {
 					regionIdFromMain={regionIdFromMain}
 					searchTerm={searchTerm}
 					continent={continent}
+					setContinent={setContinent}
+					setSearchTerm={setSearchTerm}
 				/>
 				<LineSvg />
 				{/* best들 */}

@@ -6,10 +6,10 @@ import regionsStore from "store/regionStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;
-	setSelectedRegion(value: string): void;
+	setTitle(value: string): void;
 };
 
-const CountryModal = ({ setIsOpen, setSelectedRegion, setTitle }: ContryModalProps) => {
+const CountryModal = ({ setIsOpen, setTitle }: ContryModalProps) => {
 	const { regionList } = regionsStore();
 	const { setRegionId } = writeStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);

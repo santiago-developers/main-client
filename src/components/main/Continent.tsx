@@ -21,12 +21,6 @@ const Continent = () => {
 
 	const handleContinent = (item: string) => {
 		let continent = item.toLowerCase().replace(/ /g, "_");
-		if (continent === "all"){
-			continent = ""
-		}else{
-			continent = continent
-		}
-
 		router.push({
 			pathname: "/magazineList",
 			query: {
