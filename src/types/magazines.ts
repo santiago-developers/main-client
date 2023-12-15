@@ -9,6 +9,7 @@ export type MagazineProps = {
 	writer: WriterProps;
 	tags?: TagProps[];
 	imageUrl?: string;
+	regionId?:string;
 };
 
 export type WriterProps = {
