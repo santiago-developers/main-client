@@ -21,35 +21,33 @@ export default function QuillEditer({ value, setContent }) {
 		input.setAttribute("type", "file");
 		input.setAttribute("accept", "image/*");
 		input.click();
-		input.addEventListener("change", async () => {
-			const file = input.files;
+		input.onchange = async () => {
+			const file: any = input.files ? input.files[0] : null;
+			if (!file) return;
 			const formData = new FormData();
-			if (file) {
-				formData.append("file", file[0]);
-			}
-			if (quillRef.current) {
-				const fetchData: ImageProps = await SantiagoImagePost(formData);
-				const url = fetchData.url;
-				console.log(fetchData.id);
-				// setImgUrlIds([fetchData.id]);
-				// // setImgUrlIds([...imgUrlIds,fetchData.id])
-				setImgUrlIds((prevImgUrlIds) => [...prevImgUrlIds, fetchData.id]);
-				const editor = quillRef.current.getEditor();
-				const range = editor.getSelection();
-				editor.insertEmbed(range.index, "image", url);
-				editor.setSelection(range.index + 1);
-			}
-		});
-	
+			formData.append("file", file);
+			let quillObj = quillRef.current.getEditor();
+			const range = quillObj?.getSelection();
+			const fetchData: ImageProps = await SantiagoImagePost(formData);
+			const ImgUrl = fetchData.url;
+			console.log(fetchData.id);
+			console.log("url", ImgUrl);
+			quillObj?.insertEmbed(range.index, "image", ImgUrl);
+			// quillObj.setSelection(range.index + 1);
+
+			// setImageId((prevImgUrlIds) => [
+			// 	...prevImgUrlIds,
+			// 	fetchData.id,
+			// ]);
+		};
 	};
 
-	useEffect(() => {
-		setImageId(imgUrlIds);
-		console.log("이미지useEffect", imgUrlIds);
-	}, [imgUrlIds]);
+	// useEffect(() => {
+	// 	setImageId(imgUrlIds);
+	// }, []);
 
-	const modules = useMemo(
-		() => ({
+	const modules = useMemo(() => {
+		return {
 			toolbar: {
 				container: [
 					[{ header: [1, 2, 3, false] }],
@@ -70,9 +68,8 @@ export default function QuillEditer({ value, setContent }) {
 			clipboard: {
 				matchVisual: false,
 			},
-		}),
-		[],
-	);
+		};
+	}, []);
 
 	const formats = [
 		"header",
@@ -101,7 +98,7 @@ export default function QuillEditer({ value, setContent }) {
 			theme="snow"
 			placeholder="Tell your story.."
 			value={value || ""}
-			// onChange={(e) => setContent(e)}
+			onChange={(e) => setContent(e)}
 		/>
 	);
 }

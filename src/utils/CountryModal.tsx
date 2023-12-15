@@ -6,13 +6,15 @@ import regionsStore from "store/regionStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;
-	setTitle(value: string): void;
+	setTitle?(value: string | undefined): void;
+	setSelectedRegion?(value: string): void;
 };
 
-const CountryModal = ({ setIsOpen, setTitle }: ContryModalProps) => {
+const CountryModal = ({ setIsOpen, setTitle,setSelectedRegion }: ContryModalProps) => {
 	const { regionList } = regionsStore();
 	const { setRegionId } = writeStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);
+	console.log(regionList);
 
 	const regionClick = (item: string) => {
 		const continent = item.toLowerCase().replace(/ /g, "_");
@@ -31,7 +33,13 @@ const CountryModal = ({ setIsOpen, setTitle }: ContryModalProps) => {
 	};
 
 	const handleRegionClick = (selectedName: string) => {
-		setTitle(selectedName)
+		if(setSelectedRegion){
+			setSelectedRegion(selectedName)
+		}
+		
+		if(setTitle){	
+			setTitle(selectedName)
+		}
 		const region = regionList
 			.map((item) => item)
 			.find((item) => item.name_en === selectedName);
@@ -46,6 +54,11 @@ const CountryModal = ({ setIsOpen, setTitle }: ContryModalProps) => {
 					<div
 						key={index}
 						tw="cursor-pointer text-center border border-[#D4D4D4] rounded-lg py-14"
+						style={{backgroundImage: `url('/images/continent/${item
+							.toLowerCase()
+							.replace(/ /g, "_")}.svg')`,textShadow: "0px 0px 5px #FFF",
+							fontWeight: 700,
+							color: "black",}}
 						onClick={(e) => {
 							e.preventDefault();
 							regionClick(item as string);
