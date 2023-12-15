@@ -7,31 +7,81 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps } from "types/magazines";
+import writeStore from "store/writeStore";
 
 type MagazinesProps = {
 	selectedType: string;
-	regionId: string;
-	searchTerm: string;
-	user_id:string;
+	regionId?: string;
+	searchTerm?: string;
+	user_id?: string;
+	continent?: string;
+	regionIdFromMain?: string | string[];
+	setSearchTerm(searchTerm: string): void;
+	setContinent(continent: string): void;
 };
 
 const Magazines = ({
 	selectedType,
-	regionId,
+	regionIdFromMain,
 	searchTerm,
-	user_id
+	setSearchTerm,
+	user_id,
+	continent,
+	setContinent,
 }: MagazinesProps) => {
-	const [magazines, setMagazines] = useState([]);
+	const { regionId, setRegionId } = writeStore();
+	const [magazines, setMagazines] = useState<MagazineProps[]>([]);
+
 	const getData = async () => {
 		const query_type = selectedType.toLowerCase().replace(/ /g, "-");
-		const magazineList: string[] = await SantiagoGet(
-			`magazines?${regionId ? `region_id=${regionId}&` : ""}query_type=${
-				query_type || "hot"
-			}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}${user_id ? `&user_id=${user_id}`:""}`,
-		);
-		setMagazines(magazineList.data);
+		if (searchTerm) {
+			const magazineList = await SantiagoGet(
+				`magazines?query_type=${
+					query_type || "hot"
+				}&base=0&limit=50&search=${searchTerm}${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setSearchTerm("");
+		} else if (regionId || regionIdFromMain) {
+			const magazineList = await SantiagoGet(
+				`magazines?${
+					regionId
+						? `region_id=${regionId}&`
+						: regionIdFromMain
+						? `region_id=${regionIdFromMain}&`
+						: ""
+				}query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setRegionId("");
+		} else if (continent) {
+			let continentSearch = continent;
+			if (continent === "all") {
+				continentSearch = "";
+			}
+			const magazineList = await SantiagoGet(
+				`magazines?${
+					continentSearch ? `continent=${continentSearch}&` : ""
+				}query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setContinent("");
+		}else{
+			const magazineList = await SantiagoGet(
+				`magazines?query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+		}
 	};
-	
+
 	useEffect(() => {
 		getData();
 	}, [selectedType, regionId, searchTerm]);
@@ -75,6 +125,7 @@ const Magazines = ({
 							<Link href={`/post/${item.id}`}>
 								<div tw="relative w-[220px] h-[218px] rounded-2xl my-1 overflow-hidden">
 									<Image
+										priority={true}
 										src={
 											item.imageUrl || "/images/post.svg"
 										}
@@ -96,7 +147,7 @@ const Magazines = ({
 					))}
 				</>
 			) : (
-				<p>Theres no result..</p>
+				<p>There&#8216;s no result...</p>
 			)}
 		</div>
 	);

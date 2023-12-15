@@ -27,7 +27,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 
 	return (
 		<>
-			<header tw="w-full h-[98px] flex items-center justify-between px-16 bg-white fixed top-0 z-1">
+			<header tw="w-full h-[98px] flex items-center justify-between px-16 bg-white fixed top-0 z-10">
 				<Link href="/">
 					<LogoSvg tw="w-[131px] cursor-pointer" />
 				</Link>
@@ -39,7 +39,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 					<>
 				
 						<div tw="flex gap-5">
-							{router.pathname !== "/write" &&(
+							{router.pathname !== "/write" &&router.pathname !== "/post/[id]/edit" &&(
 								<MintButton>
 								<Link href="/write" tw="text-mint cursor-pointer">
 									Write

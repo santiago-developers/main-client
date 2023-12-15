@@ -2,24 +2,26 @@ import { countinents } from "@statics/continents";
 import React, { useState } from "react";
 import tw from "twin.macro";
 import writeStore from "store/writeStore";
-import regionsStore from "store/regionsStore";
+import regionsStore from "store/regionStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;
-	setSelectedRegion(value: string): void;
+	setTitle?(value: string | undefined): void;
+	setSelectedRegion?(value: string): void;
+	setPostRegionId?(value: string): void;
 };
 
-const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
-	const { regions } = regionsStore();
+const CountryModal = ({ setIsOpen, setTitle,setSelectedRegion,setPostRegionId }: ContryModalProps) => {
+	const { regionList } = regionsStore();
 	const { setRegionId } = writeStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);
 
 	const regionClick = (item: string) => {
 		const continent = item.toLowerCase().replace(/ /g, "_");
-		const regionAllNames = regions
+		const regionAllNames = regionList
 			.map((item) => item)
 			.map((item) => item.name_en);
-		const regionNames = regions
+		const regionNames = regionList
 			.map((item) => item)
 			.filter((item) => item.continent === continent)
 			.map((item) => item.name_en);
@@ -31,11 +33,18 @@ const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
 	};
 
 	const handleRegionClick = (selectedName: string) => {
-		setSelectedRegion(selectedName);
-		const region = regions
+		if(setSelectedRegion){
+			setSelectedRegion(selectedName)
+		}
+		
+		if(setTitle){	
+			setTitle(selectedName)
+		}
+		const region = regionList
 			.map((item) => item)
 			.find((item) => item.name_en === selectedName);
 		setRegionId(region.regionId);
+		setPostRegionId(region.regionId);
 		setIsOpen(!open);
 	};
 
@@ -46,6 +55,11 @@ const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
 					<div
 						key={index}
 						tw="cursor-pointer text-center border border-[#D4D4D4] rounded-lg py-14"
+						style={{backgroundImage: `url('/images/continent/${item
+							.toLowerCase()
+							.replace(/ /g, "_")}.svg')`,textShadow: "0px 0px 5px #FFF",
+							fontWeight: 700,
+							color: "black",}}
 						onClick={(e) => {
 							e.preventDefault();
 							regionClick(item as string);
