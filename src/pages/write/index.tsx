@@ -60,21 +60,26 @@ const WritePage = () => {
 			imageUrlIds: imageIds,
 		};
 		const fetchData = async () => {
-			await SantiagoPostWithAutorization("magazines", dto);
+			const result = await SantiagoPostWithAutorization("magazines", dto);
+			if(!result.data){
+			return
 		};
-		fetchData();
+		
+	}
+	fetchData();
 		setRegionId("");
 		setImageId([]);
-		router.push("/magazineList");
+		alert("Your story is published");
+		router.push("/profile");
 	};
 
 	return (
-		<div tw="h-screen bg-[#FAFAFA] flex justify-center items-center">
-			<div tw=" w-[866px] h-full bg-white p-10">
-				<div>
+		<div tw="min-h-screen bg-[#FAFAFA] flex justify-center">
+			<div tw="w-[866px] h-full bg-white p-10 bg-red-500">
+				<div tw="w-full bg-red-500">
 					<input
 						placeholder="Please enter your title"
-						tw="text-2xl pb-2"
+						tw="text-2xl pb-2 w-full"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
 					/>
@@ -110,12 +115,9 @@ const WritePage = () => {
 						</Paper>
 					)}
 				</div>
-
-				<QuillEditer
-					value={content}
-					setContent={setContent}
-					tw="bg-red-500"
-				/>
+				<div tw="min-h-[100vh] max-h-max">
+					<QuillEditer value={content} setContent={setContent} />
+				</div>
 				<button
 					tw="absolute top-0 right-56 m-10 z-10 font-bold"
 					onClick={handleSubmit}>
