@@ -3,6 +3,7 @@ import { SearchOutlined } from "@mui/icons-material";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import RegionSearch from "./RegionSearch";
+import regionStore from "store/regionStore";
 
 type SearchbarProps = {
 	onSubmit(searchTerm: string): void;
@@ -20,10 +21,12 @@ const Searchbar = (props: SearchbarProps) => {
 	const [filteredList, setfilteredList] = useState<string[]>([]);
 	const [regionsList, setRegionsList] = useState<string[]>([]);
 	const [open, setOpen] = useState<boolean>(false);
-
+	const{setRegionList}= regionStore();
+	
 	useEffect(() => {
 		const regionsName = props.regions.map((item: RegionsProps) => item.name_en);
 		setRegionsList(regionsName);
+		setRegionList(props.regions)
 	}, [props.regions]);
 
 	const handleSearch = (value: string) => {
