@@ -72,6 +72,13 @@ const Magazines = ({
 			);
 			setMagazines(magazineList.data);
 			setContinent("");
+		}else{
+			const magazineList = await SantiagoGet(
+				`magazines?query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
 		}
 	};
 
