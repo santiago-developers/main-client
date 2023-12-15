@@ -2,24 +2,24 @@ import { countinents } from "@statics/continents";
 import React, { useState } from "react";
 import tw from "twin.macro";
 import writeStore from "store/writeStore";
-import regionsStore from "store/regionsStore";
+import regionsStore from "store/regionStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;
-	setSelectedRegion(value: string): void;
+	setTitle(value: string): void;
 };
 
-const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
-	const { regions } = regionsStore();
+const CountryModal = ({ setIsOpen, setTitle }: ContryModalProps) => {
+	const { regionList } = regionsStore();
 	const { setRegionId } = writeStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);
 
 	const regionClick = (item: string) => {
 		const continent = item.toLowerCase().replace(/ /g, "_");
-		const regionAllNames = regions
+		const regionAllNames = regionList
 			.map((item) => item)
 			.map((item) => item.name_en);
-		const regionNames = regions
+		const regionNames = regionList
 			.map((item) => item)
 			.filter((item) => item.continent === continent)
 			.map((item) => item.name_en);
@@ -31,8 +31,8 @@ const CountryModal = ({ setIsOpen, setSelectedRegion }: ContryModalProps) => {
 	};
 
 	const handleRegionClick = (selectedName: string) => {
-		setSelectedRegion(selectedName);
-		const region = regions
+		setTitle(selectedName)
+		const region = regionList
 			.map((item) => item)
 			.find((item) => item.name_en === selectedName);
 		setRegionId(region.regionId);

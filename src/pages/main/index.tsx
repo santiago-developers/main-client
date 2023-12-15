@@ -1,18 +1,18 @@
 import tw from "twin.macro";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import MainSvg from "@public/images/main.svg";
-import Searchbar from "@components/main/SearchBar";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 import { SantiagoGet } from "lib/fetchData";
 import { RegionProps, Regions } from "types/regions";
 import Continent from "@components/main/Continent";
+import regionStore from "store/regionStore";
+import Searchbar from "@components/main/searchBar";
 
 export default function MainPage({
 	regions,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-	console.log(regions);
 	const router = useRouter();
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
@@ -25,9 +25,7 @@ export default function MainPage({
 				pathname: "/magazineList",
 				query: {
 					region_id: searchedRegion.regionId,
-					query_type: "hot",
-					base: 0,
-					limit: 8,
+					title: searchedRegion.name_en
 				},
 			});
 		} else {
@@ -74,6 +72,8 @@ export default function MainPage({
 
 export const getStaticProps = (async () => {
 	const regions = await SantiagoGet<Regions>("regions");
+	regionStore.setState({ regionList: regions.data });
+
 	return {
 		props: {
 			regions,

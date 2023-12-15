@@ -4,9 +4,9 @@ import { ServerStyleSheets } from "@mui/styles";
 export default class MyDocument extends Document {
 	render() {
 		return (
-			<Html>
+			<Html lang="en">
+				<Head />
 				<body>
-					<Head />
 					<Main />
 					<NextScript />
 				</body>

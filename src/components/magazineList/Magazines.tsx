@@ -7,45 +7,74 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps } from "types/magazines";
+import writeStore from "store/writeStore";
 
 type MagazinesProps = {
 	selectedType: string;
-	regionId: string;
-	searchTerm: string;
-	user_id:string;
-	continent:string;
+	regionId?: string;
+	searchTerm?: string;
+	user_id?: string;
+	continent?: string;
+	regionIdFromMain?: string | string[];
+	setSearchTerm(searchTerm: string): void;
+	setContinent(continent: string): void;
 };
 
 const Magazines = ({
 	selectedType,
-	regionId,
+	regionIdFromMain,
 	searchTerm,
+	setSearchTerm,
 	user_id,
 	continent,
+	setContinent,
 }: MagazinesProps) => {
-	const [magazines, setMagazines] = useState([]);
-console.log("selectedType: ",selectedType);
-console.log("searchTerm: ",searchTerm);
-console.log("continent: ",continent);
-console.log("regionId: ",regionId);
-console.log("user_id: ",user_id);
+	const { regionId, setRegionId } = writeStore();
+	const [magazines, setMagazines] = useState<MagazineProps[]>([]);
 
 	const getData = async () => {
 		const query_type = selectedType.toLowerCase().replace(/ /g, "-");
-		const magazineList: string[] = await SantiagoGet(
-			`magazines?${continent? `continent=${continent}&`:""}${regionId ? `region_id=${regionId}&` : ""}query_type=${
-				query_type || "hot"
-			}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}${user_id ? `&user_id=${user_id}`:""}`,
-		);
-		const urlName =`magazines?${continent? `continent=${continent}&`:""}${regionId ? `region_id=${regionId}&` : ""}query_type=${
-			query_type || "hot"
-		}&base=0&limit=20${searchTerm ? `&search=${searchTerm}` : ""}${user_id ? `&user_id=${user_id}`:""}`
-		console.log(magazineList);
-		console.log("urlName",urlName);
-		
-		setMagazines(magazineList.data);
+		if (searchTerm) {
+			const magazineList = await SantiagoGet(
+				`magazines?query_type=${
+					query_type || "hot"
+				}&base=0&limit=50&search=${searchTerm}${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setSearchTerm("");
+		} else if (regionId || regionIdFromMain) {
+			const magazineList = await SantiagoGet(
+				`magazines?${
+					regionId
+						? `region_id=${regionId}&`
+						: regionIdFromMain
+						? `region_id=${regionIdFromMain}&`
+						: ""
+				}query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setRegionId("");
+		} else if (continent) {
+			let continentSearch = continent;
+			if (continent === "all") {
+				continentSearch = "";
+			}
+			const magazineList = await SantiagoGet(
+				`magazines?${
+					continentSearch ? `continent=${continentSearch}&` : ""
+				}query_type=${query_type || "hot"}&base=0&limit=50${
+					user_id ? `&user_id=${user_id}` : ""
+				}`,
+			);
+			setMagazines(magazineList.data);
+			setContinent("");
+		}
 	};
-	
+
 	useEffect(() => {
 		getData();
 	}, [selectedType, regionId, searchTerm]);
@@ -89,6 +118,7 @@ console.log("user_id: ",user_id);
 							<Link href={`/post/${item.id}`}>
 								<div tw="relative w-[220px] h-[218px] rounded-2xl my-1 overflow-hidden">
 									<Image
+										priority={true}
 										src={
 											item.imageUrl || "/images/post.svg"
 										}
@@ -110,7 +140,7 @@ console.log("user_id: ",user_id);
 					))}
 				</>
 			) : (
-				<p>Theres no result..</p>
+				<p>There&#8216;s no result...</p>
 			)}
 		</div>
 	);
