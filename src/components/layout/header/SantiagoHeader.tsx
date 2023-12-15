@@ -39,7 +39,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 					<>
 				
 						<div tw="flex gap-5">
-							{router.pathname !== "/write" &&(
+							{router.pathname !== "/write" &&router.pathname !== "/post/[id]/edit" &&(
 								<MintButton>
 								<Link href="/write" tw="text-mint cursor-pointer">
 									Write
