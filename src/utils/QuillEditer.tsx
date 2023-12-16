@@ -22,7 +22,7 @@ export default function QuillEditer({ value, setContent }) {
 		input.setAttribute("accept", "image/*");
 		input.click();
 		input.onchange = async () => {
-			const file: any = input.files ? input.files[0] : null;
+			const file = input.files ? input.files[0] : null;
 			if (!file) return;
 			const formData = new FormData();
 			formData.append("file", file);
