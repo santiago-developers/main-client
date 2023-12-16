@@ -13,8 +13,7 @@ type ProfileBListProps = {
 	imageUrl: string | null;
 };
 
-const ProfileBList = () => {
-	const { id } = myInfoStore();
+const ProfileBList = ({id}) => {
 	const bestList = ["Best Pictures", "Best Writings"];
 	const [bWritings, setBWritings] = useState([]);
 	const [bPictures, setBPictures] = useState([]);
