@@ -17,7 +17,7 @@ type MagazinesProps = {
 	continent?: string;
 	regionIdFromMain?: string | string[];
 	setSearchTerm(searchTerm: string): void;
-	setContinent(continent: string): void;
+	setContinent?(continent: string): void;
 };
 
 const Magazines = ({
@@ -72,7 +72,7 @@ const Magazines = ({
 			);
 			setMagazines(magazineList.data);
 			setContinent("");
-		}else{
+		} else {
 			const magazineList = await SantiagoGet(
 				`magazines?query_type=${query_type || "hot"}&base=0&limit=50${
 					user_id ? `&user_id=${user_id}` : ""
