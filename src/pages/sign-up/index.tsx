@@ -241,7 +241,7 @@ export default function SignUp() {
 									<div>The password matches</div>
 								) : (
 									<div tw="text-[#EB4335]">
-										The password doesn't match
+										The password doesn&#8216;t match
 									</div>
 								)
 							) : (
