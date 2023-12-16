@@ -12,15 +12,20 @@ module.exports = withTwin({
 			issuer: /\.tsx?$/,
 			use: ["@svgr/webpack"],
 		});
-
 		return config;
 	},
+	reactStrictMode: true,
+	images: {
+		remotePatterns: [
+			{
+				protocol: "http",
+				hostname: "localhost",
+			},
+			{
+				protocol: "https",
+				hostname: "santiago-user.s3.ap-northeast-2.amazonaws.com",
+				pathname: "/**",
+			},
+		],
+	},
 });
-// const withTwin = require("./withTwin");
-
-// /** @type {import('next').NextConfig} */
-// const nextConfig = withTwin({
-// 	reactStrictMode: true,
-// });
-
-// module.exports = nextConfig;
