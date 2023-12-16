@@ -7,6 +7,7 @@ import RedPlus from "@public/images/redPlus.svg";
 import ProfileBList from "@components/profile/ProfileBList";
 import myInfoStore from "store/myInfoStore";
 import Link from "next/link";
+import FollowModal from "@components/profile/FollowModal";
 
 const ProfilePage = () => {
 	const {
@@ -24,6 +25,13 @@ const ProfilePage = () => {
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
 	};
+
+	const [open, setIsOpen]=useState(false);
+	const [followType, setFollowType]=useState("")
+	const handleFollowModal =(type:string)=>{
+		setFollowType(type)
+		setIsOpen(!open)
+	}
 
 	return (
 		<div tw="w-full flex mt-10 mx-20 mb-20 gap-20 justify-center">
@@ -43,14 +51,19 @@ const ProfilePage = () => {
 						<button tw="text-mint">edit</button>
 					</div>
 				</div>
-				<div tw="flex flex-col px-4 mt-5 gap-2 text-[18px]">
-					<div tw="flex justify-between">
+				<div tw="relative flex flex-col px-4 mt-5 gap-2 text-[18px]">
+					{open && <FollowModal userId={id} followType={followType} setIsOpen={setIsOpen}/> }
+					<div tw="flex justify-between" >
 						<span>followers</span>
-						<span>{followerCount}</span>
+						<span tw="cursor-pointer" onClick={(e)=> {e.stopPropagation();
+						handleFollowModal("followers");
+						}}>{followerCount}</span>
 					</div>
 					<div tw="flex justify-between mb-3">
 						<span>following</span>
-						<span>{followingCount}</span>
+						<span tw="cursor-pointer" onClick={(e)=> {e.stopPropagation();
+						handleFollowModal("followings");
+						}}>{followingCount}</span>
 					</div>
 					<div>Language Packs</div>
 					<div tw="flex items-center gap-2.5">
