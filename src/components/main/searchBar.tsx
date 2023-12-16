@@ -4,16 +4,11 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import RegionSearch from "./RegionSearch";
 import regionStore from "store/regionStore";
+import { RegionProps } from "types/regions";
 
 type SearchbarProps = {
 	onSubmit(searchTerm: string): void;
-	regions:RegionsProps[];
-};
-
-type RegionsProps = {
-	regionId: string;
-	name_en: string;
-	[key: string]: string;
+	regions:RegionProps[];
 };
 
 const Searchbar = (props: SearchbarProps) => {
@@ -24,7 +19,7 @@ const Searchbar = (props: SearchbarProps) => {
 	const{setRegionList}= regionStore();
 	
 	useEffect(() => {
-		const regionsName = props.regions.map((item: RegionsProps) => item.name_en);
+		const regionsName = props.regions.map((item: RegionProps) => item.name_en);
 		setRegionsList(regionsName);
 		setRegionList(props.regions)
 	}, [props.regions]);

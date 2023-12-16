@@ -134,7 +134,7 @@ const Magazines = ({
 										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 									/>
 								</div>
-								<div className="text-overflow" tw="w-full">
+								<div className="text-overflow" tw="w-[220px]">
 									{item.title}
 								</div>
 								<div tw="w-full text-xs text-[#A3A3A3]">
