@@ -138,12 +138,12 @@ export default function PostPage({
 	);
 }
 
-export const getStaticPaths = async () => {
-	return {
-		paths: [{ params: { id: "1" } }],
-		fallback: true,
-	};
-};
+// export const getStaticPaths = async () => {
+// 	return {
+// 		paths: [{ params: { id: "1" } }],
+// 		fallback: true,
+// 	};
+// };
 
 export const getStaticProps = (async (context) => {
 	const { params } = context;
