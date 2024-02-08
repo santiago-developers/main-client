@@ -41,7 +41,8 @@ const BestList = () => {
 	};
 
 	useEffect(() => {
-		fetchData(regionId);
+		if(regionId) 
+			fetchData(regionId);
 	}, [regionId]);
 
 	const fetchDataList = [bWriters, bPhotographers, bFanatics];
