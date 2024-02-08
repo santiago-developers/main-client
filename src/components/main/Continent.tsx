@@ -4,6 +4,7 @@ import { experimentalStyled as styled } from "@mui/material/styles";
 import { countinents, mainCountries } from "@statics/continents";
 import { useRouter } from "next/router";
 import { MainCountriesProps } from "types/regions";
+import Image from "next/image";
 
 const Continent = () => {
 	const Item = styled(Paper)(({ theme }) => ({
@@ -52,10 +53,21 @@ const Continent = () => {
 							}}
 							sx={{
 								cursor: "pointer",
-								backgroundImage: `url('/images/continent/${item
-									.toLowerCase()
-									.replace(/ /g, "_")}.svg')`,
+								position: "relative",
+								bgcolor: "transparent",
 							}}>
+							<Image
+								src={`/images/continent/${item
+									.toLowerCase()
+									.replace(/ /g, "_")}.svg`}
+								alt={item}
+								fill
+								sizes="100vw"
+								style={{
+									objectFit: "cover",
+									zIndex: "-1",
+								}}
+							/>
 							{item}
 						</Item>
 					</Grid>
@@ -69,10 +81,21 @@ const Continent = () => {
 							}}
 							sx={{
 								cursor: "pointer",
-								backgroundImage: `url('/images/continent/${item.name
-									.toLowerCase()
-									.replace(/ /g, "_")}.svg')`,
+								position: "relative",
+								bgcolor: "transparent",
 							}}>
+							<Image
+								src={`/images/continent/${item.name
+									.toLowerCase()
+									.replace(/ /g, "_")}.svg`}
+								alt={item.name}
+								fill
+								sizes="100vw"
+								style={{
+									objectFit: "cover",
+									zIndex: "-1",
+								}}
+							/>
 							{item.name}
 						</Item>
 					</Grid>
