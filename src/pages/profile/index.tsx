@@ -29,8 +29,10 @@ const ProfilePage = () => {
 	const router = useRouter();
 	const userIdFrom: string | undefined = router.query.user_id;
 	const { id } = myInfoStore();
-	const [dataType, setDataType] = useState(id);
 	const [userInfo, setUserInfo] = useState<UserInfoProps>([]);
+	if (!id) {
+		history.back();
+	}
 
 	const getData = async (dataType: string) => {
 		const data = await SantiagoGet(`users/${dataType}`);
@@ -38,15 +40,12 @@ const ProfilePage = () => {
 	};
 
 	useEffect(() => {
-		if (userIdFrom) {
-			if (userIdFrom === id) {
-				setDataType(id);
-			} else {
-				setDataType(userIdFrom);
-			}
+		if (userIdFrom === id || !userIdFrom) {
+			getData(id);
+		} else {
+			getData(userIdFrom);
 		}
-		getData(dataType);
-	}, []);
+	}, [userIdFrom]);
 
 	const {
 		name,
@@ -87,14 +86,20 @@ const ProfilePage = () => {
 							<span tw="text-[18px]">{region?.name_en}</span>
 						</div>
 						<button tw="text-mint">
-							{userIdFrom === id ? "edit " : "Follow"}
+							{userIdFrom === id || !userIdFrom
+								? "edit "
+								: "Follow"}
 						</button>
 					</div>
 				</div>
 				<div tw="relative flex flex-col px-4 mt-5 gap-2 text-[18px]">
 					{open && (
 						<FollowModal
-							userId={id}
+							userId={
+								userIdFrom === id || !userIdFrom
+									? id
+									: userIdFrom
+							}
 							followType={followType}
 							setIsOpen={setIsOpen}
 						/>
@@ -121,7 +126,7 @@ const ProfilePage = () => {
 							{followingCount}
 						</span>
 					</div>
-					{userIdFrom === id ? (
+					{userIdFrom === id || !userIdFrom ? (
 						<>
 							<div>Language Packs</div>
 							<div tw="flex items-center gap-2.5">
@@ -151,7 +156,9 @@ const ProfilePage = () => {
 						<span>{writingScore} points</span>
 					</div>
 				</div>
-				<ProfileBList id={userIdFrom === id ? id : userIdFrom} />
+				<ProfileBList
+					id={userIdFrom === id || !userIdFrom ? id : userIdFrom}
+				/>
 			</div>
 			<div tw="flex flex-col gap-36 items-center">
 				<MagazineSearchBar onSubmit={searchSubmit} />
@@ -159,7 +166,7 @@ const ProfilePage = () => {
 					selectedType="recent"
 					searchTerm={searchTerm}
 					setSearchTerm={setSearchTerm}
-					user_id={userIdFrom === id ? id : userIdFrom}
+					user_id={userIdFrom === id || !userIdFrom ? id : userIdFrom}
 				/>
 			</div>
 		</div>
