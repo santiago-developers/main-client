@@ -35,7 +35,7 @@ const EditPage = () => {
 
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
-	const [postRegionId, setPostRegionId] = useState<string>("");
+	// const [postRegionId, setPostRegionId] = useState<string>("");
 	const [tags, setTags] = useState<string[]>([]);
 	const [editedtags, setEditedTags] = useState<string[]>([]);
 	const [tagInput, setTagInput] = useState<string>("");
@@ -48,7 +48,7 @@ const EditPage = () => {
 		);
 		setTitle(post.title);
 		setContent(post.content);
-		setPostRegionId(post.regionId);
+		// setPostRegionId(post.regionId);
 
 		const regionName = regionList
 			.map((item) => item)

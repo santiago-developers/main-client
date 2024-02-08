@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Paper } from "@mui/material";
+import { Divider } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@utils/CountryModal";
 import { useState } from "react";
@@ -16,10 +16,11 @@ const WritePage = () => {
 		position: "absolute",
 		top: 250,
 		right: 240,
-		width: 820,
-		padding: 4,
+		width: 650,
+		margin: "0 auto",
 		zIndex: 1,
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
+		backgroundColor: "white",
 	};
 	const router = useRouter();
 
@@ -53,10 +54,6 @@ const WritePage = () => {
 			await SantiagoPostWithAutorization("magazines", dto);
 
 		fetchData();
-		if (!fetchData.data) {
-			alert("Try Again");
-			return;
-		}
 		setRegionId("");
 		setImageId([]);
 		alert("Your story is published successfully");
@@ -79,19 +76,18 @@ const WritePage = () => {
 					<Tag tags={tags} setTags={setTags} />
 					<button onClick={openCountry}>{selectedRegion}</button>
 					{isOpen && (
-						<Paper sx={style}>
+						<div style={style}>
 							<CountryModal
 								setIsOpen={setIsOpen}
 								setSelectedRegion={setSelectedRegion}
 							/>
-						</Paper>
+						</div>
 					)}
 				</div>
 				<div tw="min-h-[100vh] max-h-max">
 					<QuillEditer value={content} setContent={setContent} />
 				</div>
-				<MintButtonFilledForHeader
-					onClick={handleSubmit}>
+				<MintButtonFilledForHeader onClick={handleSubmit}>
 					Publish
 				</MintButtonFilledForHeader>
 			</div>
