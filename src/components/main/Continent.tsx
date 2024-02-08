@@ -16,6 +16,9 @@ const Continent = () => {
 		textShadow: "0px 0px 5px #FFF",
 		fontWeight: 700,
 		color: "black",
+		position: "relative",
+		bgcolor: "transparent",
+		cursor: "pointer",
 	}));
 
 	const router = useRouter();
@@ -50,11 +53,6 @@ const Continent = () => {
 							onClick={(e) => {
 								e.preventDefault();
 								handleContinent(item as string);
-							}}
-							sx={{
-								cursor: "pointer",
-								position: "relative",
-								bgcolor: "transparent",
 							}}>
 							<Image
 								src={`/images/continent/${item
@@ -65,10 +63,18 @@ const Continent = () => {
 								sizes="100vw"
 								style={{
 									objectFit: "cover",
-									zIndex: "-1",
 								}}
 							/>
-							{item}
+							<div
+								style={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -50%)",
+									zIndex: "1",
+								}}>
+								{item}
+							</div>
 						</Item>
 					</Grid>
 				))}
@@ -78,11 +84,6 @@ const Continent = () => {
 							onClick={(e) => {
 								e.preventDefault();
 								handleMainCountries(item);
-							}}
-							sx={{
-								cursor: "pointer",
-								position: "relative",
-								bgcolor: "transparent",
 							}}>
 							<Image
 								src={`/images/continent/${item.name
@@ -93,10 +94,18 @@ const Continent = () => {
 								sizes="100vw"
 								style={{
 									objectFit: "cover",
-									zIndex: "-1",
 								}}
 							/>
-							{item.name}
+							<div
+								style={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -50%)",
+									zIndex: "1",
+								}}>
+								{item.name}
+							</div>
 						</Item>
 					</Grid>
 				))}
