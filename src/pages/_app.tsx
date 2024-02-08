@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { Noto_Sans, Source_Serif_4 } from "next/font/google";
 import CssBaseline from "@mui/material/CssBaseline";
 import SantiagoLayout from "@components/layout/SantiagoLayout";
+import Head from "next/head";
 
 const notoSans = Noto_Sans({
 	subsets: ["latin"],
@@ -28,6 +29,11 @@ export default function App({ Component, pageProps }: AppProps) {
 		<main className={cls(notoSans.className, sourceSerif.variable)}>
 			<CssBaseline />
 			<SantiagoLayout>
+				<Head>
+					<title>Santiago</title>
+					<meta property="og:title" content="Santiago" key="title" />
+					<link rel="icon" href="/images/favicon.svg" />
+				</Head>
 				<Component {...pageProps} />
 			</SantiagoLayout>
 		</main>
