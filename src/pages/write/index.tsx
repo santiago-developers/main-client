@@ -10,6 +10,7 @@ import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/navigation";
 import Tag from "@components/write/Tag";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
+import SubmitModal from "./SubmitModal";
 
 const WritePage = () => {
 	const style = {
@@ -26,7 +27,7 @@ const WritePage = () => {
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
-	const { imageIds, regionId, setImageId, setRegionId } = writeStore();
+	const {regionId, setRegionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
 
@@ -38,27 +39,19 @@ const WritePage = () => {
 	const [tags, setTags] = useState<string[]>([]);
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
+	const [imgUrlId, setImgUrlId] = useState<string>("");
 
-	const handleSubmit = () => {
-		let locale = navigator.language || navigator.userLanguage;
-		const dto = {
-			title,
-			content,
-			regionId,
-			userId: id,
-			tags,
-			language: locale,
-			imageUrlIds: imageIds,
-		};
-		const fetchData = async () =>
-			await SantiagoPostWithAutorization("magazines", dto);
-
-		fetchData();
-		setRegionId("");
-		setImageId([]);
-		alert("Your story is published successfully");
-		router.push("/profile");
+	let locale = navigator.language || navigator.userLanguage;
+	const writeInfo = {
+		title,
+		content,
+		regionId,
+		userId: id,
+		tags,
+		language: locale,
+		imageUrlIds: [imgUrlId],
 	};
+	const [openModal, setOpenModal] = useState(false)
 
 	return (
 		<div tw="min-h-screen bg-[#FAFAFA] flex justify-center">
@@ -90,6 +83,8 @@ const WritePage = () => {
 				<MintButtonFilledForHeader onClick={handleSubmit}>
 					Publish
 				</MintButtonFilledForHeader>
+				<SubmitModal writeInfo={writeInfo} setRegionId={setRegionId} setOpenModal={setOpenModal} setTags={setTags} setTitle={setTitle} setImgUrlId={setImgUrlId}
+				/>
 			</div>
 		</div>
 	);
