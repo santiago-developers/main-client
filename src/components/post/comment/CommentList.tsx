@@ -14,9 +14,6 @@ const CommentList = ({ magazineId, commentList }: CommentListProp) => {
 		number | undefined
 	>(undefined);
 
-	// TODO 이거 테스트
-	// FIXME 이것도 테스트
-
 	return (
 		<>
 			<Paper style={{ padding: "20px 0px 20px 20px", fontSize: 14 }}>

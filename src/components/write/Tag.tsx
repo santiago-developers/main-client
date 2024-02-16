@@ -9,8 +9,12 @@ type TagComponentProps ={
 const Tag = ({ tags, setTags}:TagComponentProps) => {
 	const [tagInput, setTagInput] = useState<string>("");
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter" && tagInput.trim() !== "") {
-			setTags([...tags, tagInput.trim()]);
+		const target = e.target as HTMLInputElement;
+		if(target.value === ""){
+			return;
+		}
+		if (e.key === "Enter" && e.nativeEvent.isComposing === false) {
+			setTags([...tags, target.value]);
 			setTagInput("");
 		}
 	};
@@ -19,7 +23,6 @@ const Tag = ({ tags, setTags}:TagComponentProps) => {
 		setTags(updatedTags);
 	};
 	useEffect(()=>{
-
 	},[tags])
 
 	return (
