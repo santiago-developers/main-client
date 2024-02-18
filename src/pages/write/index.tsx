@@ -3,7 +3,6 @@ import { Divider } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@utils/CountryModal";
 import { useState } from "react";
-import { SantiagoPostWithAutorization } from "lib/fetchData";
 import QuillEditer from "@utils/QuillEditer";
 import writeStore from "store/writeStore";
 import myInfoStore from "store/myInfoStore";
@@ -27,7 +26,7 @@ const WritePage = () => {
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
-	const {regionId, setRegionId } = writeStore();
+	const { regionId, setRegionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
 
@@ -39,7 +38,6 @@ const WritePage = () => {
 	const [tags, setTags] = useState<string[]>([]);
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
-	const [imgUrlId, setImgUrlId] = useState<string>("");
 
 	let locale = navigator.language || navigator.userLanguage;
 	const writeInfo = {
@@ -48,10 +46,25 @@ const WritePage = () => {
 		regionId,
 		userId: id,
 		tags,
+		imageUrlIds: [""],
 		language: locale,
-		imageUrlIds: [imgUrlId],
 	};
-	const [openModal, setOpenModal] = useState(false)
+	const [openModal, setOpenModal] = useState(false);
+	const handleSubmitModal = () => {
+		if (!writeInfo.title) {
+			alert("Title is missing");
+			return;
+		}
+		if (writeInfo.content == "<p><br></p>") {
+			alert("Content is missing");
+			return;
+		}
+		if (!writeInfo.regionId) {
+			alert("Please select a region");
+			return;
+		}
+		setOpenModal(true);
+	};
 
 	return (
 		<div tw="min-h-screen bg-[#FAFAFA] flex justify-center">
@@ -80,11 +93,16 @@ const WritePage = () => {
 				<div tw="min-h-[100vh] max-h-max">
 					<QuillEditer value={content} setContent={setContent} />
 				</div>
-				<MintButtonFilledForHeader onClick={handleSubmit}>
+				<MintButtonFilledForHeader onClick={handleSubmitModal}>
 					Publish
 				</MintButtonFilledForHeader>
-				<SubmitModal writeInfo={writeInfo} setRegionId={setRegionId} setOpenModal={setOpenModal} setTags={setTags} setTitle={setTitle} setImgUrlId={setImgUrlId}
-				/>
+				{openModal && (
+					<SubmitModal
+						writeInfo={writeInfo}
+						setRegionId={setRegionId}
+						setOpenModal={setOpenModal}
+					/>
+				)}
 			</div>
 		</div>
 	);

@@ -1,23 +1,19 @@
 import Tag from "@components/write/Tag";
 import { SantiagoImagePost, SantiagoPostWithAutorization } from "lib/fetchData";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
 
 type Props = {
 	setOpenModal(item: boolean): void;
 	setRegionId(item: string): void;
-	setTags(item: string[]): void;
-	setTitle(item: string): void;
-	setImgUrlId(item: string): void;
 	writeInfo: {
 		title: string;
 		content: string;
 		regionId: string;
 		tags: string[];
 		language: string;
-		imageUrlIds: string[];
 	};
 };
 
@@ -26,7 +22,7 @@ type ImageProps = {
 	id: string;
 };
 
-const SubmitModal = ({ writeInfo, setRegionId, setOpenModal,setTitle,setTags,setImgUrlId }: Props) => {
+const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
 	const Wrapper = styled.div`
 		position: fixed;
 		top: 98px;
@@ -49,6 +45,7 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal,setTitle,setTags,set
 		text-align: center;
 		align-items: center;
 		background-color: white;
+		padding: 0 25px;
 		h1 {
 			font-weight: 700;
 			font-size: 25px;
@@ -62,8 +59,9 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal,setTitle,setTags,set
 			border-radius: 1.25rem;
 			border: 1px solid #000;
 		}
-		input {
-			border-bottom: 1px solid grey;
+		div {
+			word-wrap: break-word;
+			text-overflow: ellipsis;
 		}
 	`;
 	const ImgContainer = styled.div`
@@ -82,72 +80,63 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal,setTitle,setTags,set
 	`;
 	const router = useRouter();
 	const [imageSrc, setImageSrc]: any = useState(null);
-
-	const [file, setFile] =useState();
+	const [file, setFile] = useState();
 	const onUpload = (e: any) => {
 		const file = e.target.files[0];
-		setFile(file)
+		setFile(file);
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 		return new Promise<void>((resolve) => {
 			reader.onload = () => {
-				setImageSrc(reader.result || null); // 파일의 컨텐츠
+				setImageSrc(reader.result || null);
 				resolve();
 			};
 		});
 	};
-	// const {
-	// 	title,
-	// 	content,
-	// 	regionId,
-	// 	userId,
-	// 	tags,
-	// 	language,
-	// 	imageUrlIds,
-	// }=writeInfo
 
-	const handleSubmit = () => {
-		const fetchData = async () => {
-			if (file) {
-				const formData = new FormData();
-				formData.append("file", file);
-				const imgData:ImageProps = await SantiagoImagePost(formData);
-				setImgUrlId(imgData?.id)
-			}
-
+	const handleSubmit = async () => {
+		let shouldReplace = false;
+		if (file) {
+			const formData = new FormData();
+			formData.append("file", file);
+			const imgData: ImageProps = await SantiagoImagePost(formData);
+			const newWriteInfo = {
+				...writeInfo,
+				imageUrlIds: [imgData.id],
+			};
+			const writing = await SantiagoPostWithAutorization(
+				"magazines",
+				newWriteInfo,
+			);
+			shouldReplace = true;
+		} else {
 			const writing = await SantiagoPostWithAutorization(
 				"magazines",
 				writeInfo,
 			);
-			console.log(writing)
-		};
-		fetchData();
-		setRegionId("");
-		setImgUrlId("");
-		alert("Your story is published successfully");
-		// router.push("/profile");
+			shouldReplace = true;
+		}
+		if (shouldReplace) {
+			setRegionId("");
+			alert("Your story is published successfully");
+			router.replace("/profile");
+		}
 	};
 
 	return (
 		<Wrapper>
 			<Box>
 				<h1>Story Preview</h1>
-				<div tw="flex justify-center items-center text-center gap-20">
-					<div tw="flex flex-col gap-8 text-lg">
-						<input
-							id="title"
-							name="title"
-							type="text"
-							value={writeInfo.title}
-							tw="text-2xl"
-							onChange={(e) => setTitle(e.target.value)}
-						/>
-						<Tag tags={writeInfo.tags} setTags={setTags} />
-
-						<input id="tag" name="tag" type="text" value={writeInfo.tags.map((tag)=>tag)} />
+				<div tw="w-full flex justify-center items-center text-center gap-20">
+					<div tw="w-[450px] flex flex-col gap-8 text-lg text-left px-10">
+						<div tw="w-full text-3xl">{writeInfo.title}</div>
+						<div>{writeInfo.tags.map((tag) => ` #${tag}`)}</div>
 					</div>
 					<ImgContainer>
-						<label htmlFor="image">대표 이미지</label>
+						<label htmlFor="image">
+							Set a thumnail <br />
+							in your story
+						</label>
 						<input
 							id="image"
 							name="image"
