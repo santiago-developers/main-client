@@ -6,10 +6,12 @@ import Comment from "./Comment";
 
 type CommentListProp = {
 	magazineId: string | undefined;
-	// commentList:string[];
+	commentList: CommentProps[] | undefined;
+	setCommentList: React.Dispatch<React.SetStateAction<CommentProps[] | undefined>>
+	setCommentCount: React.Dispatch<React.SetStateAction<number>>
 };
 
-const CommentList = ({ magazineId, commentList }: CommentListProp) => {
+const CommentList = ({ magazineId, commentList, setCommentList, setCommentCount }: CommentListProp) => {
 	const [selectedCommentIdx, setSelectedCommentIdx] = useState<
 		number | undefined
 	>(undefined);
@@ -20,7 +22,7 @@ const CommentList = ({ magazineId, commentList }: CommentListProp) => {
 				<div
 					tw="relative h-[410px] overflow-y-scroll"
 					className="customScrollbar">
-					{commentList?.map(
+					{commentList?.sort((a, b)=> Number(b.createdAt) - Number(a.createdAt)).map(
 						(item: CommentProps, index) =>
 							!item.parentId && (
 								<Comment
@@ -37,6 +39,8 @@ const CommentList = ({ magazineId, commentList }: CommentListProp) => {
 											: false
 									}
 									commentList={commentList}
+									setCommentList={setCommentList}
+									setCommentCount={setCommentCount}
 								/>
 							),
 					)}

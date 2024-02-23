@@ -19,6 +19,8 @@ type CommentComponentProps = {
 	>;
 	isSelected: boolean;
 	commentList: CommentProps[];
+	setCommentList: React.Dispatch<React.SetStateAction<CommentProps[] | undefined>>
+	setCommentCount: React.Dispatch<React.SetStateAction<number>>
 };
 
 const Comment = ({
@@ -28,6 +30,8 @@ const Comment = ({
 	setSelectedCommentIdx,
 	isSelected,
 	commentList,
+	setCommentList,
+	setCommentCount
 }: CommentComponentProps) => {
 	const { id } = myInfoStore();
 	const replyId = comment.id;
@@ -178,6 +182,8 @@ const Comment = ({
 				setOpen={setOpen}
 				parentId={comment.id}
 				commentList={commentList}
+				setCommentList={setCommentList}
+				setCommentCount={setCommentCount}
 				isSelected={isSelected}
 				setSelectedCommentIdx={setSelectedCommentIdx}
 				index={index}
