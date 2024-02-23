@@ -129,14 +129,18 @@ const SubmitModal = ({
 					  );
 			shouldReplace = true;
 		} else {
+			const newWriteInfo = {
+				...writeInfo,
+				imageUrlIds: [],
+			};
 			const writing = submitType == "upload"
 			? await SantiagoPostWithAutorization(
 					"magazines",
-					writeInfo,
+					newWriteInfo,
 			  )
 			: await SantiagoPutWithAutorization(
 					`magazines/${magazineId}`,
-					writeInfo,
+					newWriteInfo,
 			  );
 			shouldReplace = true;
 		}
