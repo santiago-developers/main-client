@@ -22,6 +22,7 @@ type Props = {
 	};
 	submitType: string; //upload or update
 	magazineId: string | undefined;
+	imageUrl: {id: string ; url: string} | undefined;
 };
 
 type ImageProps = {
@@ -35,6 +36,7 @@ const SubmitModal = ({
 	setOpenModal,
 	submitType,
 	magazineId,
+	imageUrl,
 }: Props) => {
 	const Wrapper = styled.div`
 		position: fixed;
@@ -131,17 +133,18 @@ const SubmitModal = ({
 		} else {
 			const newWriteInfo = {
 				...writeInfo,
-				imageUrlIds: [],
+				imageUrlIds: imageUrl ? [imageUrl.id] : [],
 			};
-			const writing = submitType == "upload"
-			? await SantiagoPostWithAutorization(
-					"magazines",
-					newWriteInfo,
-			  )
-			: await SantiagoPutWithAutorization(
-					`magazines/${magazineId}`,
-					newWriteInfo,
-			  );
+			const writing =
+				submitType == "upload"
+					? await SantiagoPostWithAutorization(
+							"magazines",
+							newWriteInfo,
+					  )
+					: await SantiagoPutWithAutorization(
+							`magazines/${magazineId}`,
+							newWriteInfo,
+					  );
 			shouldReplace = true;
 		}
 		if (shouldReplace) {
@@ -181,6 +184,13 @@ const SubmitModal = ({
 									width={"100%"}
 								/>
 							)}
+							{imageUrl != null && imageSrc == null ? (
+								<img
+									src={imageUrl.url}
+									alt="preview-img"
+									width={"100%"}
+								/>
+							) : null}
 						</div>
 					</ImgContainer>
 				</div>

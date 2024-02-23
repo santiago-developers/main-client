@@ -52,6 +52,7 @@ const EditPage = () => {
 	const [content, setContent] = useState<string>("");
 	const [postRegionId, setPostRegionId] = useState<string | undefined>("");
 	const [tags, setTags] = useState<string[]>([]);
+	const [imageUrl, setImageUrl] = useState<{id: string; url: string}>();
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
 
@@ -68,6 +69,7 @@ const EditPage = () => {
 		setSelectedRegion(regionName[0].name_en);
 		const tag = post.tags?.map((item: TagProps) => item.tag);
 		setTags(tag);
+		setImageUrl(post.imageUrls[0]);
 	};
 
 	useEffect(() => {
@@ -85,7 +87,7 @@ const EditPage = () => {
 		content,
 		regionId: regionId || postRegionId,
 		tags: tags,
-		userId : id
+		userId: id,
 	};
 	const [openModal, setOpenModal] = useState(false);
 	const handleEditSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -162,6 +164,7 @@ const EditPage = () => {
 					setOpenModal={setOpenModal}
 					magazineId={magazineId as string}
 					submitType="update"
+					imageUrl={imageUrl}
 				/>
 			)}
 		</div>
