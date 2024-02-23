@@ -1,5 +1,9 @@
 import Tag from "@components/write/Tag";
-import { SantiagoImagePost, SantiagoPostWithAutorization } from "lib/fetchData";
+import {
+	SantiagoImagePost,
+	SantiagoPostWithAutorization,
+	SantiagoPutWithAutorization,
+} from "lib/fetchData";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -14,7 +18,10 @@ type Props = {
 		regionId: string;
 		tags: string[];
 		language: string;
+		userId: string;
 	};
+	submitType: string; //upload or update
+	magazineId: string | undefined;
 };
 
 type ImageProps = {
@@ -22,7 +29,13 @@ type ImageProps = {
 	id: string;
 };
 
-const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
+const SubmitModal = ({
+	writeInfo,
+	setRegionId,
+	setOpenModal,
+	submitType,
+	magazineId,
+}: Props) => {
 	const Wrapper = styled.div`
 		position: fixed;
 		top: 98px;
@@ -104,16 +117,27 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
 				...writeInfo,
 				imageUrlIds: [imgData.id],
 			};
-			const writing = await SantiagoPostWithAutorization(
-				"magazines",
-				newWriteInfo,
-			);
+			const writing =
+				submitType == "upload"
+					? await SantiagoPostWithAutorization(
+							"magazines",
+							newWriteInfo,
+					  )
+					: await SantiagoPutWithAutorization(
+							`magazines/${magazineId}`,
+							newWriteInfo,
+					  );
 			shouldReplace = true;
 		} else {
-			const writing = await SantiagoPostWithAutorization(
-				"magazines",
-				writeInfo,
-			);
+			const writing = submitType == "upload"
+			? await SantiagoPostWithAutorization(
+					"magazines",
+					writeInfo,
+			  )
+			: await SantiagoPutWithAutorization(
+					`magazines/${magazineId}`,
+					writeInfo,
+			  );
 			shouldReplace = true;
 		}
 		if (shouldReplace) {

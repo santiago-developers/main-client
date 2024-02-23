@@ -30,9 +30,6 @@ const ProfilePage = () => {
 	const userIdFrom: string | undefined = router.query.user_id;
 	const { id } = myInfoStore();
 	const [userInfo, setUserInfo] = useState<UserInfoProps>([]);
-	if (!id) {
-		history.back();
-	}
 
 	const getData = async (dataType: string) => {
 		const data = await SantiagoGet(`users/${dataType}`);
@@ -44,6 +41,9 @@ const ProfilePage = () => {
 			getData(id);
 		} else {
 			getData(userIdFrom);
+		}
+		if (!id) {
+			history.back();
 		}
 	}, [userIdFrom]);
 

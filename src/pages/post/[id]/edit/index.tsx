@@ -85,6 +85,7 @@ const EditPage = () => {
 		content,
 		regionId: regionId || postRegionId,
 		tags: tags,
+		userId : id
 	};
 	const [openModal, setOpenModal] = useState(false);
 	const handleEditSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -159,6 +160,8 @@ const EditPage = () => {
 					writeInfo={editInfo}
 					setRegionId={setRegionId}
 					setOpenModal={setOpenModal}
+					magazineId={magazineId as string}
+					submitType="update"
 				/>
 			)}
 		</div>

@@ -138,7 +138,7 @@ export async function SantiagoGet<T>(url: string): Promise<T> {
 	return data;
 }
 
-export async function SantiagoDelete<T>(url: string): Promise<T> {
+export async function SantiagoDelete<T>(url: string){
 	const accessToken = localStorage.getItem("accessToken");
 
 	if (!accessToken) {
@@ -155,6 +155,4 @@ export async function SantiagoDelete<T>(url: string): Promise<T> {
 	if (!res.ok) {
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
-	const data = await res.json();
-	return data;
 }

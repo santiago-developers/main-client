@@ -101,6 +101,7 @@ const WritePage = () => {
 						writeInfo={writeInfo}
 						setRegionId={setRegionId}
 						setOpenModal={setOpenModal}
+						submitType="upload"
 					/>
 				)}
 			</div>
