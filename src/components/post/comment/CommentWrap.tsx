@@ -17,8 +17,7 @@ const CommentWrap = ({ magazineId }: CommentWrapProp) => {
 	const handleComment = () => {
 		setOpenComment(!openComment);
 	};
-
-	const [commentList, setCommentList] = useState<CommentProps | undefined>(
+	const [commentList, setCommentList] = useState<CommentProps[] | undefined>(
 		[],
 	);
 	const [commentCount, setCommentCount] = useState(0);
@@ -32,6 +31,11 @@ const CommentWrap = ({ magazineId }: CommentWrapProp) => {
 		};
 		fetchData();
 	}, []);
+
+	const addOneForCommentList = (newComment : CommentProps) => {
+		setCommentList([...commentList as CommentProps[], newComment]);
+		setCommentCount(commentCount + 1);
+	}
 
 	return (
 		<>
@@ -48,10 +52,14 @@ const CommentWrap = ({ magazineId }: CommentWrapProp) => {
 			<div>
 				{openComment && (
 					<>
-						<CommentInput magazineId={magazineId} />
+						<CommentInput
+							magazineId={magazineId}
+							addOneForCommentList={addOneForCommentList}
+						/>
 						<CommentList
 							magazineId={magazineId}
 							commentList={commentList}
+							setCommentList={setCommentList}
 						/>
 					</>
 				)}

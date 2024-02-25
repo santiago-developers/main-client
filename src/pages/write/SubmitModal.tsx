@@ -20,6 +20,9 @@ type Props = {
 		language?: string;
 		imageUrlIds?: string[];
 	};
+	submitType: string; //upload or update
+	magazineId: string | undefined;
+	imageUrl: {id: string ; url: string} | undefined;
 };
 
 type ImageProps = {
@@ -116,16 +119,32 @@ const SubmitModal = ({
 				...writeInfo,
 				imageUrlIds: [imgData.id],
 			};
-			const writing = await SantiagoPostWithAutorization(
-				"magazines",
-				newWriteInfo,
-			);
+			const writing =
+				submitType == "upload"
+					? await SantiagoPostWithAutorization(
+							"magazines",
+							newWriteInfo,
+					  )
+					: await SantiagoPutWithAutorization(
+							`magazines/${magazineId}`,
+							newWriteInfo,
+					  );
 			shouldReplace = true;
 		} else {
-			const writing = await SantiagoPostWithAutorization(
-				"magazines",
-				writeInfo,
-			);
+			const newWriteInfo = {
+				...writeInfo,
+				imageUrlIds: imageUrl ? [imageUrl.id] : [],
+			};
+			const writing =
+				submitType == "upload"
+					? await SantiagoPostWithAutorization(
+							"magazines",
+							newWriteInfo,
+					  )
+					: await SantiagoPutWithAutorization(
+							`magazines/${magazineId}`,
+							newWriteInfo,
+					  );
 			shouldReplace = true;
 		}
 		if (shouldReplace) {

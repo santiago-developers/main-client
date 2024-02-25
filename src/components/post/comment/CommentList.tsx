@@ -6,10 +6,19 @@ import Comment from "./Comment";
 
 type CommentListProp = {
 	magazineId: string | undefined;
-	// commentList:string[];
+	commentList: CommentProps[] | undefined;
+	setCommentList: React.Dispatch<
+		React.SetStateAction<CommentProps[] | undefined>
+	>;
+	setCommentCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const CommentList = ({ magazineId, commentList }: CommentListProp) => {
+const CommentList = ({
+	magazineId,
+	commentList,
+	setCommentList,
+	setCommentCount,
+}: CommentListProp) => {
 	const [selectedCommentIdx, setSelectedCommentIdx] = useState<
 		number | undefined
 	>(undefined);
@@ -20,26 +29,32 @@ const CommentList = ({ magazineId, commentList }: CommentListProp) => {
 				<div
 					tw="relative h-[410px] overflow-y-scroll"
 					className="customScrollbar">
-					{commentList?.map(
-						(item: CommentProps, index) =>
-							!item.parentId && (
-								<Comment
-									key={item.id}
-									magazineId={magazineId}
-									comment={item}
-									index={index}
-									setSelectedCommentIdx={
-										setSelectedCommentIdx
-									}
-									isSelected={
-										selectedCommentIdx === index
-											? true
-											: false
-									}
-									commentList={commentList}
-								/>
-							),
-					)}
+					{commentList
+						?.sort((a, b) => {
+							return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+						})
+						.map(
+							(item: CommentProps, index) =>
+								!item.parentId && (
+									<Comment
+										key={item.id}
+										magazineId={magazineId}
+										comment={item}
+										index={index}
+										setSelectedCommentIdx={
+											setSelectedCommentIdx
+										}
+										isSelected={
+											selectedCommentIdx === index
+												? true
+												: false
+										}
+										commentList={commentList}
+										setCommentList={setCommentList}
+										setCommentCount={setCommentCount}
+									/>
+								),
+						)}
 				</div>
 			</Paper>
 		</>

@@ -9,7 +9,7 @@ import { SantiagoDelete } from "lib/fetchData";
 
 type MoreMenuTypeProp = {
 	moreMenuType: boolean;
-	magazineId: string |undefined;
+	magazineId: string | undefined;
 };
 
 const MoreMenu = ({ moreMenuType, magazineId }: MoreMenuTypeProp) => {
@@ -25,11 +25,11 @@ const MoreMenu = ({ moreMenuType, magazineId }: MoreMenuTypeProp) => {
 	};
 
 	const handleDelete = () => {
-		// const fetchData = async () =>
-		// 	await SantiagoDelete(`magazines/${magazineId}`);
-		// fetchData();
+		const fetchData = async () =>
+			await SantiagoDelete(`magazines/${magazineId}`);
+		fetchData();
 		alert("This post is deleted");
-		history.back()
+		history.back();
 	};
 
 	const handleReport = () => {
@@ -58,32 +58,26 @@ const MoreMenu = ({ moreMenuType, magazineId }: MoreMenuTypeProp) => {
 				{moreMenuType ? (
 					<div>
 						<Link href={`/post/${magazineId}/edit`}>
-							<MenuItem sx={{ color: "#A3A3A3" }}>
-								edit
-							</MenuItem>
+							<MenuItem sx={{ color: "#A3A3A3" }}>edit</MenuItem>
 						</Link>
 						<Link href={`/post/${magazineId}/htmlEdit`}>
-							<MenuItem
-								sx={{color: "#A3A3A3" }}>
+							<MenuItem sx={{ color: "#A3A3A3" }}>
 								html edit
 							</MenuItem>
 						</Link>
 						<Link href={`/post/${magazineId}/statistics`}>
-							<MenuItem
-								sx={{color: "#A3A3A3" }}>
+							<MenuItem sx={{ color: "#A3A3A3" }}>
 								statistics
 							</MenuItem>
 						</Link>
 						<MenuItem
-							sx={{color: "#A3A3A3" }}
+							sx={{ color: "#A3A3A3" }}
 							onClick={handleDelete}>
 							delete
 						</MenuItem>
 					</div>
 				) : (
-					<MenuItem
-						sx={{color: "#A3A3A3" }}
-						onClick={handleReport}>
+					<MenuItem sx={{ color: "#A3A3A3" }} onClick={handleReport}>
 						report
 					</MenuItem>
 				)}

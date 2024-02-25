@@ -101,6 +101,9 @@ const WritePage = () => {
 						writeInfo={writeInfo}
 						setRegionId={setRegionId}
 						setOpenModal={setOpenModal}
+						submitType="upload"
+						magazineId={undefined}
+						imageUrl={undefined}
 					/>
 				)}
 			</div>
