@@ -8,7 +8,7 @@ import writeStore from "store/writeStore";
 import myInfoStore from "store/myInfoStore";
 import Tag from "@components/write/Tag";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
-import SubmitModal from "./SubmitModal";
+import SubmitModal from "../../components/write/SubmitModal";
 
 const WritePage = () => {
 	const style = {

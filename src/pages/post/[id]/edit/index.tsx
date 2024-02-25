@@ -11,7 +11,7 @@ import regionStore from "store/regionStore";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import Tag from "@components/write/Tag";
 import writeStore from "store/writeStore";
-import SubmitModal from "@pages/write/SubmitModal";
+import SubmitModal from "@components/write/SubmitModal";
 
 type TagProps = {
 	tagId: string;
@@ -47,8 +47,10 @@ const EditPage = () => {
 	const [tags, setTags] = useState<string[]>([""]);
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
-	const [prevImageUrl, setprevImageUrl] = useState<{id: string; url: string}>();
-
+	const [prevImageUrl, setprevImageUrl] = useState<{
+		id: string;
+		url: string;
+	}>();
 
 	const fetchData = async () => {
 		const post: MagazineProps = await SantiagoGet(
@@ -85,7 +87,7 @@ const EditPage = () => {
 		tags: tags,
 		imageUrlIds: [""],
 	};
-	
+
 	const [openModal, setOpenModal] = useState(false);
 	const handleEditSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		if (!editInfo.title) {
