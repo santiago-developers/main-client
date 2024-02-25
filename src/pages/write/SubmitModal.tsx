@@ -1,19 +1,24 @@
-import Tag from "@components/write/Tag";
-import { SantiagoImagePost, SantiagoPostWithAutorization } from "lib/fetchData";
+import {
+	SantiagoImagePost,
+	SantiagoPostWithAutorization,
+	SantiagoPutWithAutorization,
+} from "lib/fetchData";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
 
 type Props = {
 	setOpenModal(item: boolean): void;
 	setRegionId(item: string): void;
+	magazineId?: string;
 	writeInfo: {
 		title: string;
 		content: string;
 		regionId: string;
 		tags: string[];
-		language: string;
+		language?: string;
+		imageUrlIds?: string[];
 	};
 };
 
@@ -22,7 +27,12 @@ type ImageProps = {
 	id: string;
 };
 
-const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
+const SubmitModal = ({
+	writeInfo,
+	setRegionId,
+	setOpenModal,
+	magazineId,
+}: Props) => {
 	const Wrapper = styled.div`
 		position: fixed;
 		top: 98px;
@@ -79,6 +89,8 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
 		}
 	`;
 	const router = useRouter();
+	console.log(writeInfo.prevImageUrl);
+
 	const [imageSrc, setImageSrc]: any = useState(null);
 	const [file, setFile] = useState();
 	const onUpload = (e: any) => {
@@ -123,6 +135,36 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
 		}
 	};
 
+	const handleEdit = async () => {
+		let shouldReplace = false;
+		if (file) {
+			const formData = new FormData();
+			formData.append("file", file);
+			const imgData: ImageProps = await SantiagoImagePost(formData);
+			const newEditInfo = {
+				...writeInfo,
+				imageUrlIds: [imgData.id],
+			};
+			const editing = await SantiagoPutWithAutorization(
+				`magazines/${magazineId}`,
+				newEditInfo,
+			);
+			shouldReplace = true;
+		} else {
+			console.log("edittry", writeInfo);
+			const editing = await SantiagoPutWithAutorization(
+				`magazines/${magazineId}`,
+				writeInfo,
+			);
+			shouldReplace = true;
+		}
+		if (shouldReplace) {
+			setRegionId("");
+			alert("Your story is edited successfully");
+			router.replace(`/post/${magazineId}`);
+		}
+	};
+
 	return (
 		<Wrapper>
 			<Box>
@@ -146,21 +188,41 @@ const SubmitModal = ({ writeInfo, setRegionId, setOpenModal }: Props) => {
 							onChange={(e) => onUpload(e)}
 						/>
 						<div tw="w-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#fafafa]">
-							{imageSrc && (
-								<img
-									src={imageSrc}
-									alt="preview-img"
-									width={"100%"}
-								/>
+							{router.pathname === "/post/[id]/edit" ? (
+								<>
+									{writeInfo.imageUrlIds[0] && (
+										<img
+											src={imageSrc||writeInfo.imageUrlIds[0]}
+											alt="preview-img"
+											width={"100%"}
+										/>
+									)}
+								</>
+							) : (
+								<>
+									{imageSrc && (
+										<img
+											src={imageSrc}
+											alt="preview-img"
+											width={"100%"}
+										/>
+									)}
+								</>
 							)}
 						</div>
 					</ImgContainer>
 				</div>
 				<div tw="flex gap-6 mt-20">
 					<button onClick={() => setOpenModal(false)}>Cancel</button>
-					<button tw="bg-mint" onClick={handleSubmit}>
-						Publish
-					</button>
+					{router.pathname === "/post/[id]/edit" ? (
+						<button tw="bg-mint" onClick={handleEdit}>
+							Edit
+						</button>
+					) : (
+						<button tw="bg-mint" onClick={handleSubmit}>
+							Publish
+						</button>
+					)}
 				</div>
 			</Box>
 		</Wrapper>
