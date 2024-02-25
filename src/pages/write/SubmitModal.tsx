@@ -3,7 +3,6 @@ import {
 	SantiagoPostWithAutorization,
 	SantiagoPutWithAutorization,
 } from "lib/fetchData";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
@@ -21,8 +20,7 @@ type Props = {
 		imageUrlIds?: string[];
 	};
 	submitType: string; //upload or update
-	magazineId: string | undefined;
-	imageUrl: {id: string ; url: string} | undefined;
+	imageUrl: { id: string; url: string } | undefined;
 };
 
 type ImageProps = {
@@ -35,6 +33,8 @@ const SubmitModal = ({
 	setRegionId,
 	setOpenModal,
 	magazineId,
+	submitType,
+	imageUrl,
 }: Props) => {
 	const Wrapper = styled.div`
 		position: fixed;
@@ -92,7 +92,6 @@ const SubmitModal = ({
 		}
 	`;
 	const router = useRouter();
-	console.log(writeInfo.prevImageUrl);
 
 	const [imageSrc, setImageSrc]: any = useState(null);
 	const [file, setFile] = useState();
@@ -147,40 +146,14 @@ const SubmitModal = ({
 					  );
 			shouldReplace = true;
 		}
+		console.log("submit", writeInfo);
+
 		if (shouldReplace) {
 			setRegionId("");
 			alert("Your story is published successfully");
 			router.replace("/profile");
-		}
-	};
-
-	const handleEdit = async () => {
-		let shouldReplace = false;
-		if (file) {
-			const formData = new FormData();
-			formData.append("file", file);
-			const imgData: ImageProps = await SantiagoImagePost(formData);
-			const newEditInfo = {
-				...writeInfo,
-				imageUrlIds: [imgData.id],
-			};
-			const editing = await SantiagoPutWithAutorization(
-				`magazines/${magazineId}`,
-				newEditInfo,
-			);
-			shouldReplace = true;
-		} else {
-			console.log("edittry", writeInfo);
-			const editing = await SantiagoPutWithAutorization(
-				`magazines/${magazineId}`,
-				writeInfo,
-			);
-			shouldReplace = true;
-		}
-		if (shouldReplace) {
-			setRegionId("");
-			alert("Your story is edited successfully");
-			router.replace(`/post/${magazineId}`);
+			// alert("Your story is edited successfully");
+			// router.replace(`/post/${magazineId}`);
 		}
 	};
 
@@ -211,7 +184,10 @@ const SubmitModal = ({
 								<>
 									{writeInfo.imageUrlIds[0] && (
 										<img
-											src={imageSrc||writeInfo.imageUrlIds[0]}
+											src={
+												imageSrc ||
+												writeInfo.imageUrlIds[0]
+											}
 											alt="preview-img"
 											width={"100%"}
 										/>
@@ -233,15 +209,11 @@ const SubmitModal = ({
 				</div>
 				<div tw="flex gap-6 mt-20">
 					<button onClick={() => setOpenModal(false)}>Cancel</button>
-					{router.pathname === "/post/[id]/edit" ? (
-						<button tw="bg-mint" onClick={handleEdit}>
-							Edit
-						</button>
-					) : (
-						<button tw="bg-mint" onClick={handleSubmit}>
-							Publish
-						</button>
-					)}
+					<button tw="bg-mint" onClick={handleSubmit}>
+						{router.pathname === "/post/[id]/edit"
+							? "Edit"
+							: "Publish"}
+					</button>
 				</div>
 			</Box>
 		</Wrapper>

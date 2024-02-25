@@ -6,7 +6,6 @@ import { useState } from "react";
 import QuillEditer from "@utils/QuillEditer";
 import writeStore from "store/writeStore";
 import myInfoStore from "store/myInfoStore";
-import { useRouter } from "next/navigation";
 import Tag from "@components/write/Tag";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import SubmitModal from "./SubmitModal";
@@ -22,7 +21,6 @@ const WritePage = () => {
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
 		backgroundColor: "white",
 	};
-	const router = useRouter();
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
