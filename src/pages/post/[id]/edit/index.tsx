@@ -86,6 +86,7 @@ const EditPage = () => {
 		regionId: regionId || postRegionId,
 		tags: tags,
 		imageUrlIds: [""],
+		userId: id,
 	};
 
 	const [openModal, setOpenModal] = useState(false);

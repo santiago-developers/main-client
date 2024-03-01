@@ -18,6 +18,7 @@ type Props = {
 		tags: string[];
 		language?: string;
 		imageUrlIds?: string[];
+		userId: string;
 	};
 	submitType: string; //upload or update
 	imageUrl: { id: string; url: string } | undefined;
@@ -182,12 +183,9 @@ const SubmitModal = ({
 						<div tw="w-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#fafafa]">
 							{router.pathname === "/post/[id]/edit" ? (
 								<>
-									{writeInfo.imageUrlIds[0] && (
+									{imageUrl && (
 										<img
-											src={
-												imageSrc ||
-												writeInfo.imageUrlIds[0]
-											}
+											src={imageSrc || imageUrl}
 											alt="preview-img"
 											width={"100%"}
 										/>
