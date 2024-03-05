@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import tw from "twin.macro";
-import PhotoSvg from "@public/images/photo.svg";
-import WritingSvg from "@public/images/writing.svg";
-import Image from "next/image";
-import dayjs from "dayjs";
-import Link from "next/link";
-import { SantiagoGet } from "lib/fetchData";
 import { MagazineProps } from "types/magazines";
 import writeStore from "store/writeStore";
+import Magazine from "./Magazine";
+import {
+	InfiniteData,
+	QueryClient,
+	dehydrate,
+	useInfiniteQuery,
+	useQuery,
+} from "@tanstack/react-query";
+import { getMagazineList } from "lib/react_query/getMagazineList";
+import { useInView } from "react-intersection-observer";
 
 type MagazinesProps = {
 	selectedType: string;
@@ -17,7 +21,7 @@ type MagazinesProps = {
 	continent?: string;
 	regionIdFromMain?: string | string[];
 	setSearchTerm(searchTerm: string): void;
-	setContinent?(continent: string): void;
+	setContinent(continent: string): void;
 };
 
 const Magazines = ({
@@ -32,125 +36,57 @@ const Magazines = ({
 	const { regionId, setRegionId } = writeStore();
 	const [magazines, setMagazines] = useState<MagazineProps[]>([]);
 
-	const getData = async () => {
-		const query_type = selectedType.toLowerCase().replace(/ /g, "-");
-		if (searchTerm) {
-			const magazineList = await SantiagoGet(
-				`magazines?query_type=${
-					query_type || "hot"
-				}&base=0&limit=50&search=${searchTerm}${
-					user_id ? `&user_id=${user_id}` : ""
-				}`,
-			);
-			setMagazines(magazineList.data);
-			setSearchTerm("");
-		} else if (regionId || regionIdFromMain) {
-			const magazineList = await SantiagoGet(
-				`magazines?${
-					regionId
-						? `region_id=${regionId}&`
-						: regionIdFromMain
-						? `region_id=${regionIdFromMain}&`
-						: ""
-				}query_type=${query_type || "hot"}&base=0&limit=50${
-					user_id ? `&user_id=${user_id}` : ""
-				}`,
-			);
-			setMagazines(magazineList.data);
-			setRegionId("");
-		} else if (continent) {
-			let continentSearch = continent;
-			if (continent === "all") {
-				continentSearch = "";
-			}
-			const magazineList = await SantiagoGet(
-				`magazines?${
-					continentSearch ? `continent=${continentSearch}&` : ""
-				}query_type=${query_type || "hot"}&base=0&limit=50${
-					user_id ? `&user_id=${user_id}` : ""
-				}`,
-			);
-			setMagazines(magazineList.data);
-			setContinent("");
-		} else {
-			const magazineList = await SantiagoGet(
-				`magazines?query_type=${query_type || "hot"}&base=0&limit=50${
-					user_id ? `&user_id=${user_id}` : ""
-				}`,
-			);
-			setMagazines(magazineList.data);
-		}
-	};
+	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
+		queryKey: ["magazineList", "magazines"],
+		queryFn: getMagazineList,
+		initialPageParam: 0, // [[1,2,3,4,5],[6,7,8,9,10]] 2차원배열로 들어옴
+		//  백엔드에 마지막 글인경우, nextCursor가 -1로 나오도록 하기
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage.data.length === 0 ? undefined : pages.length;
+		},
+		staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
+		gcTime: 300 * 1000,
+	});
+	const { ref, inView } = useInView({
+		threshold: 0.9,
+		delay: 0,
+	});
 
 	useEffect(() => {
-		getData();
-	}, [selectedType, regionId, searchTerm]);
+		// 화면에 밑에 ref부분이 보이면
+		if (inView) {
+			!isFetching && hasNextPage && fetchNextPage();
+		}
+	}, [inView, isFetching, hasNextPage, fetchNextPage]);
 
 	return (
-		<div tw="self-start w-full grid grid-cols-3 gap-10 pr-8">
-			{magazines.length > 0 ? (
-				<>
-					{magazines.map((item: MagazineProps) => (
-						<div
-							tw="w-[220px] h-[290px] flex flex-col items-center justify-between mb-3"
-							key={item.id}>
-							{/* writer정보 */}
-							<div tw=" w-full h-[30px] flex justify-between">
-								<div tw="flex">
-									<Image
-										src={
-											item.writer.imageUrl ||
-											"/images/defaultUser.svg"
-										}
-										alt="profile"
-										width={30}
-										height={30}
-									/>
-									<div tw="flex flex-col justify-center pl-2">
-										<span tw="text-sm">
-											{item.writer.name}
-										</span>
-										<span tw="text-xs">
-											{item.writer.region.name_en}
-										</span>
-									</div>
-								</div>
-								<div tw="place-self-end flex items-center gap-1 text-sm">
-									<PhotoSvg tw="w-[12px] h-[12px]" />
-									{item.photoLikeCount}
-									<WritingSvg tw="w-[12px] h-[12px]" />
-									{item.writingLikeCount}
-								</div>
-							</div>
-							<Link href={`/post/${item.id}`}>
-								<div tw="relative w-[220px] h-[218px] rounded-2xl my-1 overflow-hidden">
-									<Image
-										priority={true}
-										src={
-											item.imageUrl || "/images/post.svg"
-										}
-										alt="postImage"
-										fill
-										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-									/>
-								</div>
-								<div className="text-overflow" tw="w-[220px]">
-									{item.title}
-								</div>
-								<div tw="w-full text-xs text-[#A3A3A3]">
-									{dayjs(item.createdAt).format(
-										"MMM DD, YYYY",
-									)}
-								</div>
-							</Link>
-						</div>
-					))}
-				</>
-			) : (
-				<p>There&#8216;s no result...</p>
-			)}
-		</div>
+		<>
+			<div tw="self-start w-full grid grid-cols-3 gap-10 pr-8">
+				{data?.pages.map((group, i) => (
+					<Fragment key={i}>
+						{group.data.map((item: MagazineProps) => (
+							<Magazine key={item.id} item={item} />
+						))}
+					</Fragment>
+				))}
+				<div ref={ref} style={{ height: 50 }} />
+			</div>
+		</>
 	);
 };
 
 export default Magazines;
+
+// export async function getServerSideProps() {
+// 	const queryClient = new QueryClient();
+// 	await queryClient.prefetchQuery({
+// 		queryKey: ["magazineList", "magazines"],
+// 		queryFn: getMagazineList,
+// 	});
+
+// 	return {
+// 		props: {
+// 			dehydratedState: dehydrate(queryClient),
+// 		},
+// 	};
+// }
