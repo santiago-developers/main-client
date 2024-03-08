@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
-import HotSvg from "@public/images/magazines/hot.svg";
-import RecentSvg from "@public/images/magazines/recent.svg";
-import BPicturesSvg from "@public/images/magazines/bPictures.svg";
-import BWritingsSvg from "@public/images/magazines/bWritings.svg";
 import LineSvg from "@public/images/line.svg";
 import BestList from "@components/magazineList/BestList";
 import CountryModal from "@utils/CountryModal";
-
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
 import { Paper } from "@mui/material";
 import Magazines from "@components/magazineList/Magazines";
+import { SvgIcon } from "./SvgIcon";
 
 export default function MagazineListPage() {
 	const style = {
@@ -79,42 +75,7 @@ export default function MagazineListPage() {
 						className={
 							selectedType === item ? "svgActive" : "svgBasic"
 						}>
-						{item === "Hot" && (
-							<HotSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
-						{item === "Recent" && (
-							<RecentSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
-						{item === "Best Pictures" && (
-							<BPicturesSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
-						{item === "Best Writing" && (
-							<BWritingsSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
+						<SvgIcon type={item} isActive={selectedType === item} />
 						{item}
 					</span>
 				))}
