@@ -6,6 +6,8 @@ import Magazine from "./Magazine";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getMagazineList } from "lib/react_query/getMagazineList";
 import { useInView } from "react-intersection-observer";
+import RegionResult from "./RegionResult";
+import SearchResult from "./SearchResult";
 
 type MagazinesProps = {
 	selectedType: string;
@@ -17,29 +19,25 @@ type MagazinesProps = {
 	setSearchTerm(searchTerm: string): void;
 	setContinent(continent: string): void;
 };
+// selectedType,
+// 	regionIdFromMain,
+// 	searchTerm,
+// 	setSearchTerm,
+// 	user_id,
+// 	continent,
+// 	setContinent,
+// type Props={
+// 	data:, fetchNextPage, hasNextPage, isFetching
+// }
+const Magazines = ({ data, fetchNextPage, hasNextPage, isFetching }) => {
+	// const submit = ["region", "searchTerm", "continent", "userId"];
+	const [result, setResult] = useState();
+	const submit = "region";
+	// if (submit === "region") {
+	// 	const data = RegionResult();
+	// 	setResult(data);
+	// } else if (submit === "searchTerm") SearchResult(searchTerm);
 
-const Magazines = ({
-	selectedType,
-	regionIdFromMain,
-	searchTerm,
-	setSearchTerm,
-	user_id,
-	continent,
-	setContinent,
-}: MagazinesProps) => {
-	const { regionId, setRegionId } = writeStore();
-	const [magazines, setMagazines] = useState<MagazineProps[]>([]);
-
-	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-		queryKey: ["magazineList", "magazines"],
-		queryFn: getMagazineList,
-		initialPageParam: 0,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage.data.length === 0 ? undefined : pages.length;
-		},
-		staleTime: 60 * 1000,
-		gcTime: 300 * 1000,
-	});
 	const { ref, inView } = useInView({
 		threshold: 0.9,
 		delay: 0,
@@ -68,17 +66,3 @@ const Magazines = ({
 };
 
 export default Magazines;
-
-// export async function getServerSideProps() {
-// 	const queryClient = new QueryClient();
-// 	await queryClient.prefetchQuery({
-// 		queryKey: ["magazineList", "magazines"],
-// 		queryFn: getMagazineList,
-// 	});
-
-// 	return {
-// 		props: {
-// 			dehydratedState: dehydrate(queryClient),
-// 		},
-// 	};
-// }

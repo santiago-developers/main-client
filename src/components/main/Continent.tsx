@@ -5,6 +5,7 @@ import { countinents, mainCountries } from "@statics/continents";
 import { useRouter } from "next/router";
 import { MainCountriesProps } from "types/regions";
 import Image from "next/image";
+import magazineStore from "store/\bmagazineStore";
 
 const Continent = () => {
 	const Item = styled(Paper)(({ theme }) => ({
@@ -22,8 +23,10 @@ const Continent = () => {
 	}));
 
 	const router = useRouter();
+	const { setSubmitType } = magazineStore();
 
 	const handleContinent = (item: string) => {
+		setSubmitType("continent");
 		let continent = item.toLowerCase().replace(/ /g, "_");
 		router.push({
 			pathname: "/magazineList",
@@ -35,6 +38,7 @@ const Continent = () => {
 	};
 
 	const handleMainCountries = (item: MainCountriesProps) => {
+		setSubmitType("region");
 		router.push({
 			pathname: "/magazineList",
 			query: {

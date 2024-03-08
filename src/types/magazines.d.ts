@@ -1,4 +1,4 @@
-export type MagazineProps = {
+export interface IMagazine {
 	id?: string;
 	magazineId?: string;
 	title: string;
@@ -16,7 +16,7 @@ export type MagazineProps = {
 			url: string;
 		},
 	];
-};
+}
 
 export type WriterProps = {
 	userId?: string | undefined;

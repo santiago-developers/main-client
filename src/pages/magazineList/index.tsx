@@ -6,8 +6,9 @@ import BestList from "@components/magazineList/BestList";
 import CountryModal from "@utils/CountryModal";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
 import { Paper } from "@mui/material";
-import Magazines from "@components/magazineList/Magazines";
 import SvgIcon from "./SvgIcon";
+import magazineStore from "store/\bmagazineStore";
+import MagazineProvider from "@components/magazineList/MagazineProvider";
 
 export default function MagazineListPage() {
 	const style = {
@@ -21,27 +22,27 @@ export default function MagazineListPage() {
 	};
 
 	const router = useRouter();
+	const { setSorting, setSearchTerm, setSubmitType } = magazineStore();
 	const [title, setTitle] = useState("");
-	const [continent, setContinent] = useState("");
-	const regionIdFromMain = router.query.region_id;
-	const continentFromMain = router.query.continent;
-	const titleFromMain = router.query.title;
+	const titleFromMain = router.query.title as string | "";
 
 	useState(() => {
 		setTitle(titleFromMain);
-		setContinent(continentFromMain);
 	}, []);
 
-	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
 		setTitle(searchTerm);
+		setSubmitType("searchTerm");
 	};
+
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writing"];
 	const [selectedType, setSelectedType] = useState<string>("Hot");
 	const handleSearchType = (type: string) => {
 		setSelectedType(type);
+		setSorting(type);
 	};
+
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
 		setIsOpen(!isOpen);
@@ -81,14 +82,7 @@ export default function MagazineListPage() {
 				))}
 			</div>
 			<div tw="w-[1021px] flex justify-center gap-10">
-				<Magazines
-					selectedType={selectedType}
-					regionIdFromMain={regionIdFromMain}
-					searchTerm={searchTerm}
-					continent={continent}
-					setContinent={setContinent}
-					setSearchTerm={setSearchTerm}
-				/>
+				<MagazineProvider />
 				<LineSvg />
 				{/* best들 */}
 				<div tw="flex flex-col gap-16">

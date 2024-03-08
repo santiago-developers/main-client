@@ -9,11 +9,13 @@ import { RegionProps, Regions } from "types/regions";
 import Continent from "@components/main/Continent";
 import regionStore from "store/regionStore";
 import Searchbar from "@components/main/searchBar";
+import magazineStore from "store/\bmagazineStore";
 
 export default function MainPage({
 	regions,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
+
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {

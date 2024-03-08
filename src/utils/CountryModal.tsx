@@ -4,10 +4,11 @@ import tw from "twin.macro";
 import writeStore from "store/writeStore";
 import regionsStore from "store/regionStore";
 import Image from "next/image";
+import magazineStore from "store/\bmagazineStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;
-	setTitle?(value: string | undefined): void;
+	setTitle?(value: string): void;
 	setSelectedRegion?(value: string): void;
 };
 
@@ -18,6 +19,7 @@ const CountryModal = ({
 }: ContryModalProps) => {
 	const { regionList } = regionsStore();
 	const { setRegionId } = writeStore();
+	const { setSubmitType } = magazineStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);
 
 	const regionClick = (item: string) => {
@@ -35,7 +37,9 @@ const CountryModal = ({
 			setRegionNames(regionNames);
 		}
 	};
+
 	const handleRegionClick = (selectedName: string) => {
+		setSubmitType("region");
 		if (setSelectedRegion) {
 			setSelectedRegion(selectedName);
 		}

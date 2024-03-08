@@ -1,14 +1,14 @@
 import React from "react";
 import tw from "twin.macro";
 import Image from "next/image";
-import { MagazineProps } from "types/magazines";
+import { IMagazine } from "types/magazines";
 import PhotoSvg from "@public/images/photo.svg";
 import WritingSvg from "@public/images/writing.svg";
 import dayjs from "dayjs";
 import Link from "next/link";
 
 type Props = {
-	item: MagazineProps;
+	item: IMagazine;
 };
 
 const Magazine = ({ item }: Props) => {
