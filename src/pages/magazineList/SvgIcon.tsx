@@ -7,7 +7,8 @@ type Props = {
 	type: string;
 	isActive: boolean;
 };
-export const SvgIcon = ({ type, isActive }: Props) => {
+
+const SvgIcon = ({ type, isActive }: Props) => {
 	const iconProps = {
 		className: isActive ? "svgActive" : "svgBasic",
 	};
@@ -25,3 +26,5 @@ export const SvgIcon = ({ type, isActive }: Props) => {
 			return null;
 	}
 };
+
+export default SvgIcon;

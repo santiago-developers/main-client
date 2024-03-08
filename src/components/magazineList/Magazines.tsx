@@ -3,13 +3,7 @@ import tw from "twin.macro";
 import { MagazineProps } from "types/magazines";
 import writeStore from "store/writeStore";
 import Magazine from "./Magazine";
-import {
-	InfiniteData,
-	QueryClient,
-	dehydrate,
-	useInfiniteQuery,
-	useQuery,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getMagazineList } from "lib/react_query/getMagazineList";
 import { useInView } from "react-intersection-observer";
 
@@ -39,12 +33,11 @@ const Magazines = ({
 	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
 		queryKey: ["magazineList", "magazines"],
 		queryFn: getMagazineList,
-		initialPageParam: 0, // [[1,2,3,4,5],[6,7,8,9,10]] 2차원배열로 들어옴
-		//  백엔드에 마지막 글인경우, nextCursor가 -1로 나오도록 하기
+		initialPageParam: 0,
 		getNextPageParam: (lastPage, pages) => {
 			return lastPage.data.length === 0 ? undefined : pages.length;
 		},
-		staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
+		staleTime: 60 * 1000,
 		gcTime: 300 * 1000,
 	});
 	const { ref, inView } = useInView({
@@ -53,7 +46,6 @@ const Magazines = ({
 	});
 
 	useEffect(() => {
-		// 화면에 밑에 ref부분이 보이면
 		if (inView) {
 			!isFetching && hasNextPage && fetchNextPage();
 		}
