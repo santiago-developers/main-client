@@ -7,7 +7,7 @@ import CountryModal from "@utils/CountryModal";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
 import { Paper } from "@mui/material";
 import SvgIcon from "../../components/magazineList/SvgIcon";
-import magazineStore from "store/\bmagazineStore";
+import magazineStore from "store/magazineStore";
 import MagazineProvider from "@components/magazineList/MagazineProvider";
 
 export default function MagazineListPage() {

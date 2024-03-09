@@ -4,7 +4,7 @@ import tw from "twin.macro";
 import writeStore from "store/writeStore";
 import regionsStore from "store/regionStore";
 import Image from "next/image";
-import magazineStore from "store/\bmagazineStore";
+import magazineStore from "store/magazineStore";
 
 type ContryModalProps = {
 	setIsOpen(value: boolean): void;

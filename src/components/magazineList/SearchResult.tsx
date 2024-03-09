@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getSearchResult } from "lib/react_query/getSearchResult";
-import magazineStore from "store/\bmagazineStore";
+import magazineStore from "store/magazineStore";
 
 const SearchResult = () => {
 	const { searchTerm, sorting } = magazineStore();

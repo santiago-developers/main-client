@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getRegionResult } from "lib/react_query/getRegionResult";
 import { useRouter } from "next/router";
-import magazineStore from "store/\bmagazineStore";
+import magazineStore from "store/magazineStore";
 import writeStore from "store/writeStore";
 
 const RegionResult = () => {

@@ -5,9 +5,11 @@ interface MagazineStoreProps {
 	sorting: string;
 	searchTerm: string;
 	submitType: string;
+	userSearchTerm: string;
 	setSorting: (newSorting: string) => void;
 	setSearchTerm: (newSearchTerm: string) => void;
 	setSubmitType: (newSubmitType: string) => void;
+	setUserSearchTerm: (newUserSearchTerm: string) => void;
 }
 
 const magazineStore = create(
@@ -21,6 +23,8 @@ const magazineStore = create(
 				set({ submitType: newSubmitType }),
 			setSearchTerm: (newSearchTerm) =>
 				set({ searchTerm: newSearchTerm }),
+			setUserSearchTerm: (newUserSearchTerm) =>
+				set({ userSearchTerm: newUserSearchTerm }),
 		}),
 		{ name: "magazine" },
 	),

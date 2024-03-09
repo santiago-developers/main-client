@@ -5,7 +5,7 @@ import { countinents, mainCountries } from "@statics/continents";
 import { useRouter } from "next/router";
 import { MainCountriesProps } from "types/regions";
 import Image from "next/image";
-import magazineStore from "store/\bmagazineStore";
+import magazineStore from "store/magazineStore";
 
 const Continent = () => {
 	const Item = styled(Paper)(({ theme }) => ({

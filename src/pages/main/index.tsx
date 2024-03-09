@@ -9,13 +9,12 @@ import { RegionProps, Regions } from "types/regions";
 import Continent from "@components/main/Continent";
 import regionStore from "store/regionStore";
 import Searchbar from "@components/main/searchBar";
-import magazineStore from "store/\bmagazineStore";
+import magazineStore from "store/magazineStore";
 
 export default function MainPage({
 	regions,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
-
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
@@ -27,7 +26,7 @@ export default function MainPage({
 				pathname: "/magazineList",
 				query: {
 					region_id: searchedRegion.regionId,
-					title: searchedRegion.name_en
+					title: searchedRegion.name_en,
 				},
 			});
 		} else {
