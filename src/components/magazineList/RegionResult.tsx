@@ -5,9 +5,9 @@ import magazineStore from "store/magazineStore";
 import writeStore from "store/writeStore";
 
 const RegionResult = () => {
-	const { regionId } = writeStore();
-	const { sorting } = magazineStore();
 	const router = useRouter();
+	const { regionId } = writeStore();
+	const { sorting } = magazineStore() || { sorting: "hot" };
 	const regionIdFromMain = router.query.region_id as string;
 	let regionIdParam = "";
 	if (regionId) {

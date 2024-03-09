@@ -8,7 +8,7 @@ const UserIdResult = () => {
 	const router = useRouter();
 	const { userSearchTerm } = magazineStore();
 	const userIdFrom = router.query.user_id as string;
-	const { id } = myInfoStore();
+	const { id } = myInfoStore() || { id: "" };
 	const user_id = userIdFrom === id || !userIdFrom ? id : userIdFrom;
 
 	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
