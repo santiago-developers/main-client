@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import LineSvg from "@public/images/line.svg";
@@ -6,7 +6,7 @@ import BestList from "@components/magazineList/BestList";
 import CountryModal from "@utils/CountryModal";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
 import { Paper } from "@mui/material";
-import SvgIcon from "./SvgIcon";
+import SvgIcon from "../../components/magazineList/SvgIcon";
 import magazineStore from "store/\bmagazineStore";
 import MagazineProvider from "@components/magazineList/MagazineProvider";
 
@@ -22,7 +22,8 @@ export default function MagazineListPage() {
 	};
 
 	const router = useRouter();
-	const { setSorting, setSearchTerm, setSubmitType } = magazineStore();
+	const { submitType, setSorting, setSearchTerm, setSubmitType } =
+		magazineStore();
 	const [title, setTitle] = useState("");
 	const titleFromMain = router.query.title as string | "";
 
@@ -38,9 +39,16 @@ export default function MagazineListPage() {
 
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writing"];
 	const [selectedType, setSelectedType] = useState<string>("Hot");
+
+	useEffect(() => {
+		setSelectedType("Hot");
+		setSorting("hot");
+	}, [submitType]);
+
 	const handleSearchType = (type: string) => {
+		const query_type = type.toLowerCase().replace(/ /g, "-");
+		setSorting(query_type);
 		setSelectedType(type);
-		setSorting(type);
 	};
 
 	const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -84,7 +92,6 @@ export default function MagazineListPage() {
 			<div tw="w-[1021px] flex justify-center gap-10">
 				<MagazineProvider />
 				<LineSvg />
-				{/* best들 */}
 				<div tw="flex flex-col gap-16">
 					<BestList />
 				</div>

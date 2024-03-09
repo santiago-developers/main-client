@@ -3,9 +3,9 @@ import { getSearchResult } from "lib/react_query/getSearchResult";
 import magazineStore from "store/\bmagazineStore";
 
 const SearchResult = () => {
-	const { searchTerm } = magazineStore();
+	const { searchTerm, sorting } = magazineStore();
 	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-		queryKey: ["magazineList", "search", searchTerm],
+		queryKey: ["magazineList", "search", searchTerm, sorting],
 		queryFn: getSearchResult,
 		initialPageParam: 0,
 		getNextPageParam: (lastPage, pages) => {
