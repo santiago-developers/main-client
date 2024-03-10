@@ -1,28 +1,27 @@
-import Tag from "@components/write/Tag";
 import {
 	SantiagoImagePost,
 	SantiagoPostWithAutorization,
 	SantiagoPutWithAutorization,
 } from "lib/fetchData";
-import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
 
 type Props = {
 	setOpenModal(item: boolean): void;
 	setRegionId(item: string): void;
+	magazineId?: string;
 	writeInfo: {
 		title: string;
 		content: string;
 		regionId: string;
 		tags: string[];
-		language: string;
+		language?: string;
+		imageUrlIds?: string[];
 		userId: string;
 	};
 	submitType: string; //upload or update
-	magazineId: string | undefined;
-	imageUrl: {id: string ; url: string} | undefined;
+	imageUrl: { id: string; url: string } | undefined;
 };
 
 type ImageProps = {
@@ -34,8 +33,8 @@ const SubmitModal = ({
 	writeInfo,
 	setRegionId,
 	setOpenModal,
-	submitType,
 	magazineId,
+	submitType,
 	imageUrl,
 }: Props) => {
 	const Wrapper = styled.div`
@@ -94,6 +93,7 @@ const SubmitModal = ({
 		}
 	`;
 	const router = useRouter();
+
 	const [imageSrc, setImageSrc]: any = useState(null);
 	const [file, setFile] = useState();
 	const onUpload = (e: any) => {
@@ -147,10 +147,14 @@ const SubmitModal = ({
 					  );
 			shouldReplace = true;
 		}
+		console.log("submit", writeInfo);
+
 		if (shouldReplace) {
 			setRegionId("");
 			alert("Your story is published successfully");
 			router.replace("/profile");
+			// alert("Your story is edited successfully");
+			// router.replace(`/post/${magazineId}`);
 		}
 	};
 
@@ -177,27 +181,36 @@ const SubmitModal = ({
 							onChange={(e) => onUpload(e)}
 						/>
 						<div tw="w-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#fafafa]">
-							{imageSrc && (
-								<img
-									src={imageSrc}
-									alt="preview-img"
-									width={"100%"}
-								/>
+							{router.pathname === "/post/[id]/edit" ? (
+								<>
+									{imageUrl && (
+										<img
+											src={imageSrc || imageUrl}
+											alt="preview-img"
+											width={"100%"}
+										/>
+									)}
+								</>
+							) : (
+								<>
+									{imageSrc && (
+										<img
+											src={imageSrc}
+											alt="preview-img"
+											width={"100%"}
+										/>
+									)}
+								</>
 							)}
-							{imageUrl != null && imageSrc == null ? (
-								<img
-									src={imageUrl.url}
-									alt="preview-img"
-									width={"100%"}
-								/>
-							) : null}
 						</div>
 					</ImgContainer>
 				</div>
 				<div tw="flex gap-6 mt-20">
 					<button onClick={() => setOpenModal(false)}>Cancel</button>
 					<button tw="bg-mint" onClick={handleSubmit}>
-						Publish
+						{router.pathname === "/post/[id]/edit"
+							? "Edit"
+							: "Publish"}
 					</button>
 				</div>
 			</Box>

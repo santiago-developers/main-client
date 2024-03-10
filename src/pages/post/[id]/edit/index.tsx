@@ -11,14 +11,7 @@ import regionStore from "store/regionStore";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import Tag from "@components/write/Tag";
 import writeStore from "store/writeStore";
-import SubmitModal from "@pages/write/SubmitModal";
-
-// type MagazineProps = {
-// 	magazineId: string;
-// 	title: string;
-// 	content: string;
-// 	tags: TagProps[];
-// };
+import SubmitModal from "@components/write/SubmitModal";
 
 type TagProps = {
 	tagId: string;
@@ -41,7 +34,7 @@ const EditPage = () => {
 	const { id } = myInfoStore();
 	const { regionId, setRegionId } = writeStore();
 	const { regionList } = regionStore();
-	const magazineId = router.query.id;
+	const magazineId = router.query.id?.toString();
 
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
@@ -50,11 +43,14 @@ const EditPage = () => {
 
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
-	const [postRegionId, setPostRegionId] = useState<string | undefined>("");
-	const [tags, setTags] = useState<string[]>([]);
-	const [imageUrl, setImageUrl] = useState<{id: string; url: string}>();
+	const [postRegionId, setPostRegionId] = useState<string>("");
+	const [tags, setTags] = useState<string[]>([""]);
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
+	const [prevImageUrl, setprevImageUrl] = useState<{
+		id: string;
+		url: string;
+	}>();
 
 	const fetchData = async () => {
 		const post: MagazineProps = await SantiagoGet(
@@ -63,13 +59,15 @@ const EditPage = () => {
 		setTitle(post.title);
 		setContent(post.content);
 		setPostRegionId(post.regionId);
+		setprevImageUrl(post.imageUrls[0]);
 		const regionName = regionList
 			.map((item) => item)
 			.filter((item) => item.regionId === post.regionId);
 		setSelectedRegion(regionName[0].name_en);
-		const tag = post.tags?.map((item: TagProps) => item.tag);
-		setTags(tag);
-		setImageUrl(post.imageUrls[0]);
+		if (post.tags) {
+			const tag = post.tags?.map((item: TagProps) => item.tag);
+			setTags(tag);
+		}
 	};
 
 	useEffect(() => {
@@ -87,8 +85,10 @@ const EditPage = () => {
 		content,
 		regionId: regionId || postRegionId,
 		tags: tags,
+		imageUrlIds: [""],
 		userId: id,
 	};
+
 	const [openModal, setOpenModal] = useState(false);
 	const handleEditSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		if (!editInfo.title) {
@@ -104,18 +104,6 @@ const EditPage = () => {
 			return;
 		}
 		setOpenModal(true);
-
-		console.log("dto", editInfo);
-
-		// const fetchData = async () =>
-		// 	await SantiagoPutWithAutorization(`magazines/${magazineId}`, dto);
-		// fetchData();
-		// if (!fetchData.data) {
-		// 	alert("Try Again");
-		// 	return;
-		// }
-		// alert("Your story is edited successfully");
-		// router.push("/profile");
 	};
 
 	return (
@@ -162,9 +150,9 @@ const EditPage = () => {
 					writeInfo={editInfo}
 					setRegionId={setRegionId}
 					setOpenModal={setOpenModal}
-					magazineId={magazineId as string}
+					magazineId={magazineId}
 					submitType="update"
-					imageUrl={imageUrl}
+					imageUrl={prevImageUrl}
 				/>
 			)}
 		</div>

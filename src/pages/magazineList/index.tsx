@@ -1,17 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
-import HotSvg from "@public/images/magazines/hot.svg";
-import RecentSvg from "@public/images/magazines/recent.svg";
-import BPicturesSvg from "@public/images/magazines/bPictures.svg";
-import BWritingsSvg from "@public/images/magazines/bWritings.svg";
 import LineSvg from "@public/images/line.svg";
 import BestList from "@components/magazineList/BestList";
 import CountryModal from "@utils/CountryModal";
-import Magazines from "@components/magazineList/Magazines";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
-import writeStore from "store/writeStore";
 import { Paper } from "@mui/material";
+import SvgIcon from "../../components/magazineList/SvgIcon";
+import magazineStore from "store/magazineStore";
+import MagazineProvider from "@components/magazineList/MagazineProvider";
 
 export default function MagazineListPage() {
 	const style = {
@@ -25,27 +22,35 @@ export default function MagazineListPage() {
 	};
 
 	const router = useRouter();
+	const { submitType, setSorting, setSearchTerm, setSubmitType } =
+		magazineStore();
 	const [title, setTitle] = useState("");
-	const [continent, setContinent] = useState("");
-	const regionIdFromMain = router.query.region_id;
-	const continentFromMain = router.query.continent;
-	const titleFromMain = router.query.title;
+	const titleFromMain = router.query.title as string | "";
 
 	useState(() => {
 		setTitle(titleFromMain);
-		setContinent(continentFromMain);
 	}, []);
 
-	const [searchTerm, setSearchTerm] = useState<string>("");
 	const searchSubmit = (searchTerm: string) => {
 		setSearchTerm(searchTerm);
 		setTitle(searchTerm);
+		setSubmitType("searchTerm");
 	};
+
 	const searchType = ["Hot", "Recent", "Best Pictures", "Best Writing"];
 	const [selectedType, setSelectedType] = useState<string>("Hot");
+
+	useEffect(() => {
+		setSelectedType("Hot");
+		setSorting("hot");
+	}, [submitType]);
+
 	const handleSearchType = (type: string) => {
+		const query_type = type.toLowerCase().replace(/ /g, "-");
+		setSorting(query_type);
 		setSelectedType(type);
 	};
+
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
 		setIsOpen(!isOpen);
@@ -79,57 +84,14 @@ export default function MagazineListPage() {
 						className={
 							selectedType === item ? "svgActive" : "svgBasic"
 						}>
-						{item === "Hot" && (
-							<HotSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
-						{item === "Recent" && (
-							<RecentSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
-						{item === "Best Pictures" && (
-							<BPicturesSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
-						{item === "Best Writing" && (
-							<BWritingsSvg
-								className={
-									selectedType === item
-										? "svgActive"
-										: "svgBasic"
-								}
-							/>
-						)}
+						<SvgIcon type={item} isActive={selectedType === item} />
 						{item}
 					</span>
 				))}
 			</div>
 			<div tw="w-[1021px] flex justify-center gap-10">
-				<Magazines
-					selectedType={selectedType}
-					regionIdFromMain={regionIdFromMain}
-					searchTerm={searchTerm}
-					continent={continent}
-					setContinent={setContinent}
-					setSearchTerm={setSearchTerm}
-				/>
+				<MagazineProvider />
 				<LineSvg />
-				{/* best들 */}
 				<div tw="flex flex-col gap-16">
 					<BestList />
 				</div>

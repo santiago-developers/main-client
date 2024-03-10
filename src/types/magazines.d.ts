@@ -1,4 +1,4 @@
-export type MagazineProps = {
+export interface IMagazine {
 	id?: string;
 	magazineId?: string;
 	title: string;
@@ -8,12 +8,18 @@ export type MagazineProps = {
 	writingLikeCount: number;
 	writer: WriterProps;
 	tags?: TagProps[];
+	regionId: string;
 	imageUrl?: string;
-	regionId?:string;
-};
+	imageUrls?: [
+		{
+			id: string;
+			url: string;
+		},
+	];
+}
 
 export type WriterProps = {
-	userId?:string | undefined;
+	userId?: string | undefined;
 	id?: string;
 	imageUrl?: string;
 	name: string;
@@ -34,7 +40,7 @@ export type CommentProps = {
 	content: string;
 	createdAt: string;
 	writer: WriterProps;
-	likeCount:number;
-	didILike:boolean;
-	parentId: string |null
+	likeCount: number;
+	didILike: boolean;
+	parentId: string | null;
 };

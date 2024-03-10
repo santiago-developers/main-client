@@ -2144,6 +2144,30 @@
   dependencies:
     tslib "^2.4.0"
 
+"@tanstack/query-core@5.24.7":
+  version "5.24.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.24.7.tgz#a3eb9f729fc56fc70f7bef308e98f0468da983bc"
+  integrity sha512-24d9o44FktHTgTOu3XdQWXMu24SJodmzGWXfvd9gT57ijarjOsN2cUyg/RqyCzuDTfD59+1QdCfPB4QvRRsCjw==
+
+"@tanstack/query-devtools@5.24.0":
+  version "5.24.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.24.0.tgz#b9b7828d42d5034415b1973ff4a154e880b17d59"
+  integrity sha512-pThim455t69zrZaQKa7IRkEIK8UBTS+gHVAdNfhO72Xh4rWpMc63ovRje5/n6iw63+d6QiJzVadsJVdPoodSeQ==
+
+"@tanstack/react-query-devtools@^5.24.7":
+  version "5.24.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-5.24.7.tgz#9eb1565362e730eb4f11c3235fc681acc74090c4"
+  integrity sha512-aNh9bGtHSNedpcc/WVxporY0ZLqO4fx7PLOFmhtP5PcHbvtuQlG6q8s2By8Juk/BqXJWGz9FhDHrRjepcQjqQQ==
+  dependencies:
+    "@tanstack/query-devtools" "5.24.0"
+
+"@tanstack/react-query@^5.24.7":
+  version "5.24.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.24.7.tgz#55e17b21aa578c19e5ec6e8c76da149c12077eee"
+  integrity sha512-+yO1UuXeh47/mnegBZcgwqRrxcXiOYkUSMdk69FsNKtPzH7PFFRXLdkyWk/cu6eEc0Zc8g9Skgu26oqEYWTxpQ==
+  dependencies:
+    "@tanstack/query-core" "5.24.7"
+
 "@trysound/sax@0.2.0":
   version "0.2.0"
   resolved "https://registry.npmjs.org/@trysound/sax/-/sax-0.2.0.tgz"
@@ -5241,6 +5265,11 @@ react-dom@latest:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-intersection-observer@^9.8.1:
+  version "9.8.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.8.1.tgz#9c3631c0c9acd624a2af1c192318752ea73b5d91"
+  integrity sha512-QzOFdROX8D8MH3wE3OVKH0f3mLjKTtEN1VX/rkNuECCff+aKky0pIjulDhr3Ewqj5el/L+MhBkM3ef0Tbt+qUQ==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
