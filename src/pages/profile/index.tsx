@@ -1,6 +1,5 @@
 import tw from "twin.macro";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
-import Magazines from "@components/magazineList/Magazines";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import RedPlus from "@public/images/redPlus.svg";
@@ -12,6 +11,8 @@ import { useRouter } from "next/router";
 import { SantiagoGet } from "lib/fetchData";
 import { RegionResponse } from "lib/dto/region/region";
 import { LanguageDto } from "lib/dto/user/LanguageDto";
+import MagazineProvider from "@components/magazineList/MagazineProvider";
+import magazineStore from "store/magazineStore";
 
 type UserInfoProps = {
 	id?: string;
@@ -27,9 +28,9 @@ type UserInfoProps = {
 
 const ProfilePage = () => {
 	const router = useRouter();
-	const userIdFrom: string | undefined = router.query.user_id;
+	const userIdFrom = router.query.user_id as string | undefined;
 	const { id } = myInfoStore();
-	const [dataType, setDataType] = useState(id);
+	const { setUserSearchTerm, setSubmitType } = magazineStore();
 	const [userInfo, setUserInfo] = useState<UserInfoProps>([]);
 
 	const getData = async (dataType: string) => {
@@ -38,14 +39,19 @@ const ProfilePage = () => {
 	};
 
 	useEffect(() => {
-		if (userIdFrom) {
-			if (userIdFrom === id) {
-				setDataType(id);
-			} else {
-				setDataType(userIdFrom);
-			}
+		if (userIdFrom === id || !userIdFrom) {
+			getData(id);
+		} else {
+			getData(userIdFrom);
 		}
-		getData(dataType);
+		if (!id) {
+			history.back();
+		}
+	}, [userIdFrom]);
+
+	useEffect(() => {
+		setSubmitType("user_id");
+		setUserSearchTerm("");
 	}, []);
 
 	const {
@@ -59,9 +65,10 @@ const ProfilePage = () => {
 		region,
 	} = userInfo;
 
-	const [searchTerm, setSearchTerm] = useState<string>("");
+	const [title, setTitle] = useState("");
 	const searchSubmit = (searchTerm: string) => {
-		setSearchTerm(searchTerm);
+		setUserSearchTerm(searchTerm);
+		setTitle(searchTerm);
 	};
 
 	const [open, setIsOpen] = useState(false);
@@ -87,14 +94,20 @@ const ProfilePage = () => {
 							<span tw="text-[18px]">{region?.name_en}</span>
 						</div>
 						<button tw="text-mint">
-							{userIdFrom === id ? "edit " : "Follow"}
+							{userIdFrom === id || !userIdFrom
+								? "edit "
+								: "Follow"}
 						</button>
 					</div>
 				</div>
 				<div tw="relative flex flex-col px-4 mt-5 gap-2 text-[18px]">
 					{open && (
 						<FollowModal
-							userId={id}
+							userId={
+								userIdFrom === id || !userIdFrom
+									? id
+									: userIdFrom
+							}
 							followType={followType}
 							setIsOpen={setIsOpen}
 						/>
@@ -121,7 +134,7 @@ const ProfilePage = () => {
 							{followingCount}
 						</span>
 					</div>
-					{userIdFrom === id ? (
+					{userIdFrom === id || !userIdFrom ? (
 						<>
 							<div>Language Packs</div>
 							<div tw="flex items-center gap-2.5">
@@ -151,16 +164,14 @@ const ProfilePage = () => {
 						<span>{writingScore} points</span>
 					</div>
 				</div>
-				<ProfileBList id={userIdFrom === id ? id : userIdFrom} />
-			</div>
-			<div tw="flex flex-col gap-36 items-center">
-				<MagazineSearchBar onSubmit={searchSubmit} />
-				<Magazines
-					selectedType="recent"
-					searchTerm={searchTerm}
-					setSearchTerm={setSearchTerm}
-					user_id={userIdFrom === id ? id : userIdFrom}
+				<ProfileBList
+					id={userIdFrom === id || !userIdFrom ? id : userIdFrom}
 				/>
+			</div>
+			<div tw="flex flex-col gap-20 items-center">
+				<h1 tw="text-4xl font-bold">{title}</h1>
+				<MagazineSearchBar onSubmit={searchSubmit} />
+				<MagazineProvider />
 			</div>
 		</div>
 	);

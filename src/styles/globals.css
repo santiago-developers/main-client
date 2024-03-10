@@ -4,7 +4,7 @@
 
 :root {
 	--primary: #f1f1f1;
-	--secondary: #05C3B6;
+	--secondary: #05c3b6;
 	--tertiary: rgba(31, 209, 253, 0.6);
 }
 
@@ -28,15 +28,16 @@ img {
 	vertical-align: middle;
 	border: 0;
 }
-html {
-	font-size: 16px;
-}
+html,
 body {
-	max-width: 100vw;
+	font-size: 16px;
 	/* overflow-x: hidden; */
 	line-height: 1.5;
 	word-break: keep-all;
 	background-color: #ffffff;
+	min-width: 1280px;
+	max-width: 100dvw;
+	overflow-x: hidden;
 }
 .wrap {
 	position: relative;
@@ -44,11 +45,10 @@ body {
 	margin: 0 auto;
 	position: relative;
 	display: block;
-	min-height: 100vh;
-	min-width: 1280px;
+	width: 100dvw;
+	min-height: 100dvh;
 	/* 1280px 피그마 */
 	/* 1903px */
-	max-width: 1880px;
 	overflow: hidden;
 }
 input:focus {
@@ -88,7 +88,7 @@ button {
 .customScrollbar::-webkit-scrollbar-thumb {
 	background-color: var(--secondary);
 	border-radius: 14px;
-	border:7px solid white;
+	border: 7px solid white;
 }
 
 /* ::-webkit-scrollbar-thumb:hover {

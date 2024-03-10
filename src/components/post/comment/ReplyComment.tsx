@@ -21,6 +21,8 @@ type ReplyCommentProps = {
 	>;
 	isSelected: boolean;
 	commentList: CommentProps[];
+	setCommentList: React.Dispatch<React.SetStateAction<CommentProps[] | undefined>>;
+	setCommentCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const ReplyComment = ({
@@ -30,6 +32,8 @@ const ReplyComment = ({
 	parentId,
 	commentList,
 	setSelectedCommentIdx,
+	setCommentList,
+	setCommentCount,
 	isSelected,
 }: ReplyCommentProps) => {
 	const { id } = myInfoStore();
@@ -48,6 +52,11 @@ const ReplyComment = ({
 		// );
 		// setSelectedCommentIdx(undefined);
 	};
+
+	const addOneForCommentList = (newComment: CommentProps) => {
+		setCommentList([...commentList, newComment]);
+		setCommentCount((commentList?.length as number) + 1);
+	}
 
 	const renderReplyComment = (parentId: string | null) =>
 		commentList.map((comment: CommentProps, index) => (
@@ -160,6 +169,7 @@ const ReplyComment = ({
 						magazineId={magazineId}
 						parentId={parentId}
 						setOpen={setOpen}
+						addOneForCommentList={addOneForCommentList}
 					/>
 				</>
 			)}

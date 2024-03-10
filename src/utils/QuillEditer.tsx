@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState } from "react";
 import tw from "twin.macro";
 import { SantiagoImagePost } from "lib/fetchData";
 import ReactQuill from "react-quill";

@@ -4,6 +4,8 @@ import { experimentalStyled as styled } from "@mui/material/styles";
 import { countinents, mainCountries } from "@statics/continents";
 import { useRouter } from "next/router";
 import { MainCountriesProps } from "types/regions";
+import Image from "next/image";
+import magazineStore from "store/magazineStore";
 
 const Continent = () => {
 	const Item = styled(Paper)(({ theme }) => ({
@@ -15,11 +17,16 @@ const Continent = () => {
 		textShadow: "0px 0px 5px #FFF",
 		fontWeight: 700,
 		color: "black",
+		position: "relative",
+		bgcolor: "transparent",
+		cursor: "pointer",
 	}));
 
 	const router = useRouter();
+	const { setSubmitType } = magazineStore();
 
 	const handleContinent = (item: string) => {
+		setSubmitType("continent");
 		let continent = item.toLowerCase().replace(/ /g, "_");
 		router.push({
 			pathname: "/magazineList",
@@ -31,6 +38,7 @@ const Continent = () => {
 	};
 
 	const handleMainCountries = (item: MainCountriesProps) => {
+		setSubmitType("region");
 		router.push({
 			pathname: "/magazineList",
 			query: {
@@ -49,14 +57,28 @@ const Continent = () => {
 							onClick={(e) => {
 								e.preventDefault();
 								handleContinent(item as string);
-							}}
-							sx={{
-								cursor: "pointer",
-								backgroundImage: `url('/images/continent/${item
-									.toLowerCase()
-									.replace(/ /g, "_")}.svg')`,
 							}}>
-							{item}
+							<Image
+								src={`/images/continent/${item
+									.toLowerCase()
+									.replace(/ /g, "_")}.svg`}
+								alt={item}
+								fill
+								sizes="100vw"
+								style={{
+									objectFit: "cover",
+								}}
+							/>
+							<div
+								style={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -50%)",
+									zIndex: "1",
+								}}>
+								{item}
+							</div>
 						</Item>
 					</Grid>
 				))}
@@ -66,14 +88,28 @@ const Continent = () => {
 							onClick={(e) => {
 								e.preventDefault();
 								handleMainCountries(item);
-							}}
-							sx={{
-								cursor: "pointer",
-								backgroundImage: `url('/images/continent/${item.name
-									.toLowerCase()
-									.replace(/ /g, "_")}.svg')`,
 							}}>
-							{item.name}
+							<Image
+								src={`/images/continent/${item.name
+									.toLowerCase()
+									.replace(/ /g, "_")}.svg`}
+								alt={item.name}
+								fill
+								sizes="100vw"
+								style={{
+									objectFit: "cover",
+								}}
+							/>
+							<div
+								style={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -50%)",
+									zIndex: "1",
+								}}>
+								{item.name}
+							</div>
 						</Item>
 					</Grid>
 				))}

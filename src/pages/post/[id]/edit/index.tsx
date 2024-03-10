@@ -7,15 +7,11 @@ import { SantiagoGet, SantiagoPutWithAutorization } from "lib/fetchData";
 import { useRouter } from "next/router";
 import myInfoStore from "store/myInfoStore";
 import { MagazineProps } from "types/magazines";
-import regionStore from "store/regionStore";;
+import regionStore from "store/regionStore";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
-
-// type MagazineProps = {
-// 	magazineId: string;
-// 	title: string;
-// 	content: string;
-// 	tags: TagProps[];
-// };
+import Tag from "@components/write/Tag";
+import writeStore from "store/writeStore";
+import SubmitModal from "@components/write/SubmitModal";
 
 type TagProps = {
 	tagId: string;
@@ -23,10 +19,22 @@ type TagProps = {
 };
 
 const EditPage = () => {
+	const style = {
+		position: "absolute",
+		top: 250,
+		right: 240,
+		width: 650,
+		margin: "0 auto",
+		zIndex: 1,
+		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
+		backgroundColor: "white",
+	};
+
 	const router = useRouter();
 	const { id } = myInfoStore();
+	const { regionId, setRegionId } = writeStore();
 	const { regionList } = regionStore();
-	const magazineId = router.query.id;
+	const magazineId = router.query.id?.toString();
 
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const openCountry = () => {
@@ -36,11 +44,13 @@ const EditPage = () => {
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	const [postRegionId, setPostRegionId] = useState<string>("");
-	const [tags, setTags] = useState<string[]>([]);
-	const [editedtags, setEditedTags] = useState<string[]>([]);
-	const [tagInput, setTagInput] = useState<string>("");
+	const [tags, setTags] = useState<string[]>([""]);
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
+	const [prevImageUrl, setprevImageUrl] = useState<{
+		id: string;
+		url: string;
+	}>();
 
 	const fetchData = async () => {
 		const post: MagazineProps = await SantiagoGet(
@@ -49,13 +59,15 @@ const EditPage = () => {
 		setTitle(post.title);
 		setContent(post.content);
 		setPostRegionId(post.regionId);
-
+		setprevImageUrl(post.imageUrls[0]);
 		const regionName = regionList
 			.map((item) => item)
 			.filter((item) => item.regionId === post.regionId);
 		setSelectedRegion(regionName[0].name_en);
-		const tag = post.tags?.map((item: TagProps) => "#" + item.tag);
-		setTags(tag);
+		if (post.tags) {
+			const tag = post.tags?.map((item: TagProps) => item.tag);
+			setTags(tag);
+		}
 	};
 
 	useEffect(() => {
@@ -68,43 +80,30 @@ const EditPage = () => {
 		fetchData();
 	}, []);
 
-	const handleTagRemove = (removedTag: string) => {
-		const updatedTags = tags.filter((tag: string) => tag !== removedTag);
-		setTags(updatedTags);
+	const editInfo = {
+		title,
+		content,
+		regionId: regionId || postRegionId,
+		tags: tags,
+		imageUrlIds: [""],
+		userId: id,
 	};
 
-	const handleTagAdd = () => {
-		if (tagInput.trim() !== "") {
-			setEditedTags([...editedtags, tagInput.trim()]);
-			setTagInput("");
-		}
-	};
-	const handleEditedTagRemove = (removedTag: string) => {
-		const updatedTags = editedtags.filter(
-			(tag: string) => tag !== removedTag,
-		);
-		setEditedTags(updatedTags);
-	};
-
-	const editSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-		const totalTags = [...tags, ...editedtags];
-		const dto = {
-			title,
-			content,
-			regionId: postRegionId,
-			tags: totalTags,
-		};
-		console.log("dto", dto);
-
-		const fetchData = async () =>await SantiagoPutWithAutorization(`magazines/${magazineId}`, dto);
-		fetchData();
-		if (!fetchData.data) {
-			alert("Try Again");
+	const [openModal, setOpenModal] = useState(false);
+	const handleEditSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+		if (!editInfo.title) {
+			alert("Title is missing");
 			return;
 		}
-		alert("Your story is edited successfully");
-		// router.push("/profile");
+		if (editInfo.content == "<p><br></p>") {
+			alert("Content is missing");
+			return;
+		}
+		if (!editInfo.regionId) {
+			alert("Please select a region");
+			return;
+		}
+		setOpenModal(true);
 	};
 
 	return (
@@ -121,53 +120,7 @@ const EditPage = () => {
 				<Divider />
 				<div tw="text-sm flex justify-between my-4">
 					<div tw="flex items-center">
-						<div>
-							{tags &&
-								tags.map((tag, index) => (
-									<span
-										tw="max-w-max bg-[#F5F5F5] text-[#A3A3A3] rounded-xl px-3 py-1 mr-2"
-										key={index}>
-										{tag}
-										<button
-											onClick={() =>
-												handleTagRemove(tag)
-											}>
-											X
-										</button>
-									</span>
-								))}
-						</div>
-						{editedtags &&
-							editedtags.map((tag, index) => (
-								<span
-									tw="max-w-max bg-[#F5F5F5] text-[#A3A3A3] rounded-xl px-3 py-1 mr-2"
-									key={index}>
-									#{tag}
-									<button
-										onClick={() =>
-											handleEditedTagRemove(tag)
-										}>
-										X
-									</button>
-								</span>
-							))}
-						<div tw="flex">
-							#
-							<input
-								tw="w-full"
-								placeholder="Please enter your tag"
-								value={tagInput}
-								onChange={(e) => setTagInput(e.target.value)}
-							/>
-							<button
-								tw="w-20 border rounded-xl border-mint"
-								onClick={(e) => {
-									e.preventDefault();
-									handleTagAdd();
-								}}>
-								add tag
-							</button>
-						</div>
+						<Tag tags={tags} setTags={setTags} />
 					</div>
 					<button
 						onClick={(e) => {
@@ -177,21 +130,31 @@ const EditPage = () => {
 						{selectedRegion}
 					</button>
 					{isOpen && (
-						<CountryModal
-							setIsOpen={setIsOpen}
-							setSelectedRegion={setSelectedRegion}
-							setPostRegionId={setPostRegionId}
-						/>
+						<div style={style}>
+							<CountryModal
+								setIsOpen={setIsOpen}
+								setSelectedRegion={setSelectedRegion}
+							/>
+						</div>
 					)}
 				</div>
 				<div tw="min-h-[100vh] max-h-max">
-					<QuillEditer
-						value={content}
-						setContent={setContent}
-					/>
+					<QuillEditer value={content} setContent={setContent} />
 				</div>
 			</div>
-			<MintButtonFilledForHeader onClick={editSubmit}>Edit</MintButtonFilledForHeader>
+			<MintButtonFilledForHeader onClick={handleEditSubmit}>
+				Edit
+			</MintButtonFilledForHeader>
+			{openModal && (
+				<SubmitModal
+					writeInfo={editInfo}
+					setRegionId={setRegionId}
+					setOpenModal={setOpenModal}
+					magazineId={magazineId}
+					submitType="update"
+					imageUrl={prevImageUrl}
+				/>
+			)}
 		</div>
 	);
 };

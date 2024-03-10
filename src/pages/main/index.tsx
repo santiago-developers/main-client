@@ -9,6 +9,7 @@ import { RegionProps, Regions } from "types/regions";
 import Continent from "@components/main/Continent";
 import regionStore from "store/regionStore";
 import Searchbar from "@components/main/searchBar";
+import magazineStore from "store/magazineStore";
 
 export default function MainPage({
 	regions,
@@ -25,7 +26,7 @@ export default function MainPage({
 				pathname: "/magazineList",
 				query: {
 					region_id: searchedRegion.regionId,
-					title: searchedRegion.name_en
+					title: searchedRegion.name_en,
 				},
 			});
 		} else {

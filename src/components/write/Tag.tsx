@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import tw from "twin.macro";
 
-type TagComponentProps ={
+type TagComponentProps = {
 	tags: string[];
-	setTags(tags:string[]):void;
-}
+	setTags(tags: string[]): void;
+};
 
-const Tag = ({ tags, setTags}:TagComponentProps) => {
+const Tag = ({ tags, setTags }: TagComponentProps) => {
 	const [tagInput, setTagInput] = useState<string>("");
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter" && tagInput.trim() !== "") {
-			setTags([...tags, tagInput.trim()]);
+		const target = e.target as HTMLInputElement;
+		if (target.value === "") {
+			return;
+		}
+		if (e.key === "Enter" && e.nativeEvent.isComposing === false) {
+			setTags([...tags, target.value]);
 			setTagInput("");
 		}
 	};
@@ -18,9 +22,7 @@ const Tag = ({ tags, setTags}:TagComponentProps) => {
 		const updatedTags = tags.filter((tag: string) => tag !== removedTag);
 		setTags(updatedTags);
 	};
-	useEffect(()=>{
-
-	},[tags])
+	useEffect(() => {}, [tags]);
 
 	return (
 		<div>

@@ -13,15 +13,16 @@ import Dompurify from "dompurify";
 import CommentWrap from "@components/post/comment/CommentWrap";
 import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/router";
+import HeadMeta from "@components/meta/HeadMeta";
 
 export default function PostPage({
 	post,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-	const router =useRouter();
+	const router = useRouter();
 	if (!post) {
 		return <p>Loading...</p>;
 	}
-
+	const currentUrl = typeof window !== 'undefined' ? window.location.origin + router.asPath : '';
 	const {
 		magazineId,
 		title,
@@ -34,7 +35,6 @@ export default function PostPage({
 	}: MagazineProps = post;
 	const { id } = myInfoStore();
 	console.log(writer);
-	
 
 	const handleLike = (type: string) => {
 		const fetchData = async () =>
@@ -44,68 +44,73 @@ export default function PostPage({
 		fetchData();
 	};
 
-	const handleGotoUserProfile = (userId:string) => {
+	const handleGotoUserProfile = (userId: string) => {
 		if (userId) {
-			router.push({
-				pathname: "/profile",
-				query: {
-					user_id: userId,
-				}
-			},
-			"/profile"
+			router.push(
+				{
+					pathname: "/profile",
+					query: {
+						user_id: userId,
+					},
+				},
+				"/profile",
 			);
 		}
 	};
 
 	return (
-		<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
-			<div tw="pt-6 text-2xl font-bold">{title}</div>
-			<div tw="mt-4 text-sm flex justify-between">
-				<div tw="flex justify-center items-center">
-					<span tw="flex justify-center items-center">
-						<Tooltip
-							title="I like this photo"
-							placement="top"
-							arrow>
-							<IconButton
-								onClick={(e) => {
-									e.stopPropagation();
-									handleLike("photo");
-								}}>
-								<PhotoCameraBackOutlinedIcon
-									sx={{ fontSize: "medium" }}
-								/>
-							</IconButton>
-						</Tooltip>
-						{photoLikeCount}
-					</span>
-					<span tw="flex justify-center items-center">
-						<Tooltip
-							title="I like this writing"
-							placement="top"
-							arrow>
-							<IconButton
-								onClick={(e) => {
-									e.stopPropagation();
-									handleLike("writing");
-								}}>
-								<ArticleOutlinedIcon
-									sx={{ fontSize: "medium" }}
-								/>
-							</IconButton>
-						</Tooltip>
-						{writingLikeCount}
-					</span>
-					<span tw="text-[#A3A3A3] pl-4">
-						{dayjs(createdAt).format("MMM DD, YYYY")}
-					</span>
+		<>
+			<HeadMeta title={title} description={content} url={currentUrl} imageUrl={null}/>
+			<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
+				<div tw="pt-6 text-2xl font-bold">{title}</div>
+				<div tw="mt-4 text-sm flex justify-between">
+					<div tw="flex justify-center items-center">
+						<span tw="flex justify-center items-center">
+							<Tooltip
+								title="I like this photo"
+								placement="top"
+								arrow>
+								<IconButton
+									onClick={(e) => {
+										e.stopPropagation();
+										handleLike("photo");
+									}}>
+									<PhotoCameraBackOutlinedIcon
+										sx={{ fontSize: "medium" }}
+									/>
+								</IconButton>
+							</Tooltip>
+							{photoLikeCount}
+						</span>
+						<span tw="flex justify-center items-center">
+							<Tooltip
+								title="I like this writing"
+								placement="top"
+								arrow>
+								<IconButton
+									onClick={(e) => {
+										e.stopPropagation();
+										handleLike("writing");
+									}}>
+									<ArticleOutlinedIcon
+										sx={{ fontSize: "medium" }}
+									/>
+								</IconButton>
+							</Tooltip>
+							{writingLikeCount}
+						</span>
+						<span tw="text-[#A3A3A3] pl-4">
+							{dayjs(createdAt).format("MMM DD, YYYY")}
+						</span>
+					</div>
+					<MoreMenu
+						moreMenuType={writer.userId === id ? true : false}
+						magazineId={magazineId}
+					/>
 				</div>
-				<MoreMenu
-					moreMenuType={writer.userId === id ? true : false}
-					magazineId={magazineId}
-				/>
-			</div>
-				<div tw="flex pl-2 mt-2 cursor-pointer" onClick={()=>handleGotoUserProfile(writer.userId)}>
+				<div
+					tw="flex pl-2 mt-2 cursor-pointer"
+					onClick={() => handleGotoUserProfile(writer.userId)}>
 					<Image
 						src={writer.imageUrl || "../images/defaultUser.svg"}
 						alt="userImage"
@@ -118,23 +123,24 @@ export default function PostPage({
 						<span tw="text-xs">{writer.region.name_en}</span>
 					</div>
 				</div>
-			{process.browser && (
-				<div
-					tw="pt-4 leading-9"
-					dangerouslySetInnerHTML={{
-						__html: Dompurify.sanitize(String(content)),
-					}}
-				/>
-			)}
-			<div tw="flex gap-3 font-bold mb-14">
-				{tags?.map((item: TagProps) => (
-					<div key={item.tagId}> #{item.tag}</div>
-				))}
+				{process.browser && (
+					<div
+						tw="pt-4 leading-9"
+						dangerouslySetInnerHTML={{
+							__html: Dompurify.sanitize(String(content)),
+						}}
+					/>
+				)}
+				<div tw="flex gap-3 font-bold mb-14">
+					{tags?.map((item: TagProps) => (
+						<div key={item.tagId}> #{item.tag}</div>
+					))}
+				</div>
+				<div>
+					<CommentWrap magazineId={magazineId} />
+				</div>
 			</div>
-			<div>
-				<CommentWrap magazineId={magazineId} />
-			</div>
-		</div>
+		</>
 	);
 }
 

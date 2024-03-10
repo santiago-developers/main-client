@@ -23,7 +23,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 			setMyName(name);
 			setMyRegion(region ? region.name_en : "earth");
 		}
-	},[]);
+	},[id]);
 
 	return (
 		<>
