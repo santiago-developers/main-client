@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>http://localhost:3000/main</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/auth/find-password1</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/auth/find-password2</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/auth/sign-in</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/magazineList</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/main</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/plans</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/profile</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/sign-up</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/sign-up/simple</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/sitemap/product-sitemap.xml</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/write</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/main/post/2cb781b8-f545-403f-a8bb-b9062ee112be</loc><lastmod>2024-03-10T05:49:26.010Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/auth/find-password1</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/auth/find-password2</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/auth/sign-in</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/magazineList</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/main</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/plans</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/profile</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/sign-up</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/sign-up/simple</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/sitemap/product-sitemap.xml</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/write</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/main/post/2cb781b8-f545-403f-a8bb-b9062ee112be</loc><lastmod>2024-03-10T06:21:30.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

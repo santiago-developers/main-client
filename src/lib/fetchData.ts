@@ -135,7 +135,7 @@ export async function SantiagoGet<T>(url: string): Promise<T> {
 			//Authorization: `Bearer ${accessToken}`,
 		},
 	});
-
+	
 	if (!res.ok) {
 		throw new Error(`Failed to fetch posts, received status ${res.status}`);
 	}
