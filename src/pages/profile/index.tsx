@@ -13,6 +13,7 @@ import { RegionResponse } from "lib/dto/region/region";
 import { LanguageDto } from "lib/dto/user/LanguageDto";
 import MagazineProvider from "@components/magazineList/MagazineProvider";
 import magazineStore from "store/magazineStore";
+import LoadingModal from "@components/profile/LoadingModal";
 
 type UserInfoProps = {
 	id?: string;
@@ -77,6 +78,8 @@ const ProfilePage = () => {
 		setFollowType(type);
 		setIsOpen(!open);
 	};
+
+	const [loadingModal, setLoadingModal] = useState(false);
 
 	return (
 		<div tw="w-full flex mt-10 mx-20 mb-20 gap-20 justify-center">
@@ -173,6 +176,7 @@ const ProfilePage = () => {
 				<MagazineSearchBar onSubmit={searchSubmit} />
 				<MagazineProvider />
 			</div>
+			{loadingModal && <LoadingModal setLoadingModal={setLoadingModal} />}
 		</div>
 	);
 };
