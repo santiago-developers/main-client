@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Divider } from "@mui/material";
 import tw from "twin.macro";
 import CountryModal from "@utils/CountryModal";
@@ -11,7 +11,7 @@ import { MintButtonFilledForHeader } from "@utils/MintButton";
 import SubmitModal from "../../components/write/SubmitModal";
 
 const WritePage = () => {
-	const style = {
+	const style: React.CSSProperties = {
 		position: "absolute",
 		top: 250,
 		right: 240,
@@ -36,8 +36,11 @@ const WritePage = () => {
 	const [tags, setTags] = useState<string[]>([]);
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
+	let locale;
+	useEffect(()=> {
+		locale = navigator.language;
+	})
 
-	let locale = navigator.language || navigator.userLanguage;
 	const writeInfo = {
 		title,
 		content,

@@ -55,7 +55,7 @@ const ReplyComment = ({
 
 	const addOneForCommentList = (newComment: CommentProps) => {
 		setCommentList([...commentList, newComment]);
-		setCommentCount(commentList?.length as number);
+		setCommentCount((commentList?.length as number) + 1);
 	}
 
 	const renderReplyComment = (parentId: string | null) =>

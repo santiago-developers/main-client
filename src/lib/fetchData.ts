@@ -127,6 +127,9 @@ export async function SantiagoDeletetNoRes(url: string) {
 				`Failed to fetch posts, received status ${response.statusText}`,
 			);
 		}
+
+		const data = response.json();
+		return data;
 	} catch (error) {
 		alert("Try Again");
 		throw error;
@@ -134,10 +137,29 @@ export async function SantiagoDeletetNoRes(url: string) {
 }
 
 export async function SantiagoGet<T>(url: string): Promise<T> {
+	//const accessToken = localStorage.getItem("accessToken");
 	const res = await fetch(`${BaseURL}${url}`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
+			//Authorization: `Bearer ${accessToken}`,
+		},
+	});
+	
+	if (!res.ok) {
+		throw new Error(`Failed to fetch posts, received status ${res.status}`);
+	}
+	const data = await res.json();
+	return data;
+}
+
+export async function SantiagoGetWithAuthorization(url: string): Promise<T> {
+	const accessToken = localStorage.getItem("accessToken");
+	const res = await fetch(`${BaseURL}${url}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
 		},
 	});
 

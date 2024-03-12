@@ -5,7 +5,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CommentInput from "./CommentInput";
 import CommentList from "./CommentList";
-import { SantiagoGet } from "lib/fetchData";
+import { SantiagoGet, SantiagoGetWithAuthorization } from "lib/fetchData";
 import { CommentProps } from "types/magazines";
 
 type CommentWrapProp = {
@@ -23,7 +23,7 @@ const CommentWrap = ({ magazineId }: CommentWrapProp) => {
 	const [commentCount, setCommentCount] = useState(0);
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await SantiagoGet(
+			const result = await SantiagoGetWithAuthorization(
 				`magazines/${magazineId}/replies?base=0&limit=20`,
 			);
 			setCommentList(result.data);
@@ -60,6 +60,7 @@ const CommentWrap = ({ magazineId }: CommentWrapProp) => {
 							magazineId={magazineId}
 							commentList={commentList}
 							setCommentList={setCommentList}
+							setCommentCount={setCommentCount}
 						/>
 					</>
 				)}
