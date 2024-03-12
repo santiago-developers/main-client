@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import { SantiagoGet, SantiagoPostWithAutorization } from "lib/fetchData";
-import { MagazineProps, TagProps } from "types/magazines";
+import { IMagazine, TagProps } from "types/magazines";
 import Image from "next/image";
 import Dompurify from "dompurify";
 import CommentWrap from "@components/post/comment/CommentWrap";
@@ -35,7 +35,7 @@ export default function PostPage({
 		writingLikeCount,
 		writer,
 		tags,
-	}: MagazineProps = post;
+	}: IMagazine = post;
 	const { id } = myInfoStore();
 
 	const handleLike = (type: string) => {
@@ -161,7 +161,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = (async (context) => {
 	const { params } = context;
 	const magazineId = params?.id;
-	const post = await SantiagoGet<MagazineProps>(`magazines/${magazineId}`);
+	const post = await SantiagoGet<IMagazine>(`magazines/${magazineId}`);
 	if (!post) {
 		return { notFound: true };
 	}
@@ -171,5 +171,5 @@ export const getStaticProps = (async (context) => {
 		},
 	};
 }) satisfies GetStaticProps<{
-	post: MagazineProps;
+	post: IMagazine;
 }>;

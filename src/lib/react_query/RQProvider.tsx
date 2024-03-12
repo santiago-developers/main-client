@@ -13,7 +13,7 @@ function RQProvider({ children }: Props) {
 				// react-query 전역 설정
 				queries: {
 					// 탭 전환시
-					refetchOnWindowFocus: false,
+					refetchOnWindowFocus: true,
 					// 컴포넌트가 언마운트됐다가 다시 마운트 되는 순간
 					retryOnMount: true,
 					// 인터넷 연결이 끊겼다가 재접속 되는 순간

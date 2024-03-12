@@ -9,33 +9,20 @@ import Link from "next/link";
 import FollowModal from "@components/profile/FollowModal";
 import { useRouter } from "next/router";
 import { SantiagoGet } from "lib/fetchData";
-import { RegionResponse } from "lib/dto/region/region";
-import { LanguageDto } from "lib/dto/user/LanguageDto";
 import MagazineProvider from "@components/magazineList/MagazineProvider";
 import magazineStore from "store/magazineStore";
 import LoadingModal from "@components/profile/LoadingModal";
-
-type UserInfoProps = {
-	id?: string;
-	name: string;
-	imageUrl: string | null;
-	followerCount: number;
-	followingCount: number;
-	photoScore: number;
-	writingScore: number;
-	region: RegionResponse | null;
-	languagesSubcribed: LanguageDto[];
-};
+import { GetUserResponse } from "lib/dto/user/getUserResponse";
 
 const ProfilePage = () => {
 	const router = useRouter();
 	const userIdFrom = router.query.user_id as string | undefined;
 	const { id } = myInfoStore();
 	const { setUserSearchTerm, setSubmitType } = magazineStore();
-	const [userInfo, setUserInfo] = useState<UserInfoProps>([]);
+	const [userInfo, setUserInfo] = useState<GetUserResponse>([]);
 
-	const getData = async (dataType: string) => {
-		const data = await SantiagoGet(`users/${dataType}`);
+	const getData = async (userId: string) => {
+		const data = await SantiagoGet<GetUserResponse>(`users/${userId}`);		
 		setUserInfo(data);
 	};
 
@@ -80,6 +67,12 @@ const ProfilePage = () => {
 	};
 
 	const [loadingModal, setLoadingModal] = useState(false);
+	useEffect(() => {
+		if(router.query.from == "write"){
+			setLoadingModal(true)
+		}
+
+	}, []);
 
 	return (
 		<div tw="w-full flex mt-10 mx-20 mb-20 gap-20 justify-center">
