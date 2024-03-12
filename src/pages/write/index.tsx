@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Divider } from "@mui/material";
+import React, { ChangeEvent, useEffect } from "react";
 import tw from "twin.macro";
+import { Divider } from "@mui/material";
 import CountryModal from "@utils/CountryModal";
 import { useState } from "react";
 import QuillEditer from "@utils/QuillEditer";
@@ -37,9 +37,9 @@ const WritePage = () => {
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	let locale;
-	useEffect(()=> {
+	useEffect(() => {
 		locale = navigator.language;
-	})
+	});
 
 	const writeInfo = {
 		title,
@@ -75,7 +75,9 @@ const WritePage = () => {
 						placeholder="Please enter your title"
 						tw="text-2xl pb-2 w-full"
 						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							setTitle(e.target.value)
+						}
 					/>
 				</div>
 				<Divider />
