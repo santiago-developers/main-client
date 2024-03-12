@@ -33,8 +33,6 @@ const FollowModal = ({ userId, setIsOpen, followType }: FollowModalProps) => {
 	`;
 
 	const [followList, setFollowList] = useState<UserProps[]>([]);
-	console.log(userId);
-	console.log(followType);
 
 	const fetchData = async (userId: string, followType: string) => {
 		const data = await SantiagoGet(`users/${userId}/${followType}`);

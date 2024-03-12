@@ -33,8 +33,6 @@ export default function PostPage({
 		tags,
 	}: MagazineProps = post;
 	const { id } = myInfoStore();
-	console.log(writer);
-	
 
 	const handleLike = (type: string) => {
 		const fetchData = async () =>

@@ -30,21 +30,9 @@ export default function QuillEditer({ value, setContent }) {
 			const range = quillObj?.getSelection();
 			const fetchData: ImageProps = await SantiagoImagePost(formData);
 			const ImgUrl = fetchData.url;
-			console.log(fetchData.id);
-			console.log("url", ImgUrl);
 			quillObj?.insertEmbed(range.index, "image", ImgUrl);
-			// quillObj.setSelection(range.index + 1);
-
-			// setImageId((prevImgUrlIds) => [
-			// 	...prevImgUrlIds,
-			// 	fetchData.id,
-			// ]);
 		};
 	};
-
-	// useEffect(() => {
-	// 	setImageId(imgUrlIds);
-	// }, []);
 
 	const modules = useMemo(() => {
 		return {
