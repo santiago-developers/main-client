@@ -3,6 +3,7 @@ import { SantiagoGet } from "lib/fetchData";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { RegionProps } from "types/regions";
+import Link from "next/link";
 
 type UserProps = {
 	userId: string;
@@ -40,7 +41,7 @@ const FollowModal = ({ userId, setIsOpen, followType }: FollowModalProps) => {
 	};
 
 	useEffect(() => {
-		fetchData(userId,followType);
+		fetchData(userId, followType);
 	}, []);
 
 	return (
@@ -49,17 +50,24 @@ const FollowModal = ({ userId, setIsOpen, followType }: FollowModalProps) => {
 				<p tw="text-center py-20">no followers</p>
 			) : (
 				followList.map((item: UserProps, index) => (
-					<div tw="flex items-center gap-4 pb-5" key={item.userId}>
-						{index + 1}
-						<Image
-							src={item.imageUrl || "images/defaultUser.svg"}
-							alt="userImage"
-							width={24.5}
-							height={24.5}
-						/>
-						<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full">
-							{item.name}
-						</span>
+					<div key={item.userId} onClick={() => setIsOpen(false)}>
+						<Link href={`/profile/${item.userId}`}>
+							<div tw="flex items-center gap-4 pb-5">
+								{index + 1}
+								<Image
+									src={
+										item.imageUrl ||
+										"/images/defaultUser.svg"
+									}
+									alt="userImage"
+									width={24.5}
+									height={24.5}
+								/>
+								<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full">
+									{item.name}
+								</span>
+							</div>
+						</Link>
 					</div>
 				))
 			)}

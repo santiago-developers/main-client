@@ -14,6 +14,7 @@ import CommentWrap from "@components/post/comment/CommentWrap";
 import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/router";
 import HeadMeta from "@components/meta/HeadMeta";
+import Link from "next/link";
 
 export default function PostPage({
 	post,
@@ -44,20 +45,6 @@ export default function PostPage({
 				`magazines/${magazineId}/likes?type=${type}`,
 			);
 		fetchData();
-	};
-
-	const handleGotoUserProfile = (userId: string) => {
-		if (userId) {
-			router.push(
-				{
-					pathname: "/profile",
-					query: {
-						user_id: userId,
-					},
-				},
-				"/profile",
-			);
-		}
 	};
 
 	return (
@@ -115,21 +102,21 @@ export default function PostPage({
 						magazineId={magazineId}
 					/>
 				</div>
-				<div
-					tw="flex pl-2 mt-2 cursor-pointer"
-					onClick={() => handleGotoUserProfile(writer.userId)}>
-					<Image
-						src={writer.imageUrl || "../images/defaultUser.svg"}
-						alt="userImage"
-						width={30}
-						height={30}
-						tw="self-start"
-					/>
-					<div tw="flex flex-col justify-center pl-4 mb-12">
-						<span tw="text-sm">{writer.name}</span>
-						<span tw="text-xs">{writer.region.name_en}</span>
+				<Link href={`/profile/${writer.userId}`}>
+					<div tw="flex pl-2 mt-2 cursor-pointer">
+						<Image
+							src={writer.imageUrl || "../images/defaultUser.svg"}
+							alt="userImage"
+							width={30}
+							height={30}
+							tw="self-start"
+						/>
+						<div tw="flex flex-col justify-center pl-4 mb-12">
+							<span tw="text-sm">{writer.name}</span>
+							<span tw="text-xs">{writer.region.name_en}</span>
+						</div>
 					</div>
-				</div>
+				</Link>
 				{process.browser && (
 					<div
 						tw="pt-4 leading-9"

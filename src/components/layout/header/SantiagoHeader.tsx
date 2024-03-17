@@ -46,7 +46,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 								</Link>
 							</MintButton>
 								)}
-							<Link href="/profile" tw="cursor-pointer">
+							<Link href={`/profile/${id}`} tw="cursor-pointer">
 								<UserFrame
 									name={myName}
 									imageUrl={myImageUrl}

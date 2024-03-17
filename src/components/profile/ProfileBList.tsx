@@ -5,15 +5,17 @@ import { useState } from "react";
 import Image from "next/image";
 import BWritingsSvg from "@public/images/profileBwritings.svg";
 import BPicturesSvg from "@public/images/profileBPictures.svg";
-import myInfoStore from "store/myInfoStore";
 
+type Props = {
+	id: string;
+};
 type ProfileBListProps = {
 	id: string;
 	title: string;
 	imageUrl: string | null;
 };
 
-const ProfileBList = ({id}) => {
+const ProfileBList = ({ id }: Props) => {
 	const bestList = ["Best Pictures", "Best Writings"];
 	const [bWritings, setBWritings] = useState([]);
 	const [bPictures, setBPictures] = useState([]);
@@ -32,7 +34,7 @@ const ProfileBList = ({id}) => {
 	useEffect(() => {
 		fetchData(id);
 	}, []);
-	
+
 	const fetchDataList = [bWritings, bPictures];
 
 	return (
@@ -45,26 +47,27 @@ const ProfileBList = ({id}) => {
 						<span>{item}</span>
 					</div>
 					<div tw="w-[260px] h-[220px] border-[0.5px] rounded-xl border-[#D4D4D4] py-2 px-6">
-					{fetchDataList[index].map(
-						(item: ProfileBListProps, index) => (
-							<div tw="flex items-center gap-4 pb-5" key={index}>
-								{index + 1}
-								<Image
-									src={
-										item.imageUrl ||
-										"images/post.svg"
-									}
-									alt="userImage"
-									width={24.5}
-									height={24.5}
+						{fetchDataList[index].map(
+							(item: ProfileBListProps, index) => (
+								<div
+									tw="flex items-center gap-4 pb-5"
+									key={index}>
+									{index + 1}
+									<Image
+										src={
+											item.imageUrl || "/images/post.svg"
+										}
+										alt="userImage"
+										width={24.5}
+										height={24.5}
 									/>
-								<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full" >
-								{item.title}
-								</span>
-							</div>
-						),
+									<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full">
+										{item.title}
+									</span>
+								</div>
+							),
 						)}
-						</div>
+					</div>
 				</div>
 			))}
 		</>

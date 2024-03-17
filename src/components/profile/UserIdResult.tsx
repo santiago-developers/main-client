@@ -2,14 +2,13 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getUserIdResult } from "lib/react_query/getUserIdResult";
 import { useRouter } from "next/router";
 import magazineStore from "store/magazineStore";
-import myInfoStore from "store/myInfoStore";
 
 const UserIdResult = () => {
 	const router = useRouter();
 	const { userSearchTerm } = magazineStore();
-	const userIdFrom = router.query.user_id as string;
-	const { id } = myInfoStore() || { id: "" };
-	const user_id = userIdFrom === id || !userIdFrom ? id : userIdFrom;
+
+	const user_id = router.query.user_id as string;
+
 
 	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
 		queryKey: ["profile", user_id, userSearchTerm],
@@ -21,6 +20,7 @@ const UserIdResult = () => {
 		staleTime: 60 * 1000,
 		gcTime: 300 * 1000,
 	});
+
 	return { data, fetchNextPage, hasNextPage, isFetching };
 };
 

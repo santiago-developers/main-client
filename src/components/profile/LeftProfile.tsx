@@ -8,35 +8,16 @@ import Image from "next/image";
 import RedPlus from "@public/images/redPlus.svg";
 import ProfileBList from "@components/profile/ProfileBList";
 import { SantiagoGet } from "lib/fetchData";
-import { RegionResponse } from "lib/dto/region/region";
-
-type UserInfoProps = {
-	id?: string;
-	name: string;
-	imageUrl: string | null;
-	followerCount: number;
-	followingCount: number;
-	photoScore: number;
-	writingScore: number;
-	region: RegionResponse | null;
-	languagesSubcribed: LanguagesSubscribeProps;
-};
-
-type LanguagesSubscribeProps = {
-	id: string;
-	name: string;
-};
+import EditButton from "./EditButton";
+import FollowButton from "./FollowButton";
+import { UserInfoProps } from "types/user";
 
 const LeftProfile = () => {
 	const router = useRouter();
-	const userIdFrom = router.query.user_id as string | undefined;
+	const user_id = router.query.user_id as string;
 	const { id } = myInfoStore();
 	const [userInfo, setUserInfo] = useState<UserInfoProps>([]);
-
-	const getData = async (userId: string) => {
-		const data = await SantiagoGet<UserInfoProps>(`users/${userId}`);
-		setUserInfo(data);
-	};
+	const me = user_id === id || !user_id;
 
 	const [open, setIsOpen] = useState(false);
 	const [followType, setFollowType] = useState("");
@@ -46,15 +27,20 @@ const LeftProfile = () => {
 	};
 
 	useEffect(() => {
-		if (userIdFrom === id || !userIdFrom) {
-			getData(id);
-		} else {
-			getData(userIdFrom);
+		if (router.isReady) {
+			const getData = async (user_id: string) => {
+				const data = await SantiagoGet<UserInfoProps>(
+					`users/${user_id}`,
+				);
+				setUserInfo(data);
+			};
+
+			getData(user_id);
 		}
-		if (!id) {
-			history.back();
-		}
-	}, [userIdFrom]);
+		// if (!user_id) {
+		// 	router.replace("/auth/sign-in");
+		// }
+	}, [user_id]);
 
 	const {
 		name,
@@ -81,17 +67,17 @@ const LeftProfile = () => {
 						<span tw="text-[24px]">{name}</span>
 						<span tw="text-[18px]">{region?.name_en}</span>
 					</div>
-					<button tw="text-mint">
-						{userIdFrom === id || !userIdFrom ? "edit " : "Follow"}
-					</button>
+					{me ? (
+						<EditButton />
+					) : (
+						<FollowButton userInfo={userInfo} userId={user_id} />
+					)}
 				</div>
 			</div>
 			<div tw="relative flex flex-col px-4 mt-5 gap-2 text-[18px]">
 				{open && (
 					<FollowModal
-						userId={
-							userIdFrom === id || !userIdFrom ? id : userIdFrom
-						}
+						userId={me ? id : user_id}
 						followType={followType}
 						setIsOpen={setIsOpen}
 					/>
@@ -118,12 +104,12 @@ const LeftProfile = () => {
 						{followingCount}
 					</span>
 				</div>
-				{userIdFrom === id || !userIdFrom ? (
+				{me && (
 					<>
 						<div>Language Packs</div>
 						<div tw="flex items-center gap-2.5">
 							{languagesSubcribed?.map(
-								(item: LanguagesSubscribeProps) => (
+								(item: UserInfoProps["languagesSubcribed"]) => (
 									<span
 										tw="bg-[#F5F5F5] rounded-lg px-2 py-1.5 max-w-max text-black text-[16px]"
 										key={item.id}>
@@ -136,8 +122,6 @@ const LeftProfile = () => {
 							</Link>
 						</div>
 					</>
-				) : (
-					<></>
 				)}
 			</div>
 			<div tw="mt-16 mb-7 text-[#737373]">
@@ -150,9 +134,7 @@ const LeftProfile = () => {
 					<span>{writingScore} points</span>
 				</div>
 			</div>
-			<ProfileBList
-				id={userIdFrom === id || !userIdFrom ? id : userIdFrom}
-			/>
+			<ProfileBList id={user_id} />
 		</div>
 	);
 };
