@@ -67,11 +67,7 @@ const LeftProfile = () => {
 						<span tw="text-[24px]">{name}</span>
 						<span tw="text-[18px]">{region?.name_en}</span>
 					</div>
-					{me ? (
-						<EditButton />
-					) : (
-						<FollowButton userId={user_id} />
-					)}
+					{me ? <EditButton /> : <FollowButton userId={user_id} />}
 				</div>
 			</div>
 			<div tw="relative flex flex-col px-4 mt-5 gap-2 text-[18px]">

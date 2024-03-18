@@ -47,7 +47,7 @@ const FollowButton = ({ userId }: Props) => {
 	};
 
 	return (
-		<button tw="text-mint" onClick={handleFollow}>
+		<button tw="text-mint w-[72px]" onClick={handleFollow}>
 			{followed ? "Following" : "Follow"}
 		</button>
 	);
