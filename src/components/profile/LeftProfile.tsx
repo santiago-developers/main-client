@@ -70,7 +70,7 @@ const LeftProfile = () => {
 					{me ? (
 						<EditButton />
 					) : (
-						<FollowButton userInfo={userInfo} userId={user_id} />
+						<FollowButton userId={user_id} />
 					)}
 				</div>
 			</div>

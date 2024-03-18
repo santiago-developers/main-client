@@ -88,10 +88,10 @@ export async function SantiagoPutWithAutorization<T, R>(
 	return data;
 }
 
-export async function SantiagoPostNoRes<T, R>(
+export async function SantiagoPostNoRes<T>(
 	url: string,
 	dto?: T,
-): Promise<R> {
+) {
 	const accessToken = localStorage.getItem("accessToken");
 	try {
 		const response = await fetch(`${BaseURL}${url}`, {
