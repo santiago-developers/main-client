@@ -5,10 +5,21 @@ export const MintButton = styled.button`
 	border-radius: 9999px;
 	color: #05c3b6;
 	font-size: sm;
-	padding: 0 25px;
+	padding: 4px 25px;
 	cursor: pointer;
 	width: max-content;
 	background-color: white;
+`;
+
+export const MintButtonFilled = styled.button`
+	border: 1px solid #05c3b6;
+	border-radius: 9999px;
+	color: white;
+	font-size: sm;
+	padding: 4px 25px;
+	cursor: pointer;
+	width: max-content;
+	background-color: #05c3b6;
 `;
 
 export const MintButtonFilledForHeader = styled.button`
@@ -25,4 +36,4 @@ export const MintButtonFilledForHeader = styled.button`
 	cursor: pointer;
 	width: max-content;
 	background-color: #05c3b6;
-`
+`;

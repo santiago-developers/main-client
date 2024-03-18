@@ -2,13 +2,17 @@ import { SantiagoPostNoRes } from "lib/fetchData";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
 
-type ReportModalProps ={
-	setOpenModal(item:boolean):void;
-	magazineId:string;
-	replyId?:string
-}
+type ReportModalProps = {
+	setOpenModal(item: boolean): void;
+	magazineId: string;
+	replyId?: string;
+};
 
-const ReportModal = ({setOpenModal,magazineId,replyId}:ReportModalProps) => {
+const ReportModal = ({
+	setOpenModal,
+	magazineId,
+	replyId,
+}: ReportModalProps) => {
 	const Wrapper = styled.div`
 		position: fixed;
 		top: 98px;
@@ -45,22 +49,22 @@ const ReportModal = ({setOpenModal,magazineId,replyId}:ReportModalProps) => {
 			border: 1px solid #000;
 		}
 	`;
-	
-	
+
 	const reportType = ["Harassment", "Rules Violation", "Spam"];
 	const [onCheckedItem, setOnCheckedItem] = useState("");
-	
+
 	const handleReport = () => {
-		
-		const fetchData = async()=>{
+		const fetchData = async () => {
 			await SantiagoPostNoRes(
-				`magazines/${magazineId}${replyId? `/replies/${replyId}`: ""}/report`,
+				`magazines/${magazineId}${
+					replyId ? `/replies/${replyId}` : ""
+				}/report`,
 				{ content: onCheckedItem },
-				);
-			} 
+			);
+		};
 		fetchData();
-		alert("Thank you for your opinion")
-		setOpenModal(false)
+		alert("Thank you for your opinion");
+		setOpenModal(false);
 	};
 
 	return (

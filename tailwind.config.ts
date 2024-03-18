@@ -29,6 +29,7 @@ const config: Config = {
 			colors: {
 				mint: "#05C3B6",
 				sgray: "#A3A3A3",
+				darkGray: "#525252",
 			},
 		},
 	},
