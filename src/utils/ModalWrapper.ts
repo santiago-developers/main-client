@@ -6,6 +6,6 @@ export const Wrapper = styled.div`
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: white;
-	z-index: 9999999999;
+	backdrop-filter: blur(5px);
+	z-index: 9;
 `;

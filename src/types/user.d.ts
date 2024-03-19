@@ -1,3 +1,5 @@
+import { RegionResponse } from "lib/dto/region/region";
+
 export interface UserInfoProps {
 	id?: string;
 	name: string;
