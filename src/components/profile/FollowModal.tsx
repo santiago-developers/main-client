@@ -19,20 +19,6 @@ type FollowModalProps = {
 };
 
 const FollowModal = ({ userId, setIsOpen, followType }: FollowModalProps) => {
-	const Wrapper = styled.div`
-		position: absolute;
-		top: 4;
-		left: 93%;
-		width: 232px;
-		height: 220px;
-		background-color: white;
-		border: 1px solid #d4d4d4;
-		border-radius: 15px;
-		padding: 8px 24px;
-		z-index: 999;
-		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
-	`;
-
 	const [followList, setFollowList] = useState<UserProps[]>([]);
 
 	const fetchData = async (userId: string, followType: string) => {
@@ -76,3 +62,17 @@ const FollowModal = ({ userId, setIsOpen, followType }: FollowModalProps) => {
 };
 
 export default FollowModal;
+
+const Wrapper = styled.div`
+	position: absolute;
+	top: 4;
+	left: 93%;
+	width: 232px;
+	height: 220px;
+	background-color: white;
+	border: 1px solid #d4d4d4;
+	border-radius: 15px;
+	padding: 8px 24px;
+	z-index: 999;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+`;

@@ -1,3 +1,4 @@
+import { Wrapper } from "@utils/ModalWrapper";
 import { SantiagoPostNoRes } from "lib/fetchData";
 import React, { useState } from "react";
 import tw, { styled } from "twin.macro";
@@ -13,43 +14,6 @@ const ReportModal = ({
 	magazineId,
 	replyId,
 }: ReportModalProps) => {
-	const Wrapper = styled.div`
-		position: fixed;
-		top: 98px;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background-color: white;
-		z-index: 9999999999;
-	`;
-	const Box = styled.div`
-		box-shadow: 0px 0px 7px 0px #50505040;
-		width: 650px;
-		height: 500px;
-		display: flex;
-		position: absolute;
-		top: calc(50% - 98px);
-		left: 50%;
-		transform: translate(-50%, -50%);
-		flex-direction: column;
-		text-align: center;
-		align-items: center;
-		background-color: white;
-		h1 {
-			font-weight: 700;
-			font-size: 25px;
-			margin-top: 50px;
-			margin-bottom: 55px;
-		}
-		button {
-			width: 5.9375rem;
-			height: 2.6875rem;
-			flex-shrink: 0;
-			border-radius: 1.25rem;
-			border: 1px solid #000;
-		}
-	`;
-
 	const reportType = ["Harassment", "Rules Violation", "Spam"];
 	const [onCheckedItem, setOnCheckedItem] = useState("");
 
@@ -105,3 +69,31 @@ const ReportModal = ({
 };
 
 export default ReportModal;
+
+const Box = styled.div`
+	box-shadow: 0px 0px 7px 0px #50505040;
+	width: 650px;
+	height: 500px;
+	display: flex;
+	position: absolute;
+	top: calc(50% - 98px);
+	left: 50%;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	text-align: center;
+	align-items: center;
+	background-color: white;
+	h1 {
+		font-weight: 700;
+		font-size: 25px;
+		margin-top: 50px;
+		margin-bottom: 55px;
+	}
+	button {
+		width: 5.9375rem;
+		height: 2.6875rem;
+		flex-shrink: 0;
+		border-radius: 1.25rem;
+		border: 1px solid #000;
+	}
+`;

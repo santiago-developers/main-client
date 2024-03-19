@@ -73,11 +73,11 @@ export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleClose}
-                style={{
-                    maxHeight: "310px"
-                }}
+				style={{
+					maxHeight: "310px",
+				}}
 				MenuListProps={{
-                    style:{width: "320px"},
+					style: { width: "320px" },
 					"aria-labelledby": "basic-button",
 				}}>
 				{regionsList.map((item, index) => (

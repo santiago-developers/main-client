@@ -12,17 +12,18 @@ const RegionSearch = ({ regionsList, onSubmit }: RegionSearchProps) => {
 		<div tw="absolute w-full">
 			<Paper
 				sx={{
-					width:500,
-					maxHeight:300,
+					width: 500,
+					maxHeight: 300,
 					display: "flex",
 					flexDirection: "column",
+					zIndex: "9999",
 					mx: 44,
 					bgcolor: "white",
 					color: "#A3A3A3",
 					position: "absolute",
 					top: 0,
 					left: 0,
-					overflowY:"scroll"
+					overflowY: "scroll",
 				}}>
 				{!regionsList.length ? (
 					<>
