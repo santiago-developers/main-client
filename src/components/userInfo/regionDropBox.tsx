@@ -6,6 +6,7 @@ import { SantiagoGet } from "lib/fetchData";
 import { MenuList } from "@mui/material";
 
 type RegionDropBoxProps = {
+	myRegion?: string;
 	onSubmit(regionId: string): void;
 };
 
@@ -20,7 +21,10 @@ interface RegionInterface {
 	regionName: string;
 }
 
-export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
+export default function RegionDropDown({
+	onSubmit,
+	myRegion,
+}: RegionDropBoxProps) {
 	const [regionsList, setRegionsList] = React.useState<RegionInterface[]>([]);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
@@ -47,6 +51,12 @@ export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
 	const [regionName, setRegionName] = React.useState(
 		"Select your nationality",
 	);
+
+	React.useEffect(() => {
+		if (myRegion) {
+			setRegionName(myRegion);
+		}
+	}, [myRegion]);
 
 	return (
 		<div>
