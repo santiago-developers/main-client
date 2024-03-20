@@ -1,17 +1,24 @@
 import tw, { styled } from "twin.macro";
 import React, { useEffect, useState } from "react";
 import { MintButton, MintButtonFilled } from "@utils/MintButton";
-import { SantiagoPutWithAutorization } from "lib/fetchData";
+import { SantiagoImagePost, SantiagoPutWithAutorization } from "lib/fetchData";
 import Image from "next/image";
 import RegionDropDown from "@components/userInfo/regionDropBox";
 import { Wrapper } from "@utils/ModalWrapper";
 import { UserInfoProps } from "types/user";
+import myInfoStore from "store/myInfoStore";
 
 type Props = {
 	setOpenModal(item: boolean): void;
 } & Pick<UserInfoProps, "name" | "region" | "imageUrl">;
 
+type ImageProps = {
+	url: string;
+	id: string;
+};
+
 export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
+	const { id } = myInfoStore();
 	useEffect(() => {
 		setMyRegin(region.name_en);
 		document.body.style.cssText = `
@@ -34,9 +41,11 @@ export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
 	};
 
 	const [imagePreview, setImagePreview] = useState("/images/defaultUser.svg");
+	const [fileData, setFileData] = useState<File>();
 	const addPreviewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files !== null) {
 			const file = e.target.files[0];
+			setFileData(file);
 			if (file) {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
@@ -50,20 +59,21 @@ export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
 		}
 	};
 
-	const handleEdit = () => {
-		const dto = {
-			name: editName || name,
-			regionId: regionId || region.regionId,
-			imageId: "",
-		};
-		console.log(dto);
-
-		// const fetchData = async () => {
-		// 	await SantiagoPutWithAutorization(`users/${userId}`, dto);
-		// };
-		// fetchData();
-		// alert("Your profile is saved");
-		// setOpenModal(false);
+	const handleEdit = async () => {
+		if (fileData) {
+			const formData = new FormData();
+			formData.append("file", fileData);
+			const imgData: ImageProps = await SantiagoImagePost(formData);
+			const dto = {
+				name: editName || name,
+				regionId: regionId || region.regionId,
+				imageId: imgData.id,
+			};
+			console.log(dto);
+			await SantiagoPutWithAutorization(`users/${id}`, dto);
+			alert("Your profile is saved");
+			setOpenModal(false);
+		}
 	};
 
 	return (
@@ -87,7 +97,9 @@ export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
 								src={imageUrl || imagePreview}
 								alt="profile_image"
 								fill
-								sizes="70px"
+								style={{
+									objectFit: "cover",
+								}}
 							/>
 						</div>
 						<div tw="flex flex-col text-left">
