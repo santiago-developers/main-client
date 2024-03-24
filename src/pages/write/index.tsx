@@ -9,6 +9,7 @@ import myInfoStore from "store/myInfoStore";
 import Tag from "@components/write/Tag";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import SubmitModal from "../../components/write/SubmitModal";
+import { redirect } from "next/navigation";
 
 const WritePage = () => {
 	const style: React.CSSProperties = {
@@ -24,6 +25,9 @@ const WritePage = () => {
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
+	// if (!id) {
+	// 	redirect("/auth/sign-in");
+	// }
 	const { regionId, setRegionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
@@ -37,9 +41,6 @@ const WritePage = () => {
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	let locale;
-	useEffect(() => {
-		locale = navigator.language;
-	});
 
 	const writeInfo = {
 		title,
@@ -48,8 +49,14 @@ const WritePage = () => {
 		userId: id,
 		tags,
 		imageUrlIds: [""],
-		language: locale,
+		language: "",
 	};
+
+	useEffect(() => {
+		locale = navigator.language;
+		writeInfo.language = locale;
+	}, []);
+
 	const [openModal, setOpenModal] = useState(false);
 	const handleSubmitModal = () => {
 		if (!writeInfo.title) {
