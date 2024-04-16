@@ -25,16 +25,13 @@ const LeftProfile = () => {
 		setFollowType(type);
 		setIsOpen(!open);
 	};
+	const getData = async (user_id: string) => {
+		const data = await SantiagoGet<UserInfoProps>(`users/${user_id}`);
+		setUserInfo(data);
+	};
 
 	useEffect(() => {
 		if (router.isReady) {
-			const getData = async (user_id: string) => {
-				const data = await SantiagoGet<UserInfoProps>(
-					`users/${user_id}`,
-				);
-				setUserInfo(data);
-			};
-
 			getData(user_id);
 		}
 		// if (!user_id) {
@@ -53,6 +50,13 @@ const LeftProfile = () => {
 		region,
 	} = userInfo;
 
+	const onUpdateProfile = () => {
+		// getData(user_id);
+		window.location.reload();
+	};
+	console.log(userInfo);
+	console.log(user_id);
+
 	return (
 		<div>
 			<div tw=" w-full flex justify-between text-[#525252]">
@@ -67,7 +71,16 @@ const LeftProfile = () => {
 						<span tw="text-[24px]">{name}</span>
 						<span tw="text-[18px]">{region?.name_en}</span>
 					</div>
-					{me ? <EditButton name={name} region={region} imageUrl={imageUrl}/> : <FollowButton userId={user_id} />}
+					{me ? (
+						<EditButton
+							name={name}
+							region={region}
+							imageUrl={imageUrl}
+							onUpdateProfile={onUpdateProfile}
+						/>
+					) : (
+						<FollowButton userId={user_id} />
+					)}
 				</div>
 			</div>
 			<div tw="relative flex flex-col px-4 mt-5 gap-2 text-[18px]">
@@ -130,7 +143,7 @@ const LeftProfile = () => {
 					<span>{writingScore} points</span>
 				</div>
 			</div>
-			<ProfileBList id={user_id} />
+			{user_id && <ProfileBList id={user_id} />}
 		</div>
 	);
 };

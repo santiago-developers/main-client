@@ -10,6 +10,7 @@ import myInfoStore from "store/myInfoStore";
 
 type Props = {
 	setOpenModal(item: boolean): void;
+	onUpdateProfile(): void;
 } & Pick<UserInfoProps, "name" | "region" | "imageUrl">;
 
 type ImageProps = {
@@ -22,6 +23,7 @@ export const EditModal = ({
 	region,
 	imageUrl,
 	setOpenModal,
+	onUpdateProfile,
 }: Props) => {
 	const { id, setImageUrl, setName, setRegion } = myInfoStore();
 
@@ -65,6 +67,7 @@ export const EditModal = ({
 		}
 	};
 
+
 	const handleEdit = async () => {
 		let dto;
 		let fileUploaded;
@@ -95,6 +98,7 @@ export const EditModal = ({
 		setName(editName);
 		setRegion(regionId);
 		setOpenModal(false);
+		onUpdateProfile();
 	};
 
 	return (

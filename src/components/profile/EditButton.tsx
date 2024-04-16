@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import { EditModal } from "./EditModal";
 import { UserInfoProps } from "types/user";
 
-type Props = Pick<UserInfoProps, "name" | "region" | "imageUrl">;
+type Props = {
+	onUpdateProfile(): void;
+} & Pick<UserInfoProps, "name" | "region" | "imageUrl">;
 
-const EditButton = ({ name, region, imageUrl }: Props) => {
+const EditButton = ({ name, region, imageUrl, onUpdateProfile }: Props) => {
 	const [openModal, setOpenModal] = useState(false);
 
 	return (
-		<button tw="text-mint" onClick={() => setOpenModal(true)}>
+		<div tw="text-mint" onClick={() => setOpenModal(true)}>
 			edit
 			{openModal && (
 				<EditModal
@@ -17,9 +19,10 @@ const EditButton = ({ name, region, imageUrl }: Props) => {
 					name={name}
 					region={region}
 					imageUrl={imageUrl}
+					onUpdateProfile={onUpdateProfile}
 				/>
 			)}
-		</button>
+		</div>
 	);
 };
 
