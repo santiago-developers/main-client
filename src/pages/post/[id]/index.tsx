@@ -5,7 +5,11 @@ import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutl
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import type {
+	GetStaticPaths,
+	GetStaticProps,
+	InferGetStaticPropsType,
+} from "next";
 import { SantiagoGet, SantiagoPostWithAutorization } from "lib/fetchData";
 import { IMagazine, TagProps } from "types/magazines";
 import Image from "next/image";
@@ -20,7 +24,7 @@ export default function PostPage({
 	post,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
-	if (!post) {
+	if (router.isFallback) {
 		return <p>Loading...</p>;
 	}
 	const currentUrl =
@@ -138,14 +142,14 @@ export default function PostPage({
 	);
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
 	return {
 		paths: [{ params: { id: "2cb781b8-f545-403f-a8bb-b9062ee112be" } }],
 		fallback: true,
 	};
 };
 
-export const getStaticProps = (async (context) => {
+export const getStaticProps: GetStaticProps = (async (context) => {
 	const { params } = context;
 	const magazineId = params?.id;
 	const post = await SantiagoGet<IMagazine>(`magazines/${magazineId}`);
