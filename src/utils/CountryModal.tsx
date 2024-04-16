@@ -22,10 +22,6 @@ const CountryModal = ({
 	const { setSubmitType } = magazineStore();
 	const [regionsName, setRegionNames] = useState<string[]>([]);
 	const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-	2
-	useEffect(() => {
-
-	}, [imageLoaded]);
 
 	const regionClick = (item: string) => {
 		const continent = item.toLowerCase().replace(/ /g, "_");
@@ -58,6 +54,13 @@ const CountryModal = ({
 		setIsOpen(!open);
 	};
 
+	useEffect(() => {
+		// 이미지가 로드되면 모달을 열기
+		if (imageLoaded) {
+			setIsOpen(true);
+		}
+	}, [imageLoaded]);
+
 	return (
 		<div tw="flex flex-col justify-center items-center h-full text-[12px] text-black">
 			<div tw="w-[590px] min-h-[269px] grid grid-cols-4 gap-3 justify-center text-center items-center my-4">
@@ -77,6 +80,7 @@ const CountryModal = ({
 							regionClick(item as string);
 						}}>
 						<Image
+							priority={true}
 							src={`/images/continent/${item
 								.toLowerCase()
 								.replace(/ /g, "_")}.svg`}
