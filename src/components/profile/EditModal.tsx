@@ -1,7 +1,7 @@
 import tw, { styled } from "twin.macro";
 import React, { useEffect, useState } from "react";
 import { MintButton, MintButtonFilled } from "@utils/MintButton";
-import { SantiagoImagePost, SantiagoPutWithAutorization } from "lib/fetchData";
+import { SantiagoImagePost, SantiagoPutNoRes } from "lib/fetchData";
 import Image from "next/image";
 import RegionDropDown from "@components/userInfo/regionDropBox";
 import { Wrapper } from "@utils/ModalWrapper";
@@ -17,8 +17,14 @@ type ImageProps = {
 	id: string;
 };
 
-export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
-	const { id } = myInfoStore();
+export const EditModal = ({
+	name,
+	region,
+	imageUrl,
+	setOpenModal,
+}: Props) => {
+	const { id, setImageUrl, setName, setRegion } = myInfoStore();
+
 	useEffect(() => {
 		setMyRegin(region.name_en);
 		document.body.style.cssText = `
@@ -40,7 +46,7 @@ export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
 		setRegionId(selectedRegionId);
 	};
 
-	const [imagePreview, setImagePreview] = useState("/images/defaultUser.svg");
+	const [imagePreview, setImagePreview] = useState("");
 	const [fileData, setFileData] = useState<File>();
 	const addPreviewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files !== null) {
@@ -60,20 +66,35 @@ export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
 	};
 
 	const handleEdit = async () => {
+		let dto;
+		let fileUploaded;
 		if (fileData) {
 			const formData = new FormData();
 			formData.append("file", fileData);
-			const imgData: ImageProps = await SantiagoImagePost(formData);
-			const dto = {
+			const imgData: ImageProps = await SantiagoImagePost(
+				`users/${id}/upload_image`,
+				formData,
+			);
+			dto = {
 				name: editName || name,
 				regionId: regionId || region.regionId,
 				imageId: imgData.id,
 			};
-			console.log(dto);
-			await SantiagoPutWithAutorization(`users/${id}`, dto);
-			alert("Your profile is saved");
-			setOpenModal(false);
+			await SantiagoPutNoRes(`users/${id}`, dto);
+			alert("Your profile information is saved");
+			setImageUrl(imgData.url);
+		} else {
+			dto = {
+				name: editName || name,
+				regionId: regionId || region.regionId,
+			};
+			await SantiagoPutNoRes(`users/${id}`, dto);
+			alert("Your profile information is saved");
 		}
+
+		setName(editName);
+		setRegion(regionId);
+		setOpenModal(false);
 	};
 
 	return (
@@ -94,7 +115,11 @@ export const EditModal = ({ name, region, imageUrl, setOpenModal }: Props) => {
 							/>
 							<Image
 								priority
-								src={imageUrl || imagePreview}
+								src={
+									imagePreview ||
+									imageUrl ||
+									"/images/defaultUser.svg"
+								}
 								alt="profile_image"
 								fill
 								style={{
