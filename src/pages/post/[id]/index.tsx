@@ -19,11 +19,14 @@ import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/router";
 import HeadMeta from "@components/meta/HeadMeta";
 import Link from "next/link";
+import { Avatar } from "@mui/material";
 
 export default function PostPage({
 	post,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
+	const { id } = myInfoStore();
+
 	if (router.isFallback) {
 		return <p>Loading...</p>;
 	}
@@ -31,6 +34,7 @@ export default function PostPage({
 		typeof window !== "undefined"
 			? window.location.origin + router.asPath
 			: "";
+
 	const {
 		magazineId,
 		title,
@@ -41,7 +45,6 @@ export default function PostPage({
 		writer,
 		tags,
 	}: IMagazine = post;
-	const { id } = myInfoStore();
 
 	const handleLike = (type: string) => {
 		const fetchData = async () =>
@@ -108,12 +111,9 @@ export default function PostPage({
 				</div>
 				<Link href={`/profile/${writer.userId}`}>
 					<div tw="flex pl-2 mt-2 cursor-pointer">
-						<Image
+						<Avatar
 							src={writer.imageUrl || "../images/defaultUser.svg"}
-							alt="userImage"
-							width={30}
-							height={30}
-							tw="self-start"
+							sx={{ width: 36, height: 36 }}
 						/>
 						<div tw="flex flex-col justify-center pl-4 mb-12">
 							<span tw="text-sm">{writer.name}</span>

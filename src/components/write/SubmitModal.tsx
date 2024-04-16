@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import tw, { styled } from "twin.macro";
 import RemoveCircleOutlinedIcon from "@mui/icons-material/RemoveCircleOutlined";
+import myInfoStore from "store/myInfoStore";
 
 type Props = {
 	setOpenModal(item: boolean): void;
@@ -32,7 +33,7 @@ type ImageProps = {
 	url: string;
 	id: string;
 };
-// TODO 이미지미리보기 오류
+
 const SubmitModal = ({
 	writeInfo,
 	setRegionId,
@@ -43,11 +44,11 @@ const SubmitModal = ({
 }: Props) => {
 	const router = useRouter();
 	const fileRef = useRef<HTMLInputElement>(null);
+	const { id } = myInfoStore();
 	const [imagePreview, setImagePreview] = useState(
 		imageUrl?.url || "/images/post.svg",
 	);
 	const [fileData, setFileData] = useState<File>();
-	const [imgLoaded, setImgLoaded] = useState(false);
 
 	const addPreviewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files !== null) {
@@ -59,7 +60,6 @@ const SubmitModal = ({
 				await new Promise((resolve) => {
 					reader.onload = () => {
 						setImagePreview(reader.result as string);
-						setImgLoaded(true);
 						resolve(null);
 					};
 				});
@@ -76,7 +76,10 @@ const SubmitModal = ({
 		if (fileData) {
 			const formData = new FormData();
 			formData.append("file", fileData);
-			const imgData: ImageProps = await SantiagoImagePost(formData);
+			const imgData: ImageProps = await SantiagoImagePost(
+				"magazines/upload_image",
+				formData,
+			);
 			const newWriteInfo = {
 				...writeInfo,
 				imageUrlIds: [imgData.id],
@@ -113,10 +116,10 @@ const SubmitModal = ({
 		if (shouldReplace) {
 			setRegionId("");
 			alert("Your story is published successfully");
-			// TODO query check 필요 /profile/[user_id] 사용중
-			router.replace("/profile?from=write");
+			router.replace(`/profile/${id}`);
 		}
 	};
+	const imgCheck = imagePreview === "/images/post.svg";
 
 	return (
 		<Wrapper>
@@ -127,10 +130,9 @@ const SubmitModal = ({
 						<div tw="w-full text-3xl">{writeInfo.title}</div>
 						<div>{writeInfo.tags.map((tag) => ` #${tag}`)}</div>
 					</div>
-					<RemoveCircleOutlinedIcon tw="z-50" />
 					<div tw="pb-6">
 						<ImgContainer>
-							{!imgLoaded && (
+							{imgCheck && (
 								<label htmlFor="image">
 									Set a thumnail <br />
 									in your story
@@ -165,12 +167,11 @@ const SubmitModal = ({
 									onClick={handleClick}
 								/>
 							)}
-							{imgLoaded && (
+							{!imgCheck && (
 								<div
 									tw="absolute top-0 right-0 z-50 cursor-pointer"
 									onClick={() => {
 										setImagePreview("/images/post.svg");
-										setImgLoaded(false);
 									}}>
 									<RemoveCircleOutlinedIcon />
 								</div>
