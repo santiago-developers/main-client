@@ -51,11 +51,8 @@ const LeftProfile = () => {
 	} = userInfo;
 
 	const onUpdateProfile = () => {
-		// getData(user_id);
 		window.location.reload();
 	};
-	console.log(userInfo);
-	console.log(user_id);
 
 	return (
 		<div>
