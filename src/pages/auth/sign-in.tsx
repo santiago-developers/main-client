@@ -169,14 +169,14 @@ export default function SignIn() {
 					<div tw="h-[24px]" />
 					<SocialSignInDivider />
 					<div tw="h-[16px]" />
-					<div tw="flex justify-center">
-						<div onClick={signInWithGoogle}>
+					<div tw="flex justify-center ">
+						<div tw="cursor-pointer" onClick={signInWithGoogle}>
 							<GoogleLogo />
 						</div>
-						<div onClick={signInWithFaceBook}>
+						<div tw="cursor-pointer" onClick={signInWithFaceBook}>
 							<FacebookLogo />
 						</div>
-						<div onClick={signInWithApple}>
+						<div tw="cursor-pointer" onClick={signInWithApple}>
 							<AppleLogo />
 						</div>
 					</div>
