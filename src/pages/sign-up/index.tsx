@@ -1,23 +1,12 @@
 import { ArrowRight } from "@mui/icons-material";
-import {
-	Checkbox,
-	FormControlLabel,
-	IconButton,
-	InputAdornment,
-	TextField,
-} from "@mui/material";
+import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { MintButton } from "@utils/MintButton";
-import CheckIcon from "@public/images/checkIcon.svg";
-import { SendVerificationNumberRequest } from "lib/dto/auth/sendVerificationNumberRequest";
-import { SendVerificationNumberResponse } from "lib/dto/auth/sendVerificationNumberResponse";
-import { VerifyVerificationNumberRequest } from "lib/dto/auth/verifyVerificationNumberRequest";
 import { SantiagoPost } from "lib/fetchData";
 import { useState } from "react";
 import tw from "twin.macro";
 import { SignUpRequest } from "lib/dto/signUp/signUpRequest";
 import { SignInResponse } from "lib/dto/signIn/signInResponse";
 import { useRouter } from "next/router";
-import BasicMenu from "@components/userInfo/regionDropBox";
 import RegionDropDown from "@components/userInfo/regionDropBox";
 
 export default function SignUp() {
