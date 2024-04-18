@@ -11,6 +11,7 @@ import { SantiagoGet } from "lib/fetchData";
 import EditButton from "./EditButton";
 import FollowButton from "./FollowButton";
 import { UserInfoProps } from "types/user";
+import { Avatar } from "@mui/material";
 
 const LeftProfile = () => {
 	const router = useRouter();
@@ -56,18 +57,17 @@ const LeftProfile = () => {
 
 	return (
 		<div>
-			<div tw=" w-full flex justify-between text-[#525252]">
-				<div tw="flex gap-3">
-					<Image
-						src={imageUrl || "/images/defaultUser.svg"}
-						alt="profile"
-						width={64}
-						height={64}
-					/>
-					<div tw="flex flex-col justify-center pl-2">
-						<span tw="text-[24px]">{name}</span>
-						<span tw="text-[18px]">{region?.name_en}</span>
-					</div>
+			<div tw=" w-full flex justify-around text-[#525252] ">
+				<Avatar
+					src={imageUrl || "/images/defaultUser.svg"}
+					alt="profile"
+					sx={{ width: 65, height: 64 }}
+				/>
+				<div tw="w-full flex flex-col justify-center pl-2">
+					<span tw="text-[22px]">{name}</span>
+					<span tw="text-[16px]">{region?.name_en}</span>
+				</div>
+				<div>
 					{me ? (
 						<EditButton
 							name={name}

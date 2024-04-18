@@ -11,7 +11,7 @@ const EditButton = ({ name, region, imageUrl, onUpdateProfile }: Props) => {
 	const [openModal, setOpenModal] = useState(false);
 
 	return (
-		<div tw="text-mint" onClick={() => setOpenModal(true)}>
+		<div tw="text-mint cursor-pointer" onClick={() => setOpenModal(true)}>
 			edit
 			{openModal && (
 				<EditModal

@@ -6,6 +6,7 @@ import PhotoSvg from "@public/images/photo.svg";
 import WritingSvg from "@public/images/writing.svg";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { Avatar } from "@mui/material";
 
 type Props = {
 	item: IMagazine;
@@ -17,14 +18,12 @@ const Magazine = ({ item }: Props) => {
 			<div tw="w-[220px] h-[290px] flex flex-col items-center justify-between mb-3">
 				<div tw=" w-full h-[30px] flex justify-between">
 					<div tw="flex">
-						<Image
+						<Avatar
 							src={
 								item.writer.imageUrl ||
 								"/images/defaultUser.svg"
 							}
-							alt="profile"
-							width={30}
-							height={30}
+							sx={{ width: 30, height: 30 }}
 						/>
 						<div tw="flex flex-col justify-center pl-2">
 							<span tw="text-sm">{item.writer.name}</span>
