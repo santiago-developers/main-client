@@ -7,6 +7,8 @@ import RegionDropDown from "@components/userInfo/regionDropBox";
 import { Wrapper } from "@utils/ModalWrapper";
 import { UserInfoProps } from "types/user";
 import myInfoStore from "store/myInfoStore";
+import regionStore from "store/regionStore";
+import { RegionResponse } from "lib/dto/region/region";
 
 type Props = {
 	setOpenModal(item: boolean): void;
@@ -26,6 +28,7 @@ export const EditModal = ({
 	onUpdateProfile,
 }: Props) => {
 	const { id, setImageUrl, setName, setRegion } = myInfoStore();
+	const { regionList } = regionStore();
 
 	useEffect(() => {
 		setMyRegin(region.name_en);
@@ -44,8 +47,15 @@ export const EditModal = ({
 	const [editName, setEditName] = useState(name);
 	const [regionId, setRegionId] = useState("");
 	const [myRegion, setMyRegin] = useState("");
+	const [regionName, setRegionName] = useState<RegionResponse>();
 	const searchSubmit = (selectedRegionId: string) => {
-		setRegionId(selectedRegionId);
+		if (selectedRegionId) {
+			setRegionId(selectedRegionId);
+			const selectedRegion = regionList.find(
+				(region) => region.regionId === selectedRegionId,
+			);
+			setRegionName(selectedRegion);
+		}
 	};
 
 	const [imagePreview, setImagePreview] = useState("");
@@ -66,7 +76,6 @@ export const EditModal = ({
 			}
 		}
 	};
-
 
 	const handleEdit = async () => {
 		let dto;
@@ -96,7 +105,9 @@ export const EditModal = ({
 		}
 
 		setName(editName);
-		setRegion(regionId);
+		if (regionName) {
+			setRegion(regionName);
+		}
 		setOpenModal(false);
 		onUpdateProfile();
 	};

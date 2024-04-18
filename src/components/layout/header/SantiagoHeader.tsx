@@ -23,7 +23,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 			setMyName(name);
 			setMyRegion(region ? region.name_en : "earth");
 		}
-	},[id]);
+	}, [id]);
 
 	return (
 		<>
@@ -33,18 +33,22 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 				</Link>
 				{myId == "" ? (
 					<>
-						<Link href="/auth/sign-in" tw="cursor-pointer">Sign in</Link>
+						<Link href="/auth/sign-in" tw="cursor-pointer">
+							Sign in
+						</Link>
 					</>
 				) : (
 					<>
-				
 						<div tw="flex gap-5">
-							{router.pathname !== "/write" &&router.pathname !== "/post/[id]/edit" &&(
-								<MintButton>
-								<Link href="/write" tw="text-mint cursor-pointer">
-									Write
-								</Link>
-							</MintButton>
+							{router.pathname !== "/write" &&
+								router.pathname !== "/post/[id]/edit" && (
+									<MintButton>
+										<Link
+											href="/write"
+											tw="text-mint cursor-pointer">
+											Write
+										</Link>
+									</MintButton>
 								)}
 							<Link href={`/profile/${id}`} tw="cursor-pointer">
 								<UserFrame
