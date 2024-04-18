@@ -31,9 +31,11 @@ export default function RegionDropDown({
 
 	const fetchData = async () => {
 		const regions = await SantiagoGet("regions");
-		return regions.data.map((item: RegionsProps) => {
-			return { id: item.regionId, regionName: item.name_en };
-		});
+		return regions.data
+			.map((item: RegionsProps) => {
+				return { id: item.regionId, regionName: item.name_en };
+			})
+			.sort((a, b) => a.regionName.localeCompare(b.regionName));
 	};
 
 	React.useEffect(() => {
