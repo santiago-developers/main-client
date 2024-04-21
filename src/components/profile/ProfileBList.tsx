@@ -47,25 +47,32 @@ const ProfileBList = ({ id }: Props) => {
 						<span>{item}</span>
 					</div>
 					<div tw="w-[260px] h-[220px] border-[0.5px] rounded-xl border-[#D4D4D4] py-2 px-6">
-						{fetchDataList[index].map(
-							(item: ProfileBListProps, index) => (
-								<div
-									tw="flex items-center gap-4 pb-5"
-									key={index}>
-									{index + 1}
-									<Image
-										src={
-											item.imageUrl || "/images/post.svg"
-										}
-										alt="userImage"
-										width={24.5}
-										height={24.5}
-									/>
-									<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full">
-										{item.title}
-									</span>
-								</div>
-							),
+						{!fetchDataList[index].length ? (
+							<p>No result...</p>
+						) : (
+							<>
+								{fetchDataList[index].map(
+									(item: ProfileBListProps, index) => (
+										<div
+											tw="flex items-center gap-4 pb-5"
+											key={index}>
+											{index + 1}
+											<Image
+												src={
+													item.imageUrl ||
+													"/images/post.svg"
+												}
+												alt="userImage"
+												width={24.5}
+												height={24.5}
+											/>
+											<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full">
+												{item.title}
+											</span>
+										</div>
+									),
+								)}
+							</>
 						)}
 					</div>
 				</div>
