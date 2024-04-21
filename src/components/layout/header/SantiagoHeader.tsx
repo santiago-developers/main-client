@@ -6,6 +6,7 @@ import { MintButton } from "@utils/MintButton";
 import UserFrame from "@utils/UserFrame";
 import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/router";
+import HeaderDropdown from "./\bHeaderDropDown";
 
 const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 	const router = useRouter();
@@ -14,6 +15,11 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 	const [myName, setMyName] = useState("");
 	const [myImageUrl, setMyImageUrl] = useState<string | null>("");
 	const [myRegion, setMyRegion] = useState("");
+	const [isOpen, setIsOpen] = useState(false);
+
+	const handleToggle = () => {
+		setIsOpen(!isOpen);
+	};
 
 	useEffect(() => {
 		const token = localStorage.getItem("accessToken");
@@ -22,6 +28,12 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 			setMyImageUrl(imageUrl);
 			setMyName(name);
 			setMyRegion(region ? region.name_en : "earth");
+		}
+	}, [id, imageUrl, name, region]);
+
+	useEffect(() => {
+		if (!id) {
+			setMyId("");
 		}
 	}, [id]);
 
@@ -50,13 +62,22 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 										</Link>
 									</MintButton>
 								)}
-							<Link href={`/profile/${id}`} tw="cursor-pointer">
-								<UserFrame
-									name={myName}
-									imageUrl={myImageUrl}
-									regionName={myRegion}
-								/>
-							</Link>
+							<div tw="relative">
+								<div tw="cursor-pointer" onClick={handleToggle}>
+									<UserFrame
+										name={myName}
+										imageUrl={myImageUrl}
+										regionName={myRegion}
+									/>
+								</div>
+								{isOpen && (
+									<HeaderDropdown
+										id={id}
+										isOpen={isOpen}
+										setIsOpen={setIsOpen}
+									/>
+								)}
+							</div>
 						</div>
 					</>
 				)}
