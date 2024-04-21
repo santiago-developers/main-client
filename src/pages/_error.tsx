@@ -1,5 +1,6 @@
-import { MintButton } from "@utils/MintButton";
+import { MintButton, MintButtonFilled } from "@utils/MintButton";
 import { Wrapper } from "@utils/ModalWrapper";
+import Link from "next/link";
 
 function Error({ statusCode }) {
 	return (
@@ -12,9 +13,14 @@ function Error({ statusCode }) {
 				</p>
 				<p>Sorry, the service is temporarily unavailable.</p>
 				<p>Please try refreshing the page.</p>
-				<MintButton onClick={() => window.location.reload()}>
-					Refresh Page
-				</MintButton>
+				<div tw="flex gap-4">
+					<MintButton onClick={() => window.location.reload()}>
+						Refresh Page
+					</MintButton>
+					<Link href="/main">
+						<MintButtonFilled>Home</MintButtonFilled>
+					</Link>
+				</div>
 			</div>
 		</Wrapper>
 	);
