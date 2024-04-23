@@ -1,13 +1,11 @@
 import tw from "twin.macro";
-import DefautUserSvg from "@public/images/defaultUser.svg";
 import BPhotographersSvg from "@public/images/magazines/bPhotographers.svg";
 import BWritersSvg from "@public/images/magazines/bWriters.svg";
 import BFanaticsSvg from "@public/images/magazines/bFanatics.svg";
 import { SantiagoGet } from "lib/fetchData";
 import { useEffect } from "react";
 import { useState } from "react";
-import writeStore from "store/writeStore";
-import Image from "next/image";
+import { Avatar } from "@mui/material";
 
 type BestListProps = {
 	id: string;
@@ -17,7 +15,6 @@ type BestListProps = {
 };
 
 const BestList = () => {
-	// const { regionId } = writeStore();
 	const bestList = ["Best Photographers", "Best Writers", "Best Fanatics"];
 
 	const [bWriters, setBWriters] = useState([]);
@@ -41,8 +38,7 @@ const BestList = () => {
 	};
 
 	useEffect(() => {
-		if(regionId) 
-			fetchData(regionId);
+		if (regionId) fetchData(regionId);
 	}, [regionId]);
 
 	const fetchDataList = [bWriters, bPhotographers, bFanatics];
@@ -58,13 +54,12 @@ const BestList = () => {
 						<span>{item}</span>
 					</div>
 					{fetchDataList[index].map((item: BestListProps, index) => (
-						<div tw="flex items-center gap-4 pb-5" key={index}>
+						<div tw="flex items-center gap-4 pb-4" key={index}>
 							{index + 1}
-							<Image
+							<Avatar
 								src={item.imageUrl || "images/defaultUser.svg"}
 								alt="userImage"
-								width={24.5}
-								height={24.5}
+								sx={{ width: 25, height: 25 }}
 							/>
 							{item.name}
 						</div>

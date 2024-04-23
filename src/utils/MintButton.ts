@@ -1,14 +1,25 @@
 import { styled } from "twin.macro";
 
 export const MintButton = styled.button`
-	border: 1px solid #05c3b6;
+	border: 1px solid var(--secondary);
 	border-radius: 9999px;
-	color: #05c3b6;
+	color: var(--secondary);
 	font-size: sm;
-	padding: 0 25px;
+	padding: 4px 25px;
 	cursor: pointer;
 	width: max-content;
 	background-color: white;
+`;
+
+export const MintButtonFilled = styled.button`
+	border: 1px solid var(--secondary);
+	border-radius: 9999px;
+	color: white;
+	font-size: sm;
+	padding: 4px 25px;
+	cursor: pointer;
+	width: max-content;
+	background-color: var(--secondary);
 `;
 
 export const MintButtonFilledForHeader = styled.button`
@@ -17,12 +28,12 @@ export const MintButtonFilledForHeader = styled.button`
 	right: 224px;
 	margin: 40px;
 	z-index: 99999;
-	border: 1px solid #05c3b6;
+	border: 1px solid var(--secondary);
 	border-radius: 9999px;
 	color: white;
 	font-size: sm;
 	padding: 4px 25px;
 	cursor: pointer;
 	width: max-content;
-	background-color: #05c3b6;
-`
+	background-color: var(--secondary);
+`;

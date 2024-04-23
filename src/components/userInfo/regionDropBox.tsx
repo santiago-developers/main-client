@@ -6,6 +6,7 @@ import { SantiagoGet } from "lib/fetchData";
 import { MenuList } from "@mui/material";
 
 type RegionDropBoxProps = {
+	myRegion?: string;
 	onSubmit(regionId: string): void;
 };
 
@@ -20,16 +21,21 @@ interface RegionInterface {
 	regionName: string;
 }
 
-export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
+export default function RegionDropDown({
+	onSubmit,
+	myRegion,
+}: RegionDropBoxProps) {
 	const [regionsList, setRegionsList] = React.useState<RegionInterface[]>([]);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 
 	const fetchData = async () => {
 		const regions = await SantiagoGet("regions");
-		return regions.data.map((item: RegionsProps) => {
-			return { id: item.regionId, regionName: item.name_en };
-		});
+		return regions.data
+			.map((item: RegionsProps) => {
+				return { id: item.regionId, regionName: item.name_en };
+			})
+			.sort((a, b) => a.regionName.localeCompare(b.regionName));
 	};
 
 	React.useEffect(() => {
@@ -47,6 +53,12 @@ export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
 	const [regionName, setRegionName] = React.useState(
 		"Select your nationality",
 	);
+
+	React.useEffect(() => {
+		if (myRegion) {
+			setRegionName(myRegion);
+		}
+	}, [myRegion]);
 
 	return (
 		<div>
@@ -73,11 +85,11 @@ export default function RegionDropDown({ onSubmit }: RegionDropBoxProps) {
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleClose}
-                style={{
-                    maxHeight: "310px"
-                }}
+				style={{
+					maxHeight: "310px",
+				}}
 				MenuListProps={{
-                    style:{width: "320px"},
+					style: { width: "320px" },
 					"aria-labelledby": "basic-button",
 				}}>
 				{regionsList.map((item, index) => (

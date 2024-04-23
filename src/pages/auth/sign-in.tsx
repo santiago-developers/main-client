@@ -38,7 +38,7 @@ export default function SignIn() {
 		setWritingScore,
 		setRegion,
 		setLanguagesSubcribed,
-		setAllowedLanguageCount
+		setAllowedLanguageCount,
 	} = myInfoStore();
 
 	const storeMyInfo = async (userId: string) => {
@@ -68,7 +68,7 @@ export default function SignIn() {
 		SantiagoPost<SignInRequest, SignInResponse>("auth/sign-in", dto)
 			.then((data) => loadUserInfo(data))
 			.then(() => {
-				router.push("/main"); //TODO: 이전 페이지로 이동하기 (뒤로 돌아가기 아님)
+				router.push("/main");
 			})
 			.catch(() => {
 				localStorage.setItem("firebaseUID", user.uid);
@@ -81,7 +81,7 @@ export default function SignIn() {
 		SantiagoPost<SignInRequest, SignInResponse>("auth/sign-in", dto)
 			.then((data) => loadUserInfo(data))
 			.then(() => {
-				router.push("/main"); //TODO: 이전 페이지로 이동하기 (뒤로 돌아가기 아님)
+				router.push("/main");
 			})
 			.catch(() =>
 				alert(
@@ -149,7 +149,7 @@ export default function SignIn() {
 					<div tw="h-[36px]" />
 					<div tw="m-auto">
 						<MintButton
-							tw="w-full h-[40px] bg-[#05C3B6] text-white font-medium"
+							tw="w-full h-[40px] bg-mint text-white font-medium"
 							onClick={signIn}>
 							Sign in with email
 						</MintButton>
@@ -161,22 +161,22 @@ export default function SignIn() {
 						</Link>
 					</div>
 					<div tw="h-[36px]" />
-					<Link href="/auth/find-password1">
-						<div tw="text-[12px] flex justify-center text-[#05C3B6]">
+					<Link href="/auth/cloudError">
+						<div tw="text-[12px] flex justify-center text-mint">
 							Forgot your password?
 						</div>
 					</Link>
 					<div tw="h-[24px]" />
 					<SocialSignInDivider />
 					<div tw="h-[16px]" />
-					<div tw="flex justify-center">
-						<div onClick={signInWithGoogle}>
+					<div tw="flex justify-center ">
+						<div tw="cursor-pointer" onClick={signInWithGoogle}>
 							<GoogleLogo />
 						</div>
-						<div onClick={signInWithFaceBook}>
+						<div tw="cursor-pointer" onClick={signInWithFaceBook}>
 							<FacebookLogo />
 						</div>
-						<div onClick={signInWithApple}>
+						<div tw="cursor-pointer" onClick={signInWithApple}>
 							<AppleLogo />
 						</div>
 					</div>

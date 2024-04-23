@@ -71,7 +71,7 @@ export default function PlanCard({
 					<div tw="text-[#79747E] text-[11px]">
 						<div>You can translate your magazine into</div>
 						<div tw="flex items-end">
-							<div tw="text-[#525252] text-[20px] font-semibold">
+							<div tw="text-darkGray text-[20px] font-semibold">
 								{langCount}
 							</div>
 							<div>

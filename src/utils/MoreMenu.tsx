@@ -60,11 +60,6 @@ const MoreMenu = ({ moreMenuType, magazineId }: MoreMenuTypeProp) => {
 						<Link href={`/post/${magazineId}/edit`}>
 							<MenuItem sx={{ color: "#A3A3A3" }}>edit</MenuItem>
 						</Link>
-						<Link href={`/post/${magazineId}/htmlEdit`}>
-							<MenuItem sx={{ color: "#A3A3A3" }}>
-								html edit
-							</MenuItem>
-						</Link>
 						<Link href={`/post/${magazineId}/statistics`}>
 							<MenuItem sx={{ color: "#A3A3A3" }}>
 								statistics

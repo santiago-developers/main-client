@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import tw from "twin.macro";
 import Image from "next/image";
 import HeartSvg from "@public/images/heart.svg";
@@ -21,7 +21,9 @@ type ReplyCommentProps = {
 	>;
 	isSelected: boolean;
 	commentList: CommentProps[];
-	setCommentList: React.Dispatch<React.SetStateAction<CommentProps[] | undefined>>;
+	setCommentList: React.Dispatch<
+		React.SetStateAction<CommentProps[] | undefined>
+	>;
 	setCommentCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -56,13 +58,11 @@ const ReplyComment = ({
 	const addOneForCommentList = (newComment: CommentProps) => {
 		setCommentList([...commentList, newComment]);
 		setCommentCount((commentList?.length as number) + 1);
-	}
+	};
 
 	const renderReplyComment = (parentId: string | null) =>
 		commentList.map((comment: CommentProps, index) => (
 			<div key={index}>
-
-		
 				{comment.parentId === parentId && (
 					<div>
 						<Divider
@@ -157,7 +157,7 @@ const ReplyComment = ({
 						</Grid>
 					</div>
 				)}
-					</div>
+			</div>
 		));
 
 	return (

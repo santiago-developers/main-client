@@ -5,15 +5,17 @@ import { useState } from "react";
 import Image from "next/image";
 import BWritingsSvg from "@public/images/profileBwritings.svg";
 import BPicturesSvg from "@public/images/profileBPictures.svg";
-import myInfoStore from "store/myInfoStore";
 
+type Props = {
+	id: string;
+};
 type ProfileBListProps = {
 	id: string;
 	title: string;
 	imageUrl: string | null;
 };
 
-const ProfileBList = ({id}) => {
+const ProfileBList = ({ id }: Props) => {
 	const bestList = ["Best Pictures", "Best Writings"];
 	const [bWritings, setBWritings] = useState([]);
 	const [bPictures, setBPictures] = useState([]);
@@ -32,39 +34,47 @@ const ProfileBList = ({id}) => {
 	useEffect(() => {
 		fetchData(id);
 	}, []);
-	
+
 	const fetchDataList = [bWritings, bPictures];
 
 	return (
 		<>
 			{bestList.map((item, index) => (
 				<div tw="text-[14px]" key={index}>
-					<div tw="whitespace-nowrap flex gap-4 mb-2 mt-14 items-center text-[#525252] font-medium">
+					<div tw="whitespace-nowrap flex gap-4 mb-2 mt-14 items-center text-darkGray font-medium">
 						{index == 0 && <BWritingsSvg />}
 						{index == 1 && <BPicturesSvg />}
 						<span>{item}</span>
 					</div>
 					<div tw="w-[260px] h-[220px] border-[0.5px] rounded-xl border-[#D4D4D4] py-2 px-6">
-					{fetchDataList[index].map(
-						(item: ProfileBListProps, index) => (
-							<div tw="flex items-center gap-4 pb-5" key={index}>
-								{index + 1}
-								<Image
-									src={
-										item.imageUrl ||
-										"images/post.svg"
-									}
-									alt="userImage"
-									width={24.5}
-									height={24.5}
-									/>
-								<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full" >
-								{item.title}
-								</span>
-							</div>
-						),
+						{!fetchDataList[index].length ? (
+							<p>No result...</p>
+						) : (
+							<>
+								{fetchDataList[index].map(
+									(item: ProfileBListProps, index) => (
+										<div
+											tw="flex items-center gap-4 pb-5"
+											key={index}>
+											{index + 1}
+											<Image
+												src={
+													item.imageUrl ||
+													"/images/post.svg"
+												}
+												alt="userImage"
+												width={24.5}
+												height={24.5}
+											/>
+											<span tw="overflow-hidden whitespace-nowrap text-ellipsis w-full">
+												{item.title}
+											</span>
+										</div>
+									),
+								)}
+							</>
 						)}
-						</div>
+					</div>
 				</div>
 			))}
 		</>

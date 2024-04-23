@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "twin.macro";
 import Image from "next/image";
 import HeartSvg from "@public/images/heart.svg";
@@ -7,7 +7,11 @@ import dayjs from "dayjs";
 import CommentMoreMenu from "./CommentMoreMenu";
 import { CommentProps } from "types/magazines";
 import myInfoStore from "store/myInfoStore";
-import { SantiagoDelete, SantiagoPostNoRes,SantiagoPutWithAutorization, SantiagoPostWithAutorization, SantiagoDeletetNoRes } from "lib/fetchData";
+import {
+	SantiagoPutWithAutorization,
+	SantiagoPostWithAutorization,
+	SantiagoDeletetNoRes,
+} from "lib/fetchData";
 import ReplyComment from "./ReplyComment";
 
 type CommentComponentProps = {
@@ -19,8 +23,10 @@ type CommentComponentProps = {
 	>;
 	isSelected: boolean;
 	commentList: CommentProps[];
-	setCommentList: React.Dispatch<React.SetStateAction<CommentProps[] | undefined>>
-	setCommentCount: React.Dispatch<React.SetStateAction<number>>
+	setCommentList: React.Dispatch<
+		React.SetStateAction<CommentProps[] | undefined>
+	>;
+	setCommentCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const Comment = ({
@@ -31,7 +37,7 @@ const Comment = ({
 	isSelected,
 	commentList,
 	setCommentList,
-	setCommentCount
+	setCommentCount,
 }: CommentComponentProps) => {
 	const { id } = myInfoStore();
 	const replyId = comment.id;
@@ -60,29 +66,32 @@ const Comment = ({
 		// setOpen(!open);
 	};
 
-	const [like, setLike]=useState(false)
-	const handleLike = async()=>{
+	const [like, setLike] = useState(false);
+	const handleLike = async () => {
 		let like = false;
-		if(!didILike){
-			const fetchData = async()=>{
-				return await SantiagoPostWithAutorization<undefined, {likeCount: number}>(`magazines/${magazineId}/replies/${replyId}/like`)
-			}
+		if (!didILike) {
+			const fetchData = async () => {
+				return await SantiagoPostWithAutorization<
+					undefined,
+					{ likeCount: number }
+				>(`magazines/${magazineId}/replies/${replyId}/like`);
+			};
 			const data = await fetchData();
 			setDidILike(true);
 			setLikeCount(data.likeCount);
-		}else{
-			const fetchData = async()=>{
-				 	return await SantiagoDeletetNoRes(`magazines/${magazineId}/replies/${replyId}/like`)
-				 }
+		} else {
+			const fetchData = async () => {
+				return await SantiagoDeletetNoRes(
+					`magazines/${magazineId}/replies/${replyId}/like`,
+				);
+			};
 			const data = await fetchData();
 			setDidILike(false);
 			setLikeCount(data.likeCount);
-			}
-	}
+		}
+	};
 
-	useEffect(()=>{
-		
-	},[editedContent, like])
+	useEffect(() => {}, [editedContent, like]);
 
 	return (
 		<div>
@@ -107,8 +116,8 @@ const Comment = ({
 						</div>
 					</div>
 				</Grid>
-					{isSelected ? (
-				<Grid justifyContent="left" item xs>
+				{isSelected ? (
+					<Grid justifyContent="left" item xs>
 						<textarea
 							id="commentEdit"
 							autoFocus
@@ -118,67 +127,63 @@ const Comment = ({
 							placeholder="Editing... "
 							value={editedContent}
 							onChange={(e) => setEditedContent(e.target.value)}
+						/>
+					</Grid>
+				) : (
+					<Grid justifyContent="left" item xs>
+						<p style={{ textAlign: "left" }}>{comment.content}</p>
+						<p
+							style={{
+								textAlign: "left",
+								color: "#A3A3A3",
+								fontSize: 11,
+								marginTop: 5,
+							}}>
+							{dayjs(comment.createdAt).format("MMM DD, YYYY")}
+							<button tw="text-mint pl-4" onClick={handleReply}>
+								reply
+							</button>
+						</p>
+					</Grid>
+				)}
+				{isSelected ? (
+					<Grid item>
+						<button
+							tw="border border-mint rounded-full text-mint text-sm px-1.5 content-end"
+							onClick={handleEdit}>
+							Upload
+						</button>
+						<button
+							tw="block text-sm px-1 mr-2 mt-5"
+							onClick={handleClose}>
+							Cancel
+						</button>
+					</Grid>
+				) : (
+					<Grid item>
+						<div tw="flex items-center justify-center gap-1">
+							<HeartSvg
+								fill={`${didILike ? "#E84033" : "#A3A3A3"}`}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleLike();
+								}}
+								tw="cursor-pointer"
 							/>
-							</Grid>
-					) : (
-						<Grid justifyContent="left" item xs>
-							<p style={{ textAlign: "left" }}>
-								{comment.content}
-							</p>
-							<p
-								style={{
-									textAlign: "left",
-									color: "#A3A3A3",
-									fontSize: 11,
-									marginTop:5,
-								}}>
-								{dayjs(comment.createdAt).format(
-									"MMM DD, YYYY",
-								)}
-								<button
-									tw="text-mint pl-4"
-									onClick={handleReply}>
-									reply
-								</button>
-							</p>
-							</Grid>
-					)}
-					{isSelected ? (
-				<Grid item>
-					
-							<button
-								tw="border border-mint rounded-full text-mint text-sm px-1.5 content-end"
-								onClick={handleEdit}>
-								Upload
-							</button>
-							<button
-								tw="block text-sm px-1 mr-2 mt-5"
-								onClick={handleClose}>
-								Cancel
-							</button>
-					
-						</Grid>
-					) : (
-						<Grid item>
-							<div tw="flex items-center justify-center gap-1">
-								<HeartSvg fill={`${didILike ? "#E84033":"#A3A3A3"}`} onClick={(e)=> {e.stopPropagation();
-								handleLike();}} tw="cursor-pointer"/>
-								<span tw="text-xs">{likeCount}</span>
-							</div>
-							<div tw="content-end mt-1">
-								<CommentMoreMenu
-									commentType={
-										comment.writer.userId === id
-											? true
-											: false
-									}
-									replyId={comment.id}
-									onSelectCommentIdx={onSelectCommentIdx}
-									magazineId={magazineId}
-								/>
-							</div>
-							</Grid>
-					)}
+							<span tw="text-xs">{likeCount}</span>
+						</div>
+						<div tw="content-end mt-1">
+							<CommentMoreMenu
+								commentType={
+									comment.writer.userId === id ? true : false
+								}
+								replyId={comment.id}
+								onSelectCommentIdx={onSelectCommentIdx}
+								magazineId={magazineId}
+							/>
+						</div>
+					</Grid>
+				)}
 			</Grid>
 			<ReplyComment
 				magazineId={magazineId}

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { SantiagoGet, SantiagoPutWithAutorization } from "lib/fetchData";
 import { useRouter } from "next/router";
 import myInfoStore from "store/myInfoStore";
-import { MagazineProps } from "types/magazines";
+import { IMagazine } from "types/magazines";
 import regionStore from "store/regionStore";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import Tag from "@components/write/Tag";
@@ -53,7 +53,7 @@ const EditPage = () => {
 	}>();
 
 	const fetchData = async () => {
-		const post: MagazineProps = await SantiagoGet(
+		const post: IMagazine = await SantiagoGet(
 			`magazines/${magazineId}`,
 		);
 		setTitle(post.title);

@@ -5,62 +5,80 @@ import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutl
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import type {
+	GetStaticPaths,
+	GetStaticProps,
+	InferGetStaticPropsType,
+} from "next";
 import { SantiagoGet, SantiagoPostWithAutorization } from "lib/fetchData";
-import { MagazineProps, TagProps } from "types/magazines";
-import Image from "next/image";
+import { IMagazine, TagProps } from "types/magazines";
 import Dompurify from "dompurify";
 import CommentWrap from "@components/post/comment/CommentWrap";
 import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/router";
 import HeadMeta from "@components/meta/HeadMeta";
+import Link from "next/link";
+import { Avatar } from "@mui/material";
+import Loading from "@pages/loading";
+import { useState } from "react";
 
 export default function PostPage({
 	post,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
-	if (!post) {
-		return <p>Loading...</p>;
+	const { id } = myInfoStore();
+
+	if (router.isFallback) {
+		return <Loading />;
 	}
-	const currentUrl = typeof window !== 'undefined' ? window.location.origin + router.asPath : '';
+	const currentUrl =
+		typeof window !== "undefined"
+			? window.location.origin + router.asPath
+			: "";
+
 	const {
 		magazineId,
 		title,
 		content,
-		createdAt,
 		photoLikeCount,
 		writingLikeCount,
+		createdAt,
 		writer,
 		tags,
-	}: MagazineProps = post;
-	const { id } = myInfoStore();
-	console.log(writer);
+	}: IMagazine = post;
+	const [newPhotoLikeCount, setPhotoLikeCount] = useState(photoLikeCount);
+	const [newWritingLikeCount, setWritingLikeCount] =
+		useState(writingLikeCount);
 
 	const handleLike = (type: string) => {
-		const fetchData = async () =>
-			await SantiagoPostWithAutorization(
-				`magazines/${magazineId}/likes?type=${type}`,
-			);
-		fetchData();
-	};
-
-	const handleGotoUserProfile = (userId: string) => {
-		if (userId) {
-			router.push(
-				{
-					pathname: "/profile",
-					query: {
-						user_id: userId,
-					},
-				},
-				"/profile",
-			);
+		if (!id) {
+			alert("Login in necessary");
+			return;
 		}
+		const fetchData = async () => {
+			const res: { photoLikeCount: number; writingLikeCount: number } =
+				await SantiagoPostWithAutorization(
+					`magazines/${magazineId}/likes?type=${type}`,
+				);
+			if (res) {
+				if (type === "photo") {
+					setPhotoLikeCount(res.photoLikeCount);
+				} else {
+					setWritingLikeCount(res.writingLikeCount);
+				}
+			}
+		};
+		fetchData();
 	};
 
 	return (
 		<>
-			<HeadMeta title={title} description={content} url={currentUrl} imageUrl={null}/>
+			<HeadMeta
+				title={title}
+				description={content}
+				url={currentUrl}
+				imageUrl={null}
+			/>
 			<div tw="w-[60%] h-full mb-10 mx-auto flex flex-col justify-center">
 				<div tw="pt-6 text-2xl font-bold">{title}</div>
 				<div tw="mt-4 text-sm flex justify-between">
@@ -80,7 +98,7 @@ export default function PostPage({
 									/>
 								</IconButton>
 							</Tooltip>
-							{photoLikeCount}
+							{newPhotoLikeCount}
 						</span>
 						<span tw="flex justify-center items-center">
 							<Tooltip
@@ -97,7 +115,7 @@ export default function PostPage({
 									/>
 								</IconButton>
 							</Tooltip>
-							{writingLikeCount}
+							{newWritingLikeCount}
 						</span>
 						<span tw="text-[#A3A3A3] pl-4">
 							{dayjs(createdAt).format("MMM DD, YYYY")}
@@ -108,21 +126,18 @@ export default function PostPage({
 						magazineId={magazineId}
 					/>
 				</div>
-				<div
-					tw="flex pl-2 mt-2 cursor-pointer"
-					onClick={() => handleGotoUserProfile(writer.userId)}>
-					<Image
-						src={writer.imageUrl || "../images/defaultUser.svg"}
-						alt="userImage"
-						width={30}
-						height={30}
-						tw="self-start"
-					/>
-					<div tw="flex flex-col justify-center pl-4 mb-12">
-						<span tw="text-sm">{writer.name}</span>
-						<span tw="text-xs">{writer.region.name_en}</span>
+				<Link href={`/profile/${writer.userId}`}>
+					<div tw="flex pl-2 mt-2 cursor-pointer">
+						<Avatar
+							src={writer.imageUrl || "../images/defaultUser.svg"}
+							sx={{ width: 36, height: 36 }}
+						/>
+						<div tw="flex flex-col justify-center pl-4 mb-12">
+							<span tw="text-sm">{writer.name}</span>
+							<span tw="text-xs">{writer.region.name_en}</span>
+						</div>
 					</div>
-				</div>
+				</Link>
 				{process.browser && (
 					<div
 						tw="pt-4 leading-9"
@@ -144,17 +159,17 @@ export default function PostPage({
 	);
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
 	return {
 		paths: [{ params: { id: "2cb781b8-f545-403f-a8bb-b9062ee112be" } }],
 		fallback: true,
 	};
 };
 
-export const getStaticProps = (async (context) => {
+export const getStaticProps: GetStaticProps = (async (context) => {
 	const { params } = context;
 	const magazineId = params?.id;
-	const post = await SantiagoGet<MagazineProps>(`magazines/${magazineId}`);
+	const post = await SantiagoGet<IMagazine>(`magazines/${magazineId}`);
 	if (!post) {
 		return { notFound: true };
 	}
@@ -164,5 +179,5 @@ export const getStaticProps = (async (context) => {
 		},
 	};
 }) satisfies GetStaticProps<{
-	post: MagazineProps;
+	post: IMagazine;
 }>;

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Divider } from "@mui/material";
+import { ChangeEvent, useEffect } from "react";
 import tw from "twin.macro";
+import { Divider } from "@mui/material";
 import CountryModal from "@utils/CountryModal";
 import { useState } from "react";
 import QuillEditer from "@utils/QuillEditer";
@@ -9,6 +9,7 @@ import myInfoStore from "store/myInfoStore";
 import Tag from "@components/write/Tag";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import SubmitModal from "../../components/write/SubmitModal";
+// import { useRouter } from "next/router";
 
 const WritePage = () => {
 	const style: React.CSSProperties = {
@@ -21,9 +22,13 @@ const WritePage = () => {
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
 		backgroundColor: "white",
 	};
+	// const router = useRouter();
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
+	// if (!id) {
+	// 	router.push("/auth/sign-in");
+	// }
 	const { regionId, setRegionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =
 		useState<string>("Select a country");
@@ -37,9 +42,6 @@ const WritePage = () => {
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	let locale;
-	useEffect(()=> {
-		locale = navigator.language;
-	})
 
 	const writeInfo = {
 		title,
@@ -48,8 +50,14 @@ const WritePage = () => {
 		userId: id,
 		tags,
 		imageUrlIds: [""],
-		language: locale,
+		language: "",
 	};
+
+	useEffect(() => {
+		locale = navigator.language;
+		writeInfo.language = locale;
+	}, []);
+
 	const [openModal, setOpenModal] = useState(false);
 	const handleSubmitModal = () => {
 		if (!writeInfo.title) {
@@ -75,7 +83,9 @@ const WritePage = () => {
 						placeholder="Please enter your title"
 						tw="text-2xl pb-2 w-full"
 						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							setTitle(e.target.value)
+						}
 					/>
 				</div>
 				<Divider />

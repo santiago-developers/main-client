@@ -8,7 +8,8 @@ import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 
 export default function FindPassword2() {
-	const regexPw = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,20}$|^(?=.*[a-zA-Z])(?=.*\d)(?!.*[@#$%^&+=!]).{8,20}$/;
+	const regexPw =
+		/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,20}$|^(?=.*[a-zA-Z])(?=.*\d)(?!.*[@#$%^&+=!]).{8,20}$/;
 	const query = useSearchParams();
 	const email = query.get("email");
 	const router = useRouter();
@@ -33,7 +34,9 @@ export default function FindPassword2() {
 		<>
 			<div tw="w-[336px] m-auto h-[75vh] grid place-items-center">
 				<div tw="w-full m-auto px-[8px]">
-					<div tw="text-center text-[30px] font-serif">Find Password</div>
+					<div tw="text-center text-[30px] font-serif">
+						Find Password
+					</div>
 					<div tw="h-[36px]" />
 					<div tw="m-auto">
 						<TextField
@@ -47,13 +50,17 @@ export default function FindPassword2() {
 							}
 						/>
 						<div tw="text-sm text-[#49454F] px-[16px] pt-[4px]  hover:cursor-default">
-							{password != "" ? regexPw.test(password) ? (
-								<div>Properly formed password </div>
+							{password != "" ? (
+								regexPw.test(password) ? (
+									<div>Properly formed password </div>
+								) : (
+									<div tw="text-[#EB4335]">
+										Badly formed password{" "}
+									</div>
+								)
 							) : (
-								<div tw="text-[#EB4335]">
-									Badly formed password{" "}
-								</div>
-							) : " "}
+								" "
+							)}
 						</div>
 						<div tw="h-[8px]" />
 						<TextField
@@ -82,7 +89,7 @@ export default function FindPassword2() {
 					</div>
 					<div tw="h-[36px]" />
 					<MintButton
-						tw="w-full h-[40px] font-medium hover:text-white hover:bg-[#05C3B6]"
+						tw="w-full h-[40px] font-medium hover:text-white hover:bg-mint"
 						onClick={confirm}>
 						Confirm
 					</MintButton>

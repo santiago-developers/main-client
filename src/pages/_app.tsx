@@ -25,7 +25,6 @@ export const cls = (...classnames: string[]) => {
 	return classnames.join(" ");
 };
 
-// <className={`${notoSans.variable} font-serif`}>
 export default function App({ Component, pageProps }: AppProps) {
 	const queryClient = new QueryClient();
 	const dehydratedState = dehydrate(queryClient)

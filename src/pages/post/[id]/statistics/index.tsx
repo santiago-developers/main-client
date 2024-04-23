@@ -205,7 +205,7 @@ export default function StatisticsPage({
 							<div tw="h-[4px]" />
 						</div>
 						<div tw="w-[12px]" />
-						<div tw="text-[28px] text-[#05C3B6] font-bold">
+						<div tw="text-[28px] text-mint font-bold">
 							{totalCount}
 						</div>
 					</div>
