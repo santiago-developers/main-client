@@ -1,5 +1,4 @@
 import tw from "twin.macro";
-import React from "react";
 import RingLoader from "react-spinners/RingLoader";
 
 const Loading = () => {

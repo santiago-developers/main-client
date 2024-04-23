@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import tw from "twin.macro";
-import { useRouter } from "next/router";
 import LoadingModal from "@components/profile/LoadingModal";
 import LeftProfile from "@components/profile/LeftProfile";
 import RightProfile from "@components/profile/RightProfile";
 
 const ProfilePage = () => {
-	const router = useRouter();
 	const [loadingModal, setLoadingModal] = useState(false);
 
 	return (

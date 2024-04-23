@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "twin.macro";
 import Link from "next/link";
 import myInfoStore from "store/myInfoStore";
 import { useRouter } from "next/router";
 import FollowModal from "@components/profile/FollowModal";
-import Image from "next/image";
 import RedPlus from "@public/images/redPlus.svg";
 import ProfileBList from "@components/profile/ProfileBList";
 import { SantiagoGet } from "lib/fetchData";
@@ -57,7 +56,7 @@ const LeftProfile = () => {
 
 	return (
 		<div>
-			<div tw=" w-full flex justify-around text-darkGray] ">
+			<div tw=" w-full flex justify-around text-darkGray">
 				<Avatar
 					src={imageUrl || "/images/defaultUser.svg"}
 					alt="profile"

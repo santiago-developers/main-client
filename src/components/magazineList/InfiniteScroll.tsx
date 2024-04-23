@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect } from "react";
 import tw from "twin.macro";
+import { Fragment, useEffect } from "react";
 import { IMagazine } from "types/magazines";
 import Magazine from "./Magazine";
 import { useInView } from "react-intersection-observer";

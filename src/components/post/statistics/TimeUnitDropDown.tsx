@@ -1,6 +1,6 @@
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import { Button, Menu, MenuItem, MenuList } from "@mui/material";
-import React from "react";
+import { Button } from "@mui/material";
+import { useState } from "react";
 import tw from "twin.macro";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function TimeUnitDropDown({ setTimeUnit, timeUnit }: Props) {
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,15 +63,17 @@ export default function TimeUnitDropDown({ setTimeUnit, timeUnit }: Props) {
 								Monthly
 							</div>
 						) : null}
-						{timeUnit !== "Annual" ?  <div
-							onClick={(e) => {
-								e.preventDefault();
-								setTimeUnit("Annual");
-								setAnchorEl(null);
-							}}>
-							Annual
-						</div>: null}
-						<div tw="h-1"/>
+						{timeUnit !== "Annual" ? (
+							<div
+								onClick={(e) => {
+									e.preventDefault();
+									setTimeUnit("Annual");
+									setAnchorEl(null);
+								}}>
+								Annual
+							</div>
+						) : null}
+						<div tw="h-1" />
 					</div>
 				) : null}
 			</div>

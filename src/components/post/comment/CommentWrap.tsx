@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";

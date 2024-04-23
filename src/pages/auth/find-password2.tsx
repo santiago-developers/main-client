@@ -89,7 +89,7 @@ export default function FindPassword2() {
 					</div>
 					<div tw="h-[36px]" />
 					<MintButton
-						tw="w-full h-[40px] font-medium hover:text-white hover:bg-mint]"
+						tw="w-full h-[40px] font-medium hover:text-white hover:bg-mint"
 						onClick={confirm}>
 						Confirm
 					</MintButton>

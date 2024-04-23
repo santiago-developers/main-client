@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "twin.macro";
 import MagazineProvider from "@components/magazineList/MagazineProvider";
 import MagazineSearchBar from "@components/magazineList/MagazineSearchBar";
@@ -17,7 +17,7 @@ const RightProfile = () => {
 		setUserSearchTerm(searchTerm);
 		setTitle(searchTerm);
 	};
-	
+
 	return (
 		<div tw="w-[772px] flex flex-col gap-20 items-center">
 			<h1 tw="text-4xl font-bold">{title}</h1>

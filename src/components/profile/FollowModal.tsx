@@ -1,7 +1,7 @@
 import tw, { styled } from "twin.macro";
 import { SantiagoGet } from "lib/fetchData";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RegionProps } from "types/regions";
 import Link from "next/link";
 

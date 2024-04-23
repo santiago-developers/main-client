@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SantiagoDelete, SantiagoGet, SantiagoPostNoRes } from "lib/fetchData";
 import myInfoStore from "store/myInfoStore";
 

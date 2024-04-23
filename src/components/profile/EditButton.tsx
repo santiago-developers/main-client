@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import React, { useState } from "react";
+import { useState } from "react";
 import { EditModal } from "./EditModal";
 import { UserInfoProps } from "types/user";
 

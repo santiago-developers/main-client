@@ -1,5 +1,5 @@
 import tw, { styled } from "twin.macro";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MintButton, MintButtonFilled } from "@utils/MintButton";
 import { SantiagoImagePost, SantiagoPutNoRes } from "lib/fetchData";
 import Image from "next/image";
@@ -164,7 +164,6 @@ export const EditModal = ({
 						</div>
 					</div>
 				</div>
-				{/* TODO name, regionId, imageId, */}
 				<div tw="w-full text-left">
 					<div tw="mb-3">Name*</div>
 					<input

@@ -1,4 +1,3 @@
-import React from "react";
 import { Grid, Paper } from "@mui/material";
 import { experimentalStyled as styled } from "@mui/material/styles";
 import { countinents, mainCountries } from "@statics/continents";

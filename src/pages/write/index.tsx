@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import tw from "twin.macro";
 import { Divider } from "@mui/material";
 import CountryModal from "@utils/CountryModal";
@@ -9,7 +9,7 @@ import myInfoStore from "store/myInfoStore";
 import Tag from "@components/write/Tag";
 import { MintButtonFilledForHeader } from "@utils/MintButton";
 import SubmitModal from "../../components/write/SubmitModal";
-import { redirect } from "next/navigation";
+// import { useRouter } from "next/router";
 
 const WritePage = () => {
 	const style: React.CSSProperties = {
@@ -22,11 +22,12 @@ const WritePage = () => {
 		boxShadow: "2px 2px 4px 1px rgba(0, 0, 0, 0.25)",
 		backgroundColor: "white",
 	};
+	// const router = useRouter();
 
 	const { id } = myInfoStore();
 	// 추후 authentication 설정 필요
 	// if (!id) {
-	// 	redirect("/auth/sign-in");
+	// 	router.push("/auth/sign-in");
 	// }
 	const { regionId, setRegionId } = writeStore();
 	const [selectedRegion, setSelectedRegion] =

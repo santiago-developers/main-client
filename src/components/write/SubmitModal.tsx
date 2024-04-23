@@ -7,7 +7,7 @@ import {
 } from "lib/fetchData";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import tw, { styled } from "twin.macro";
 import RemoveCircleOutlinedIcon from "@mui/icons-material/RemoveCircleOutlined";
 import myInfoStore from "store/myInfoStore";

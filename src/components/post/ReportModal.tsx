@@ -1,6 +1,6 @@
 import { Wrapper } from "@utils/ModalWrapper";
 import { SantiagoPostNoRes } from "lib/fetchData";
-import React, { useState } from "react";
+import { useState } from "react";
 import tw, { styled } from "twin.macro";
 
 type ReportModalProps = {

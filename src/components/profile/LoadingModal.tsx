@@ -1,4 +1,3 @@
-import React from "react";
 import tw, { styled } from "twin.macro";
 import RingLoader from "react-spinners/RingLoader";
 import { Wrapper } from "@utils/ModalWrapper";

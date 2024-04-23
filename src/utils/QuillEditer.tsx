@@ -12,7 +12,6 @@ type ImageProps = {
 };
 
 export default function QuillEditer({ value, setContent }) {
-	const { setImageId } = writeStore();
 	const quillRef = useRef<ReactQuill>(null);
 	const [imgUrlIds, setImgUrlIds] = useState<string[]>([]);
 

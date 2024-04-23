@@ -1,5 +1,5 @@
 import { countinents } from "@statics/continents";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "twin.macro";
 import writeStore from "store/writeStore";
 import regionsStore from "store/regionStore";
@@ -55,7 +55,6 @@ const CountryModal = ({
 	};
 
 	useEffect(() => {
-		// 이미지가 로드되면 모달을 열기
 		if (imageLoaded) {
 			setIsOpen(true);
 		}
