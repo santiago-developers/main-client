@@ -52,6 +52,8 @@ const Magazine = ({ item }: Props) => {
 							fill
 							style={{
 								objectFit: "cover",
+								width: "100%" /* 부모 요소의 너비에 맞게 이미지 크기 조정 */,
+								height: "100%",
 							}}
 							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 						/>

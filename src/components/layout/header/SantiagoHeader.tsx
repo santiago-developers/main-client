@@ -44,11 +44,14 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 					<LogoSvg tw="w-[131px] cursor-pointer" />
 				</Link>
 				{myId == "" ? (
-					<>
-						<Link href="/auth/sign-in" tw="cursor-pointer">
+					<button>
+						<Link
+							href="/auth/sign-in"
+							tw="cursor-pointer"
+							prefetch={true}>
 							Sign in
 						</Link>
-					</>
+					</button>
 				) : (
 					<>
 						<div tw="flex gap-5">
