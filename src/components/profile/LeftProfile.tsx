@@ -57,7 +57,7 @@ const LeftProfile = () => {
 
 	return (
 		<div>
-			<div tw=" w-full flex justify-around text-[#525252] ">
+			<div tw=" w-full flex justify-around text-darkGray] ">
 				<Avatar
 					src={imageUrl || "/images/defaultUser.svg"}
 					alt="profile"

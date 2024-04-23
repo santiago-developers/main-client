@@ -149,7 +149,7 @@ export default function SignIn() {
 					<div tw="h-[36px]" />
 					<div tw="m-auto">
 						<MintButton
-							tw="w-full h-[40px] bg-[#05C3B6] text-white font-medium"
+							tw="w-full h-[40px] bg-mint text-white font-medium"
 							onClick={signIn}>
 							Sign in with email
 						</MintButton>
@@ -162,7 +162,7 @@ export default function SignIn() {
 					</div>
 					<div tw="h-[36px]" />
 					<Link href="/auth/cloudError">
-						<div tw="text-[12px] flex justify-center text-[#05C3B6]">
+						<div tw="text-[12px] flex justify-center text-mint">
 							Forgot your password?
 						</div>
 					</Link>

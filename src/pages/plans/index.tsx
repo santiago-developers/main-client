@@ -54,7 +54,7 @@ export default function Plan() {
 				<div tw="h-8" />
 				<div tw="flex font-light text-[14px] text-[#79747E]">
 					<div>To&nbsp;</div>
-					<div tw="font-semibold text-[#525252]">Change</div>
+					<div tw="font-semibold text-darkGray">Change</div>
 					<div>
 						&nbsp;the language from your plan, You have to&nbsp;
 					</div>

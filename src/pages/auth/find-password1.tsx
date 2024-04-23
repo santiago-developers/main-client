@@ -103,12 +103,12 @@ export default function FindPassword1() {
 							}
 						/>
 						<div tw="flex justify-between items-center px-[16px] pt-[4px]">
-							<div tw="text-sm text-[#05C3B6] hover:cursor-default">
+							<div tw="text-sm text-mint hover:cursor-default">
 								Click to get a verification number{" "}
 								<ArrowRight />
 							</div>
 							<button
-								tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[8px] rounded-md"
+								tw="text-sm text-[#FFFFFF] bg-mint px-[8px] rounded-md"
 								onClick={sendVerificationNumber}>
 								send
 							</button>
@@ -151,14 +151,14 @@ export default function FindPassword1() {
 								) : null}
 							</div>
 							<button
-								tw="text-sm text-[#FFFFFF] bg-[#05C3B6] px-[6px] rounded-md"
+								tw="text-sm text-[#FFFFFF] bg-mint px-[6px] rounded-md"
 								onClick={verify}>
 								verify
 							</button>
 						</div>
 						<div tw="h-[36px]" />
 						<MintButton
-							tw="w-full h-[40px] font-medium hover:text-white hover:bg-[#05C3B6]"
+							tw="w-full h-[40px] font-medium hover:text-white hover:bg-mint"
 							onClick={confirm}>
 							Confirm
 						</MintButton>

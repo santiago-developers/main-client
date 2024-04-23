@@ -41,7 +41,7 @@ const ProfileBList = ({ id }: Props) => {
 		<>
 			{bestList.map((item, index) => (
 				<div tw="text-[14px]" key={index}>
-					<div tw="whitespace-nowrap flex gap-4 mb-2 mt-14 items-center text-[#525252] font-medium">
+					<div tw="whitespace-nowrap flex gap-4 mb-2 mt-14 items-center text-darkGray font-medium">
 						{index == 0 && <BWritingsSvg />}
 						{index == 1 && <BPicturesSvg />}
 						<span>{item}</span>

@@ -61,7 +61,7 @@ const Magazine = ({ item }: Props) => {
 					<div className="text-overflow" tw="w-[220px]">
 						{item.title}
 					</div>
-					<div tw="w-full text-xs text-[#A3A3A3]">
+					<div tw="w-full text-xs text-sgray">
 						{dayjs(item.createdAt).format("MMM DD, YYYY")}
 					</div>
 				</Link>

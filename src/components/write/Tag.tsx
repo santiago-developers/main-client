@@ -28,7 +28,7 @@ const Tag = ({ tags, setTags }: TagComponentProps) => {
 		<div>
 			{tags?.map((tag, index) => (
 				<span
-					tw="max-w-max bg-[#F5F5F5] text-[#A3A3A3] rounded-xl px-3 py-1 mr-2"
+					tw="max-w-max bg-[#F5F5F5] text-sgray rounded-xl px-3 py-1 mr-2"
 					key={index}>
 					{tag}
 					<button onClick={() => handleTagRemove(tag)}>X</button>
