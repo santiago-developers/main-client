@@ -76,5 +76,6 @@
 	"engines": {
 		"node": ">=16.16.0",
 		"npm": "please-use-yarn"
-	}
+	},
+	"sideEffects": false
 }
