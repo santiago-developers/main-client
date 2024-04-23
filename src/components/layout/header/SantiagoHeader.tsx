@@ -45,10 +45,7 @@ const SantiagoHeader: React.FunctionComponent<PropsWithChildren> = () => {
 				</Link>
 				{myId == "" ? (
 					<button>
-						<Link
-							href="/auth/sign-in"
-							tw="cursor-pointer"
-							prefetch={true}>
+						<Link href="/auth/sign-in" tw="cursor-pointer">
 							Sign in
 						</Link>
 					</button>
