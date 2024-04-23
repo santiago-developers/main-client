@@ -1,4 +1,6 @@
 import tw from "twin.macro";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import MoreMenu from "@utils/MoreMenu";
 import dayjs from "dayjs";
 import PhotoCameraBackOutlinedIcon from "@mui/icons-material/PhotoCameraBackOutlined";
@@ -15,12 +17,10 @@ import { IMagazine, TagProps } from "types/magazines";
 import Dompurify from "dompurify";
 import CommentWrap from "@components/post/comment/CommentWrap";
 import myInfoStore from "store/myInfoStore";
-import { useRouter } from "next/router";
 import HeadMeta from "@components/meta/HeadMeta";
 import Link from "next/link";
 import { Avatar } from "@mui/material";
 import Loading from "@pages/loading";
-import { useState } from "react";
 
 export default function PostPage({
 	post,
@@ -28,9 +28,6 @@ export default function PostPage({
 	const router = useRouter();
 	const { id } = myInfoStore();
 
-	if (router.isFallback) {
-		return <Loading />;
-	}
 	const currentUrl =
 		typeof window !== "undefined"
 			? window.location.origin + router.asPath
@@ -46,9 +43,14 @@ export default function PostPage({
 		writer,
 		tags,
 	}: IMagazine = post;
+
 	const [newPhotoLikeCount, setPhotoLikeCount] = useState(photoLikeCount);
 	const [newWritingLikeCount, setWritingLikeCount] =
 		useState(writingLikeCount);
+
+	if (router.isFallback) {
+		return <Loading />;
+	}
 
 	const handleLike = (type: string) => {
 		if (!id) {
