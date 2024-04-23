@@ -12,7 +12,6 @@ import type {
 } from "next";
 import { SantiagoGet, SantiagoPostWithAutorization } from "lib/fetchData";
 import { IMagazine, TagProps } from "types/magazines";
-import Image from "next/image";
 import Dompurify from "dompurify";
 import CommentWrap from "@components/post/comment/CommentWrap";
 import myInfoStore from "store/myInfoStore";
@@ -20,6 +19,8 @@ import { useRouter } from "next/router";
 import HeadMeta from "@components/meta/HeadMeta";
 import Link from "next/link";
 import { Avatar } from "@mui/material";
+import Loading from "@pages/loading";
+import { useState } from "react";
 
 export default function PostPage({
 	post,
@@ -28,7 +29,7 @@ export default function PostPage({
 	const { id } = myInfoStore();
 
 	if (router.isFallback) {
-		return <p>Loading...</p>;
+		return <Loading />;
 	}
 	const currentUrl =
 		typeof window !== "undefined"
@@ -39,18 +40,34 @@ export default function PostPage({
 		magazineId,
 		title,
 		content,
-		createdAt,
 		photoLikeCount,
 		writingLikeCount,
+		createdAt,
 		writer,
 		tags,
 	}: IMagazine = post;
+	const [newPhotoLikeCount, setPhotoLikeCount] = useState(photoLikeCount);
+	const [newWritingLikeCount, setWritingLikeCount] =
+		useState(writingLikeCount);
 
 	const handleLike = (type: string) => {
-		const fetchData = async () =>
-			await SantiagoPostWithAutorization(
-				`magazines/${magazineId}/likes?type=${type}`,
-			);
+		if (!id) {
+			alert("Login in necessary");
+			return;
+		}
+		const fetchData = async () => {
+			const res: { photoLikeCount: number; writingLikeCount: number } =
+				await SantiagoPostWithAutorization(
+					`magazines/${magazineId}/likes?type=${type}`,
+				);
+			if (res) {
+				if (type === "photo") {
+					setPhotoLikeCount(res.photoLikeCount);
+				} else {
+					setWritingLikeCount(res.writingLikeCount);
+				}
+			}
+		};
 		fetchData();
 	};
 
@@ -81,7 +98,7 @@ export default function PostPage({
 									/>
 								</IconButton>
 							</Tooltip>
-							{photoLikeCount}
+							{newPhotoLikeCount}
 						</span>
 						<span tw="flex justify-center items-center">
 							<Tooltip
@@ -98,7 +115,7 @@ export default function PostPage({
 									/>
 								</IconButton>
 							</Tooltip>
-							{writingLikeCount}
+							{newWritingLikeCount}
 						</span>
 						<span tw="text-[#A3A3A3] pl-4">
 							{dayjs(createdAt).format("MMM DD, YYYY")}
