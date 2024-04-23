@@ -1,3 +1,4 @@
+import tw from "twin.macro";
 import { MintButton, MintButtonFilled } from "@utils/MintButton";
 import { Wrapper } from "@utils/ModalWrapper";
 import Link from "next/link";
@@ -5,7 +6,7 @@ import Link from "next/link";
 function Error({ statusCode }) {
 	return (
 		<Wrapper>
-			<div tw="h-full pb-[98px] flex flex-col gap-4 justify-center items-center">
+			<div tw="w-full h-full pb-[98px] flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col justify-center items-center gap-4">
 				<p>
 					{statusCode
 						? `An error ${statusCode} occurred on server`
