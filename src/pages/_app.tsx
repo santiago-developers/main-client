@@ -6,12 +6,17 @@ import CssBaseline from "@mui/material/CssBaseline";
 import SantiagoLayout from "@components/layout/SantiagoLayout";
 import Head from "next/head";
 import RQProvider from "lib/react_query/RQProvider";
-import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import {
+	HydrationBoundary,
+	QueryClient,
+	dehydrate,
+} from "@tanstack/react-query";
 
 const notoSans = Noto_Sans({
 	subsets: ["latin"],
 	display: "swap",
 	weight: ["500", "400", "300"],
+	preload: true,
 });
 
 const sourceSerif = Source_Serif_4({
@@ -19,6 +24,7 @@ const sourceSerif = Source_Serif_4({
 	display: "swap",
 	weight: ["400", "300"],
 	variable: "--source_Serif_4",
+	preload: true,
 });
 
 export const cls = (...classnames: string[]) => {
@@ -27,8 +33,8 @@ export const cls = (...classnames: string[]) => {
 
 export default function App({ Component, pageProps }: AppProps) {
 	const queryClient = new QueryClient();
-	const dehydratedState = dehydrate(queryClient)
-	
+	const dehydratedState = dehydrate(queryClient);
+
 	return (
 		<main className={cls(notoSans.className, sourceSerif.variable)}>
 			<CssBaseline />
